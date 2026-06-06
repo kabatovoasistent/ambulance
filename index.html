@@ -2074,8 +2074,8 @@ function saveCenik(data) {
       const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
       fetch(WEBHOOK_URL_CENIK_SAVE, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cenik_b64: b64 })
+        headers: { 'Content-Type': 'text/plain' },
+        body: b64
       }).catch(function() {});
     } catch(e) {}
   }
