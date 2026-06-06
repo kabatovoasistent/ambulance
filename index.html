@@ -1915,7 +1915,9 @@ function showArchive() {
 // ── Ceník editor ──────────────────────────────────────────────────────────
 let cenikData = [];
 
-function openCenik() {
+async function openCenik() {
+  // Nejdřív načti ze serveru (zajistí čerstvá data i na jiných zařízeních)
+  await loadCenikFromServer();
   cenikData = loadCenik();
   renderCenikBody();
   document.getElementById('cenik-overlay').classList.remove('hidden');
@@ -2066,13 +2068,16 @@ function loadCenik() {
 }
 function saveCenik(data) {
   try { localStorage.setItem(CENIK_STORAGE_KEY, JSON.stringify(data)); } catch {}
-  // Sync do Make Data Store (fire-and-forget)
+  // Sync do Make Data Store jako base64 (fire-and-forget)
   if (WEBHOOK_URL_CENIK_SAVE) {
-    fetch(WEBHOOK_URL_CENIK_SAVE, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ json_data: JSON.stringify(data) })
-    }).catch(function() {});
+    try {
+      const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+      fetch(WEBHOOK_URL_CENIK_SAVE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cenik_b64: b64 })
+      }).catch(function() {});
+    } catch(e) {}
   }
 }
 async function loadCenikFromServer() {
@@ -2084,7 +2089,12 @@ async function loadCenikFromServer() {
       body: JSON.stringify({ action: 'load' })
     });
     if (!resp.ok) return;
-    const data = await resp.json();
+    const text = (await resp.text()).trim();
+    if (!text) return;
+    // Zkus base64 dekódování, pak přímý JSON parse
+    let data = null;
+    try { data = JSON.parse(decodeURIComponent(escape(atob(text)))); } catch(e) {}
+    if (!data) { try { data = JSON.parse(text); } catch(e) {} }
     if (Array.isArray(data) && data.length > 0) {
       localStorage.setItem(CENIK_STORAGE_KEY, JSON.stringify(data));
     }
