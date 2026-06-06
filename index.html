@@ -1086,6 +1086,9 @@ const WEBHOOK_URL_DRIVE = "https://hook.eu2.make.com/ezul17w4wl6r0fik6cff6ppyrto
 const WEBHOOK_URL_DEKURZ_EMAIL = "https://hook.eu2.make.com/nwf7jk4rw3vlpclcg8bo3g6xozyyv8ar";
 const WEBHOOK_URL_PLATBA_ZAPIS = "https://hook.eu2.make.com/vpwp8rbtntg9y7ojc81m4o2dvq6fqaph";
 const WEBHOOK_URL_PLATBA_MESIC = "https://hook.eu2.make.com/7piwts6gsx1l8qdjn1l64dvdm8xpep1v";
+const WEBHOOK_URL_CENIK_SAVE   = "https://hook.eu2.make.com/kjjr2zgl3yqd9o8ue4h4o4tdunuemwwn";
+const WEBHOOK_URL_CENIK_LOAD   = "https://hook.eu2.make.com/uvahg29eowk4g2e3vorebkiquu4tl6e2";
+const WEBHOOK_URL_KOMM_LOG     = "https://hook.eu2.make.com/724udcmghiyg6jwb713ngqkuj43yhwib";
 
 // stav filtru kartiček: 'all' | 'scheduled' | 'calendar'
 let pillFilter = 'all';
@@ -1876,6 +1879,8 @@ document.getElementById('btn-send-list').addEventListener('click', sendListByEma
 document.getElementById('btn-last-list').addEventListener('click', showLastList);
 
 (function(){ const btn = document.getElementById('btn-load-server'); if (!btn) return; btn.addEventListener('click', function(e){ e.preventDefault(); loadKlientiFromServer(); }); })();
+// Načti ceník ze serveru při startu (pro synchronizaci mezi zařízeními)
+loadCenikFromServer();
 // ---- Připomínky objednávek ----
 let reminderItems = [];
 
@@ -2014,8 +2019,7 @@ const KOMM_MAX = 500; // max záznamů
 function loadKomunikace() { try { return JSON.parse(localStorage.getItem(KOMM_STORAGE_KEY) || '[]'); } catch { return []; } }
 function saveKomunikace(arr) { try { localStorage.setItem(KOMM_STORAGE_KEY, JSON.stringify(arr.slice(-KOMM_MAX))); } catch {} }
 function logKomunikace(type, patient, detail, status, errorMsg) {
-  const arr = loadKomunikace();
-  arr.push({
+  const entry = {
     ts: new Date().toISOString(),
     type: type,          // 'email_objednavka' | 'email_pristi' | 'email_gdpr' | 'sms' | 'sms_planned'
     patientId: patient ? patient.id : '',
@@ -2023,8 +2027,25 @@ function logKomunikace(type, patient, detail, status, errorMsg) {
     detail: detail || '',
     status: status,      // 'ok' | 'error'
     error: errorMsg || ''
-  });
+  };
+  const arr = loadKomunikace();
+  arr.push(entry);
   saveKomunikace(arr);
+  // Sync do Make Data Store (fire-and-forget)
+  if (WEBHOOK_URL_KOMM_LOG) {
+    fetch(WEBHOOK_URL_KOMM_LOG, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        typ: entry.type,
+        patient_name: entry.patientName,
+        detail: entry.detail,
+        status: entry.status,
+        error_msg: entry.error,
+        ts: entry.ts
+      })
+    }).catch(function() {});
+  }
 }
 const DEFAULT_CENIK = [
   { kategorie: 'Biorezonance', sluzby: [
@@ -2045,6 +2066,29 @@ function loadCenik() {
 }
 function saveCenik(data) {
   try { localStorage.setItem(CENIK_STORAGE_KEY, JSON.stringify(data)); } catch {}
+  // Sync do Make Data Store (fire-and-forget)
+  if (WEBHOOK_URL_CENIK_SAVE) {
+    fetch(WEBHOOK_URL_CENIK_SAVE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ json_data: JSON.stringify(data) })
+    }).catch(function() {});
+  }
+}
+async function loadCenikFromServer() {
+  if (!WEBHOOK_URL_CENIK_LOAD) return;
+  try {
+    const resp = await fetch(WEBHOOK_URL_CENIK_LOAD, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'load' })
+    });
+    if (!resp.ok) return;
+    const data = await resp.json();
+    if (Array.isArray(data) && data.length > 0) {
+      localStorage.setItem(CENIK_STORAGE_KEY, JSON.stringify(data));
+    }
+  } catch(e) {} // fallback = localStorage
 }
 function getServicePrice(serviceName) {
   if (!serviceName) return 0;
