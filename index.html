@@ -2034,14 +2034,14 @@ function logKomunikace(type, patient, detail, status, errorMsg) {
   const arr = loadKomunikace();
   arr.push(entry);
   saveKomunikace(arr);
-  // Auto-sync celého pole do Make Data Store (fire-and-forget, stejný přístup jako Ceník)
+  // Auto-sync celého pole do Make Data Store (fire-and-forget)
   if (WEBHOOK_URL_KOMM_LOG) {
     try {
       const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(arr))));
       fetch(WEBHOOK_URL_KOMM_LOG, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: b64
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ json_data: b64 })
       }).catch(function() {});
     } catch(e) {}
   }
@@ -2623,8 +2623,8 @@ async function syncKomunikaceToCloud() {
     const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(arr))));
     const r = await fetch(WEBHOOK_URL_KOMM_LOG, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: b64
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ json_data: b64 })
     });
     if (r.ok) alert('Synchronizace hotová: ' + arr.length + ' záznamů nahráno.');
     else alert('Chyba při synchronizaci: ' + r.status);
