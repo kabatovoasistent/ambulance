@@ -2705,12 +2705,15 @@ function renderKomunikace() {
       .then(function(text) {
         var merged = [];
         text = (text || '').trim();
-        // Dekóduj base64 (stejný formát jako Ceník)
+        // Make.com může vrátit base64 raw nebo JSON-obalený ("base64...") — oba případy zvládnout
+        var b64 = text;
+        if (text.charAt(0) === '"') { try { b64 = JSON.parse(text); } catch(e) {} }
         try {
-          var decoded = decodeURIComponent(escape(atob(text)));
+          var decoded = decodeURIComponent(escape(atob(b64)));
           var parsed = JSON.parse(decoded);
           if (Array.isArray(parsed)) merged = parsed;
         } catch(ex) {
+          // Fallback: přímý JSON array
           try { var parsed2 = JSON.parse(text); if (Array.isArray(parsed2)) merged = parsed2; } catch(e2) {}
         }
         // Doplň záznamy z localStorage, které ještě nejsou v Data Store
