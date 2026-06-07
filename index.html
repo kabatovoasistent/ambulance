@@ -2737,6 +2737,8 @@ function renderKomunikace() {
             };
           });
         }
+        // Odfiltruj prázdné/neplatné záznamy ze Softr (bez timestampu → "Invalid Date")
+        merged = merged.filter(function(e) { return e.ts && String(e.ts).trim() !== ''; });
         // Doplň záznamy z localStorage, které ještě nejsou v Softr
         var dsKeys = new Set(merged.map(function(e) { return e.ts + '|' + e.type; }));
         var localExtras = loadKomunikace().filter(function(e) { return !dsKeys.has(e.ts + '|' + e.type); });
