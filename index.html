@@ -1088,8 +1088,8 @@ const WEBHOOK_URL_PLATBA_ZAPIS = "https://hook.eu2.make.com/vpwp8rbtntg9y7ojc81m
 const WEBHOOK_URL_PLATBA_MESIC = "https://hook.eu2.make.com/7piwts6gsx1l8qdjn1l64dvdm8xpep1v";
 const WEBHOOK_URL_CENIK_SAVE   = "https://hook.eu2.make.com/kjjr2zgl3yqd9o8ue4h4o4tdunuemwwn";
 const WEBHOOK_URL_CENIK_LOAD   = "https://hook.eu2.make.com/uvahg29eowk4g2e3vorebkiquu4tl6e2";
-const WEBHOOK_URL_KOMM_LOG     = "https://hook.eu2.make.com/724udcmghiyg6jwb713ngqkuj43yhwib";
-const WEBHOOK_URL_KOMM_LOG_READ = "https://hook.eu2.make.com/7fh77ivfdsvblqak8qnrfvvxcu4ycf1b";
+const WEBHOOK_URL_KOMM_LOG     = "https://hook.eu2.make.com/svh70fk3vd7kltqz4qv9lt6vdyyvz9od";
+const WEBHOOK_URL_KOMM_LOG_READ = "https://hook.eu2.make.com/mgm2qmupnz2gxsx9s8p2l7nv7rda1bit";
 
 // stav filtru kartiček: 'all' | 'scheduled' | 'calendar'
 let pillFilter = 'all';
@@ -2034,13 +2034,20 @@ function logKomunikace(type, patient, detail, status, errorMsg) {
   const arr = loadKomunikace();
   arr.push(entry);
   saveKomunikace(arr);
-  // Auto-sync celého pole do Make Data Store (fire-and-forget)
+  // Auto-sync záznamu do Softr přes Make.com (fire-and-forget)
   if (WEBHOOK_URL_KOMM_LOG) {
     try {
       fetch(WEBHOOK_URL_KOMM_LOG, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ json_data: JSON.stringify(arr) })
+        body: JSON.stringify({
+          id_klienta: entry.patientId,
+          timestamp: entry.ts,
+          typ: entry.type,
+          detail: entry.detail,
+          status: entry.status,
+          chyba: entry.error
+        })
       }).catch(function() {});
     } catch(e) {}
   }
@@ -2617,16 +2624,26 @@ async function syncKomunikaceToCloud() {
   if (!WEBHOOK_URL_KOMM_LOG) { alert('Webhook není nastaven.'); return; }
   const arr = loadKomunikace();
   if (arr.length === 0) { alert('Žádné záznamy k synchronizaci.'); return; }
-  if (!confirm('Nahrát ' + arr.length + ' záznamů do cloudu?')) return;
-  try {
-    const r = await fetch(WEBHOOK_URL_KOMM_LOG, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ json_data: JSON.stringify(arr) })
-    });
-    if (r.ok) alert('Synchronizace hotová: ' + arr.length + ' záznamů nahráno.');
-    else alert('Chyba při synchronizaci: ' + r.status);
-  } catch(e) { alert('Chyba: ' + e.message); }
+  if (!confirm('Nahrát ' + arr.length + ' záznamů do cloudu? (každý záznam = 1 volání Make.com)')) return;
+  let ok = 0, fail = 0;
+  for (const e of arr) {
+    try {
+      const r = await fetch(WEBHOOK_URL_KOMM_LOG, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id_klienta: e.patientId,
+          timestamp: e.ts,
+          typ: e.type,
+          detail: e.detail,
+          status: e.status,
+          chyba: e.error
+        })
+      });
+      if (r.ok) ok++; else fail++;
+    } catch(e2) { fail++; }
+  }
+  alert('Synchronizace hotová: ' + ok + ' nahráno' + (fail ? ', ' + fail + ' chyb.' : '.'));
   renderKomunikace();
 }
 
@@ -2698,27 +2715,29 @@ function renderKomunikace() {
   cards.innerHTML = '<div class="komm-wrap"><div class="komm-empty" style="opacity:0.5;">Načítám historii komunikace…</div></div>';
 
   if (WEBHOOK_URL_KOMM_LOG_READ) {
-    fetch(WEBHOOK_URL_KOMM_LOG_READ, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: 'load' })
-      .then(function(r) { return r.text(); })
-      .then(function(text) {
+    fetch(WEBHOOK_URL_KOMM_LOG_READ, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'load_all' })
+    })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
         var merged = [];
-        text = (text || '').trim();
-        // Make.com může JSON-obalit string: "..." — rozbalíme
-        var str = text;
-        if (str.charAt(0) === '"') { try { str = JSON.parse(str); } catch(e) {} }
-        try {
-          // Nový formát: přímý JSON string
-          var parsed = JSON.parse(str);
-          if (Array.isArray(parsed)) merged = parsed;
-        } catch(ex) {
-          // Starý formát: base64
-          try {
-            var decoded = decodeURIComponent(escape(atob(str)));
-            var parsed2 = JSON.parse(decoded);
-            if (Array.isArray(parsed2)) merged = parsed2;
-          } catch(e2) {}
+        if (Array.isArray(data)) {
+          // Mapuj Softr field kódy → lokální formát
+          merged = data.map(function(r) {
+            return {
+              ts:          r.eH3dC  || r.Timestamp  || '',
+              type:        r.f6zX3  || r.Typ        || '',
+              patientId:   r.Fe8tj  || r.ID_klienta || '',
+              patientName: '',
+              detail:      r.Z23iI  || r.Detail     || '',
+              status:      r['1yy5q'] || r.Status   || '',
+              error:       r.cgg1Q  || r.Chyba      || ''
+            };
+          });
         }
-        // Doplň záznamy z localStorage, které ještě nejsou v Data Store
+        // Doplň záznamy z localStorage, které ještě nejsou v Softr
         var dsKeys = new Set(merged.map(function(e) { return e.ts + '|' + e.type; }));
         var localExtras = loadKomunikace().filter(function(e) { return !dsKeys.has(e.ts + '|' + e.type); });
         cards.innerHTML = buildTable(merged.concat(localExtras));
