@@ -153,8 +153,6 @@
   .komm-table tr:hover td { background: var(--surface-2); }
   .komm-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
   .komm-badge-email { background: var(--info-bg); color: var(--info-text); }
-  .komm-badge-sms { background: var(--purple-bg); color: var(--purple-text); }
-  .komm-badge-sms-planned { background: var(--warning-bg); color: var(--warning-text); }
   .komm-badge-gdpr { background: var(--warning-bg); color: var(--warning-text); }
   .komm-status-ok { color: var(--success); font-size: 13px; }
   .komm-status-err { color: var(--danger); font-size: 13px; }
@@ -492,7 +490,7 @@
             <span class="tile-icon"><i class="ti ti-archive"></i></span>
             <span class="tile-label">Archiv</span>
           </button>
-          <button class="tile" onclick="navigateTo('komunikace')" title="Historie komunikace — emaily a SMS">
+          <button class="tile" onclick="navigateTo('komunikace')" title="Historie komunikace — emaily">
             <span class="tile-icon"><i class="ti ti-mail"></i></span>
             <span class="tile-label">Komunikace</span>
           </button>
@@ -757,7 +755,7 @@
 
           <!-- Příští návštěva přímo z dekurzu -->
           <div class="dk-card" style="margin-top:14px;margin-bottom:0;">
-            <p class="dk-card-title">Příští návštěva <span style="font-size:10px;color:var(--text-3);letter-spacing:0;text-transform:none;font-weight:400;">— uloží a odešle email + SMS klientovi</span></p>
+            <p class="dk-card-title">Příští návštěva <span style="font-size:10px;color:var(--text-3);letter-spacing:0;text-transform:none;font-weight:400;">— uloží a odešle email klientovi</span></p>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
               <div><label style="font-size:11px;color:var(--text-2);display:block;margin-bottom:3px;">Datum</label><input type="date" id="nxt-date" style="width:100%;"/></div>
               <div><label style="font-size:11px;color:var(--text-2);display:block;margin-bottom:3px;">Čas</label><input type="time" id="nxt-time" value="14:00" style="width:100%;"/></div>
@@ -1750,11 +1748,10 @@ async function sendPristiTerminWebhook(patient, gdprRequest) {
   if (telefon && !telefon.startsWith('+') && /^[679]\d{8}$/.test(telefon)) telefon = '+420' + telefon;
   const payload = { akce: 'pristi_termin', jmeno: patient.name || '', email: patient.email || '', telefon: telefon, typ: typ, sluzba: typ, typ_vysetreni: typNeutral, ordinace: patient.ordinace || '', kategorie: serviceToGroup(patient.therapy), nazev_udalosti: nazev, datum: datum, cas_zacatku: t, start: startStr, konec: endStr, delka_min: dur, timezone: 'Europe/Prague', id_klienta: patient.id || '', gdpr_souhlas: patient.gdpr === true, gdpr_request: !!gdprRequest, poznamka: '' };
   const detail = 'Příští termín ' + datum + ' ' + t + ' · ' + typ;
-  const hasSms = telefon && telefon.indexOf('+420') >= 0;
   try {
     const resp = await fetch(OBJEDNAVKA_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
     if (!resp.ok) { const txt = await resp.text(); const errMsg = resp.status + ': ' + (txt || resp.statusText); logKomunikace('email_pristi', patient, detail, 'error', errMsg); alert('Zpráva o termínu — Make vrátil ' + errMsg); }
-    else { logKomunikace('email_pristi', patient, detail, 'ok'); if (hasSms) logKomunikace('sms_planned', patient, detail, 'planned'); alert('Zpráva o termínu byla odeslána klientovi.'); }
+    else { logKomunikace('email_pristi', patient, detail, 'ok'); alert('Zpráva o termínu byla odeslána klientovi.'); }
   }
   catch (err) { const msg = err && err.message ? err.message : String(err); logKomunikace('email_pristi', patient, detail, 'error', msg); alert('Zprávu se nepodařilo odeslat: ' + msg); }
 }
@@ -1811,11 +1808,10 @@ async function sendObjednavkaWebhook(patient, visit) {
   if (telefon && !telefon.startsWith('+') && /^[679]\d{8}$/.test(telefon)) telefon = '+420' + telefon;
   const payload = { jmeno: patient.name || '', email: patient.email || '', telefon: telefon, typ: typ, sluzba: typ, ordinace: ordinace, kategorie: serviceToGroup(typ), nazev_udalosti: nazev, datum: visit.d, cas_zacatku: t, start: startStr, konec: endStr, delka_min: dur, timezone: 'Europe/Prague', id_klienta: patient.id || '', poznamka: '' };
   const detail = 'Termín ' + (visit.d || '') + ' ' + (visit.t || '') + ' · ' + (visit.service || typ);
-  const hasSms = telefon && telefon.indexOf('+420') >= 0;
   try {
     const resp = await fetch(OBJEDNAVKA_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
     if (!resp.ok) { const txt = await resp.text(); const errMsg = resp.status + ': ' + (txt || resp.statusText); logKomunikace('email_objednavka', patient, detail, 'error', errMsg); alert('Objednávka — Make vrátil ' + errMsg); }
-    else { logKomunikace('email_objednavka', patient, detail, 'ok'); if (hasSms) logKomunikace('sms_planned', patient, detail, 'planned'); }
+    else { logKomunikace('email_objednavka', patient, detail, 'ok'); }
   }
   catch (err) { const msg = err && err.message ? err.message : String(err); logKomunikace('email_objednavka', patient, detail, 'error', msg); alert('Objednávku se nepodařilo odeslat: ' + msg); }
 }
@@ -2024,7 +2020,7 @@ function saveKomunikace(arr) { try { localStorage.setItem(KOMM_STORAGE_KEY, JSON
 function logKomunikace(type, patient, detail, status, errorMsg) {
   const entry = {
     ts: new Date().toISOString(),
-    type: type,          // 'email_objednavka' | 'email_pristi' | 'email_gdpr' | 'sms' | 'sms_planned'
+    type: type,          // 'email_objednavka' | 'email_pristi' | 'email_gdpr'
     patientId: patient ? patient.id : '',
     patientName: patient ? (patient.name || '') : '',
     detail: detail || '',
@@ -2657,8 +2653,6 @@ function renderKomunikace() {
     if (type === 'email_objednavka') return '<span class="komm-badge komm-badge-email"><i class="ti ti-mail"></i> Email · Objednávka</span>';
     if (type === 'email_pristi')     return '<span class="komm-badge komm-badge-email"><i class="ti ti-mail"></i> Email · Příští termín</span>';
     if (type === 'email_gdpr')       return '<span class="komm-badge komm-badge-gdpr"><i class="ti ti-shield-check"></i> Email · GDPR</span>';
-    if (type === 'sms')              return '<span class="komm-badge komm-badge-sms"><i class="ti ti-message"></i> SMS</span>';
-    if (type === 'sms_planned')      return '<span class="komm-badge komm-badge-sms-planned"><i class="ti ti-clock"></i> SMS · Naplánována</span>';
     return '<span class="komm-badge">' + escapeHtml(type) + '</span>';
   }
 
@@ -2672,7 +2666,7 @@ function renderKomunikace() {
   function buildTable(log) {
     const sorted = log.slice().sort(function(a, b) { return (b.ts || '').localeCompare(a.ts || ''); });
     if (sorted.length === 0) {
-      return '<div class="komm-wrap"><div class="komm-empty"><i class="ti ti-mail-off" style="font-size:36px;opacity:0.3;display:block;margin-bottom:10px;"></i>Žádná odeslána komunikace.<br><span style="font-size:12px;">Záznamy se vytvoří automaticky při odesílání emailů a SMS.</span></div></div>';
+      return '<div class="komm-wrap"><div class="komm-empty"><i class="ti ti-mail-off" style="font-size:36px;opacity:0.3;display:block;margin-bottom:10px;"></i>Žádná odeslána komunikace.<br><span style="font-size:12px;">Záznamy se vytvoří automaticky při odesílání emailů.</span></div></div>';
     }
     const rows = sorted.map(function(r) {
       const statusIcon = r.status === 'ok'
