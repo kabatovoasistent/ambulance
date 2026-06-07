@@ -1089,6 +1089,7 @@ const WEBHOOK_URL_PLATBA_MESIC = "https://hook.eu2.make.com/7piwts6gsx1l8qdjn1l6
 const WEBHOOK_URL_CENIK_SAVE   = "https://hook.eu2.make.com/kjjr2zgl3yqd9o8ue4h4o4tdunuemwwn";
 const WEBHOOK_URL_CENIK_LOAD   = "https://hook.eu2.make.com/uvahg29eowk4g2e3vorebkiquu4tl6e2";
 const WEBHOOK_URL_KOMM_LOG     = "https://hook.eu2.make.com/724udcmghiyg6jwb713ngqkuj43yhwib";
+const WEBHOOK_URL_KOMM_LOG_READ = "https://hook.eu2.make.com/7fh77ivfdsvblqak8qnrfvvxcu4ycf1b";
 
 // stav filtru kartiček: 'all' | 'scheduled' | 'calendar'
 let pillFilter = 'all';
@@ -2033,20 +2034,16 @@ function logKomunikace(type, patient, detail, status, errorMsg) {
   const arr = loadKomunikace();
   arr.push(entry);
   saveKomunikace(arr);
-  // Sync do Make Data Store (fire-and-forget)
+  // Auto-sync celého pole do Make Data Store (fire-and-forget, stejný přístup jako Ceník)
   if (WEBHOOK_URL_KOMM_LOG) {
-    fetch(WEBHOOK_URL_KOMM_LOG, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        typ: entry.type,
-        patient_name: entry.patientName,
-        detail: entry.detail,
-        status: entry.status,
-        error_msg: entry.error,
-        ts: entry.ts
-      })
-    }).catch(function() {});
+    try {
+      const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(arr))));
+      fetch(WEBHOOK_URL_KOMM_LOG, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: b64
+      }).catch(function() {});
+    } catch(e) {}
   }
 }
 const DEFAULT_CENIK = [
@@ -2617,13 +2614,29 @@ function clearKomunikace() {
   renderKomunikace();
 }
 
+async function syncKomunikaceToCloud() {
+  if (!WEBHOOK_URL_KOMM_LOG) { alert('Webhook není nastaven.'); return; }
+  const arr = loadKomunikace();
+  if (arr.length === 0) { alert('Žádné záznamy k synchronizaci.'); return; }
+  if (!confirm('Nahrát ' + arr.length + ' záznamů do cloudu?')) return;
+  try {
+    const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(arr))));
+    const r = await fetch(WEBHOOK_URL_KOMM_LOG, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: b64
+    });
+    if (r.ok) alert('Synchronizace hotová: ' + arr.length + ' záznamů nahráno.');
+    else alert('Chyba při synchronizaci: ' + r.status);
+  } catch(e) { alert('Chyba: ' + e.message); }
+  renderKomunikace();
+}
+
 function renderKomunikace() {
   const cards = document.getElementById('patient-cards');
   const emptyState = document.getElementById('empty-state');
   emptyState.classList.add('hidden');
   cards.className = '';
-
-  const log = loadKomunikace().slice().reverse(); // nejnovější první
 
   function typeBadge(type) {
     if (type === 'email_objednavka') return '<span class="komm-badge komm-badge-email"><i class="ti ti-mail"></i> Email · Objednávka</span>';
@@ -2641,45 +2654,77 @@ function renderKomunikace() {
     } catch { return ts; }
   }
 
-  if (log.length === 0) {
-    cards.innerHTML = '<div class="komm-wrap"><div class="komm-empty"><i class="ti ti-mail-off" style="font-size:36px;opacity:0.3;display:block;margin-bottom:10px;"></i>Žádná odeslána komunikace.<br><span style="font-size:12px;">Záznamy se vytvoří automaticky při odesílání emailů a SMS.</span></div></div>';
-    return;
+  function buildTable(log) {
+    const sorted = log.slice().sort(function(a, b) { return (b.ts || '').localeCompare(a.ts || ''); });
+    if (sorted.length === 0) {
+      return '<div class="komm-wrap"><div class="komm-empty"><i class="ti ti-mail-off" style="font-size:36px;opacity:0.3;display:block;margin-bottom:10px;"></i>Žádná odeslána komunikace.<br><span style="font-size:12px;">Záznamy se vytvoří automaticky při odesílání emailů a SMS.</span></div></div>';
+    }
+    const rows = sorted.map(function(r) {
+      const statusIcon = r.status === 'ok'
+        ? '<i class="ti ti-circle-check komm-status-ok" title="Odesláno"></i>'
+        : r.status === 'planned'
+        ? '<i class="ti ti-clock komm-status-planned" title="Naplánována — odejde 24h před termínem"></i>'
+        : '<i class="ti ti-circle-x komm-status-err" title="' + escapeHtml(r.error || 'Chyba') + '"></i>';
+      return '<tr>'
+        + '<td style="white-space:nowrap;color:var(--text-3);font-size:12px;">' + escapeHtml(formatTs(r.ts)) + '</td>'
+        + '<td>' + typeBadge(r.type) + '</td>'
+        + '<td><span style="font-weight:500;">' + escapeHtml(r.patientName || '—') + '</span></td>'
+        + '<td><span>' + escapeHtml(r.detail || '') + '</span>' + (r.error ? '<div class="komm-detail" style="color:var(--danger-text);">' + escapeHtml(r.error) + '</div>' : '') + '</td>'
+        + '<td style="text-align:center;">' + statusIcon + '</td>'
+        + '</tr>';
+    }).join('');
+    return '<div class="komm-wrap">'
+      + '<div class="komm-header">'
+        + '<span class="komm-title">Historie komunikace</span>'
+        + '<div style="display:flex;gap:8px;">'
+          + '<button class="komm-clear-btn" onclick="syncKomunikaceToCloud()" title="Nahraje záznamy z tohoto prohlížeče do Make Data Store, aby byly viditelné odkudkoli"><i class="ti ti-cloud-upload" style="font-size:12px;margin-right:4px;"></i>Sync do cloudu</button>'
+          + '<button class="komm-clear-btn" onclick="clearKomunikace()"><i class="ti ti-trash" style="font-size:12px;margin-right:4px;"></i>Smazat historii</button>'
+        + '</div>'
+      + '</div>'
+      + '<div class="db-card" style="padding:0;overflow:hidden;">'
+        + '<table class="komm-table">'
+          + '<thead><tr>'
+            + '<th>Datum a čas</th>'
+            + '<th>Typ</th>'
+            + '<th>Pacient</th>'
+            + '<th>Detail</th>'
+            + '<th style="text-align:center;">Status</th>'
+          + '</tr></thead>'
+          + '<tbody>' + rows + '</tbody>'
+        + '</table>'
+      + '</div>'
+      + '</div>';
   }
 
-  const rows = log.map(function(r) {
-    const statusIcon = r.status === 'ok'
-      ? '<i class="ti ti-circle-check komm-status-ok" title="Odesláno"></i>'
-      : r.status === 'planned'
-      ? '<i class="ti ti-clock komm-status-planned" title="Naplánována — odejde 24h před termínem"></i>'
-      : '<i class="ti ti-circle-x komm-status-err" title="' + escapeHtml(r.error || 'Chyba') + '"></i>';
-    return '<tr>'
-      + '<td style="white-space:nowrap;color:var(--text-3);font-size:12px;">' + escapeHtml(formatTs(r.ts)) + '</td>'
-      + '<td>' + typeBadge(r.type) + '</td>'
-      + '<td><span style="font-weight:500;">' + escapeHtml(r.patientName || '—') + '</span></td>'
-      + '<td><span>' + escapeHtml(r.detail || '') + '</span>' + (r.error ? '<div class="komm-detail" style="color:var(--danger-text);">' + escapeHtml(r.error) + '</div>' : '') + '</td>'
-      + '<td style="text-align:center;">' + statusIcon + '</td>'
-      + '</tr>';
-  }).join('');
+  // Zobraz "načítám…" a okamžitě fetch z Make Data Store (hlavní zdroj)
+  cards.innerHTML = '<div class="komm-wrap"><div class="komm-empty" style="opacity:0.5;">Načítám historii komunikace…</div></div>';
 
-  cards.innerHTML =
-    '<div class="komm-wrap">'
-    + '<div class="komm-header">'
-      + '<span class="komm-title">Historie komunikace</span>'
-      + '<button class="komm-clear-btn" onclick="clearKomunikace()"><i class="ti ti-trash" style="font-size:12px;margin-right:4px;"></i>Smazat historii</button>'
-    + '</div>'
-    + '<div class="db-card" style="padding:0;overflow:hidden;">'
-      + '<table class="komm-table">'
-        + '<thead><tr>'
-          + '<th>Datum a čas</th>'
-          + '<th>Typ</th>'
-          + '<th>Pacient</th>'
-          + '<th>Detail</th>'
-          + '<th style="text-align:center;">Status</th>'
-        + '</tr></thead>'
-        + '<tbody>' + rows + '</tbody>'
-      + '</table>'
-    + '</div>'
-    + '</div>';
+  if (WEBHOOK_URL_KOMM_LOG_READ) {
+    fetch(WEBHOOK_URL_KOMM_LOG_READ, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ patient_id: '' }) })
+      .then(function(r) { return r.json(); })
+      .then(function(dsEntries) {
+        var merged = [];
+        // Odpověď je base64 string (stejný formát jako Ceník)
+        try {
+          var decoded = decodeURIComponent(escape(atob(dsEntries)));
+          var parsed = JSON.parse(decoded);
+          if (Array.isArray(parsed)) merged = parsed;
+        } catch(ex) {
+          // Fallback: možná přišel čistý JSON array
+          if (Array.isArray(dsEntries)) merged = dsEntries;
+        }
+        // Doplň záznamy z localStorage, které ještě nejsou v Data Store
+        var dsKeys = new Set(merged.map(function(e) { return e.ts + '|' + e.type; }));
+        var localExtras = loadKomunikace().filter(function(e) { return !dsKeys.has(e.ts + '|' + e.type); });
+        cards.innerHTML = buildTable(merged.concat(localExtras));
+      })
+      .catch(function() {
+        // Fallback: localStorage only
+        cards.innerHTML = buildTable(loadKomunikace());
+      });
+  } else {
+    cards.innerHTML = buildTable(loadKomunikace());
+  }
 }
 
 // ---------------- Dekurz (klinické záznamy) ----------------
