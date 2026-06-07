@@ -2700,18 +2700,18 @@ function renderKomunikace() {
   cards.innerHTML = '<div class="komm-wrap"><div class="komm-empty" style="opacity:0.5;">Načítám historii komunikace…</div></div>';
 
   if (WEBHOOK_URL_KOMM_LOG_READ) {
-    fetch(WEBHOOK_URL_KOMM_LOG_READ, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ patient_id: '' }) })
-      .then(function(r) { return r.json(); })
-      .then(function(dsEntries) {
+    fetch(WEBHOOK_URL_KOMM_LOG_READ, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: 'load' })
+      .then(function(r) { return r.text(); })
+      .then(function(text) {
         var merged = [];
-        // Odpověď je base64 string (stejný formát jako Ceník)
+        text = (text || '').trim();
+        // Dekóduj base64 (stejný formát jako Ceník)
         try {
-          var decoded = decodeURIComponent(escape(atob(dsEntries)));
+          var decoded = decodeURIComponent(escape(atob(text)));
           var parsed = JSON.parse(decoded);
           if (Array.isArray(parsed)) merged = parsed;
         } catch(ex) {
-          // Fallback: možná přišel čistý JSON array
-          if (Array.isArray(dsEntries)) merged = dsEntries;
+          try { var parsed2 = JSON.parse(text); if (Array.isArray(parsed2)) merged = parsed2; } catch(e2) {}
         }
         // Doplň záznamy z localStorage, které ještě nejsou v Data Store
         var dsKeys = new Set(merged.map(function(e) { return e.ts + '|' + e.type; }));
