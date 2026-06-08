@@ -1084,8 +1084,8 @@ const WEBHOOK_URL_DRIVE = "https://hook.eu2.make.com/ezul17w4wl6r0fik6cff6ppyrto
 const WEBHOOK_URL_DEKURZ_EMAIL = "https://hook.eu2.make.com/nwf7jk4rw3vlpclcg8bo3g6xozyyv8ar";
 const WEBHOOK_URL_PLATBA_ZAPIS = "https://hook.eu2.make.com/vpwp8rbtntg9y7ojc81m4o2dvq6fqaph";
 const WEBHOOK_URL_PLATBA_MESIC = "https://hook.eu2.make.com/7piwts6gsx1l8qdjn1l64dvdm8xpep1v";
-const WEBHOOK_URL_CENIK_SAVE   = "https://hook.eu2.make.com/kjjr2zgl3yqd9o8ue4h4o4tdunuemwwn";
-const WEBHOOK_URL_CENIK_LOAD   = "https://hook.eu2.make.com/uvahg29eowk4g2e3vorebkiquu4tl6e2";
+const WEBHOOK_URL_CENIK_SAVE   = "https://hook.eu2.make.com/ibcnlj64slvlag9bshexwf9m4vrfe3wf";
+const WEBHOOK_URL_CENIK_LOAD   = "https://hook.eu2.make.com/sxklgjh8hhssgk4spha0rx2q3ggcgyu6";
 const WEBHOOK_URL_KOMM_LOG     = "https://hook.eu2.make.com/svh70fk3vd7kltqz4qv9lt6vdyyvz9od";
 const WEBHOOK_URL_KOMM_LOG_READ = "https://hook.eu2.make.com/mgm2qmupnz2gxsx9s8p2l7nv7rda1bit";
 
@@ -2067,16 +2067,28 @@ function loadCenik() {
 }
 function saveCenik(data) {
   try { localStorage.setItem(CENIK_STORAGE_KEY, JSON.stringify(data)); } catch {}
-  // Sync do Make Data Store jako base64 (fire-and-forget)
+  // Sync do Softr přes Make — každá služba = 1 upsert podle názvu (fire-and-forget)
   if (WEBHOOK_URL_CENIK_SAVE) {
-    try {
-      const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-      fetch(WEBHOOK_URL_CENIK_SAVE, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: b64
-      }).catch(function() {});
-    } catch(e) {}
+    let poradi = 0;
+    (data || []).forEach(function(kat) {
+      (kat.sluzby || []).forEach(function(s) {
+        poradi++;
+        if (!s.nazev) return;
+        try {
+          fetch(WEBHOOK_URL_CENIK_SAVE, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              nazev: s.nazev,
+              kategorie: kat.kategorie || '',
+              cena: s.cena || 0,
+              doba: s.doba || 0,
+              poradi: poradi
+            })
+          }).catch(function() {});
+        } catch(e) {}
+      });
+    });
   }
 }
 async function loadCenikFromServer() {
@@ -2090,13 +2102,30 @@ async function loadCenikFromServer() {
     if (!resp.ok) return;
     const text = (await resp.text()).trim();
     if (!text) return;
-    // Zkus base64 dekódování, pak přímý JSON parse
-    let data = null;
-    try { data = JSON.parse(decodeURIComponent(escape(atob(text)))); } catch(e) {}
-    if (!data) { try { data = JSON.parse(text); } catch(e) {} }
-    if (Array.isArray(data) && data.length > 0) {
-      localStorage.setItem(CENIK_STORAGE_KEY, JSON.stringify(data));
-    }
+    let rows = null;
+    try { rows = JSON.parse(text); } catch(e) { return; }
+    if (!Array.isArray(rows) || rows.length === 0) return; // prázdný Softr → ponech localStorage
+    // Přemapuj Softr field kódy → lokální struktura, zahoď prázdné názvy
+    const items = rows.map(function(r) {
+      return {
+        nazev: r.DIaeU || '',
+        kategorie: r.T5ODb || '',
+        cena: Number(r.vScDl) || 0,
+        doba: Number(r.uR1Ec) || 0,
+        poradi: Number(r['7XoaF']) || 0
+      };
+    }).filter(function(it) { return it.nazev && String(it.nazev).trim() !== ''; });
+    if (items.length === 0) return;
+    items.sort(function(a, b) { return a.poradi - b.poradi; });
+    // Seskup do kategorií se zachováním pořadí
+    const groups = [];
+    const idx = {};
+    items.forEach(function(it) {
+      const katName = it.kategorie || '';
+      if (!(katName in idx)) { idx[katName] = groups.length; groups.push({ kategorie: katName, sluzby: [] }); }
+      groups[idx[katName]].sluzby.push({ nazev: it.nazev, cena: it.cena, doba: it.doba });
+    });
+    localStorage.setItem(CENIK_STORAGE_KEY, JSON.stringify(groups));
   } catch(e) {} // fallback = localStorage
 }
 function getServicePrice(serviceName) {
