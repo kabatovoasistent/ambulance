@@ -2102,17 +2102,20 @@ async function loadCenikFromServer() {
     if (!resp.ok) return;
     const text = (await resp.text()).trim();
     if (!text) return;
-    let rows = null;
-    try { rows = JSON.parse(text); } catch(e) { return; }
-    if (!Array.isArray(rows) || rows.length === 0) return; // prázdný Softr → ponech localStorage
-    // Přemapuj Softr field kódy → lokální struktura, zahoď prázdné názvy
+    let parsed = null;
+    try { parsed = JSON.parse(text); } catch(e) { return; }
+    const rows = (parsed && Array.isArray(parsed.data)) ? parsed.data
+               : (Array.isArray(parsed) ? parsed : null);
+    if (!rows || rows.length === 0) return; // prázdný Softr → ponech localStorage
+    // Přemapuj Softr záznamy (r.fields = field kódy) → lokální struktura, zahoď prázdné názvy
     const items = rows.map(function(r) {
+      const f = r.fields || r;
       return {
-        nazev: r.DIaeU || '',
-        kategorie: r.T5ODb || '',
-        cena: Number(r.vScDl) || 0,
-        doba: Number(r.uR1Ec) || 0,
-        poradi: Number(r['7XoaF']) || 0
+        nazev: f.DIaeU || '',
+        kategorie: f.T5ODb || '',
+        cena: Number(f.vScDl) || 0,
+        doba: Number(f.uR1Ec) || 0,
+        poradi: Number(f['7XoaF']) || 0
       };
     }).filter(function(it) { return it.nazev && String(it.nazev).trim() !== ''; });
     if (items.length === 0) return;
