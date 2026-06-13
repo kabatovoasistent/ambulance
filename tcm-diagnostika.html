@@ -218,7 +218,9 @@
   <div class="modal" style="max-width:540px;">
     <h3>Vyfotit kamerou</h3>
     <div id="camError" style="display:none;font-size:13px;color:#c62828;background:#fff5f5;border-radius:8px;padding:10px;margin-bottom:10px;"></div>
+    <select id="camSelect" onchange="switchCamera()" style="display:none;margin-bottom:8px;"></select>
     <video id="camVideo" playsinline muted style="width:100%;border-radius:10px;background:#000;max-height:360px;"></video>
+    <div style="font-size:12px;color:#5f6b78;margin-top:6px;">Je-li obraz černý (např. připojený telefon je zamčený), vyberte nahoře jinou kameru — třeba vestavěnou webkameru.</div>
     <div class="actions" style="margin-top:10px;">
       <button class="btn btn-primary" onclick="capturePhoto()"><i class="ti ti-camera"></i> Vyfotit</button>
       <button class="btn btn-ghost" onclick="closeCamera()">Zavřít</button>
@@ -455,17 +457,42 @@ function bindFile(inputId, dropId, textId, label, imgId){
 }
 
 let cameraTarget=null, cameraStream=null;
+async function startCamera(deviceId){
+  if(cameraStream){ cameraStream.getTracks().forEach(t=>t.stop()); cameraStream=null; }
+  const constraints = deviceId ? {video:{deviceId:{exact:deviceId}},audio:false} : {video:true,audio:false};
+  cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+  const video=document.getElementById("camVideo");
+  video.srcObject=cameraStream; await video.play();
+}
+async function populateCameras(){
+  try{
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const cams = devices.filter(d=>d.kind==="videoinput");
+    const sel=document.getElementById("camSelect");
+    if(cams.length<=1){ sel.style.display="none"; return; }
+    let curId="";
+    if(cameraStream && cameraStream.getVideoTracks()[0]){ curId = cameraStream.getVideoTracks()[0].getSettings().deviceId || ""; }
+    sel.innerHTML="";
+    cams.forEach((d,i)=>{ const o=document.createElement("option"); o.value=d.deviceId; o.textContent=d.label || ("Kamera "+(i+1)); if(d.deviceId===curId) o.selected=true; sel.appendChild(o); });
+    sel.style.display="block";
+  }catch(e){ console.warn(e); }
+}
+async function switchCamera(){
+  const id=document.getElementById("camSelect").value;
+  const err=document.getElementById("camError"); err.style.display="none";
+  try{ await startCamera(id); }
+  catch(e){ err.textContent="Tuto kameru nelze otevřít: "+e.message+" — zkuste jinou ze seznamu."; err.style.display="block"; }
+}
 async function openCamera(inputId){
   cameraTarget=inputId;
   document.getElementById("cameraModal").style.display="flex";
   const err=document.getElementById("camError"); err.style.display="none";
-  const video=document.getElementById("camVideo");
   try{
     if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
       throw new Error("Tento prohlížeč/kontext kameru nepovoluje");
     }
-    cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false});
-    video.srcObject=cameraStream; await video.play();
+    await startCamera();
+    await populateCameras();
   }catch(e){
     err.textContent="Kameru nelze otevřít ("+e.message+"). Kamera funguje jen když aplikace běží přes https (např. GitHub Pages), ne z lokálního souboru. Zatím použijte tlačítko Nahrát.";
     err.style.display="block";
