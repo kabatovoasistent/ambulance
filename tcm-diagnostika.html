@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TČM Diagnostika — MedicGroup</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1a3a5c; --navy2:#2c4a6b; --orange:#e65100; --steel:#7a9ab5;
+    --steel-l:#b8cdd9; --bg:#f4f7fa; --line:#cdd6df; --ink:#1a3a5c; --muted:#5f6b78;
+    --soft:#eef2f6; --card:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:'Source Sans 3',system-ui,sans-serif;color:#22323f;}
+  .wrap{max-width:680px;margin:24px auto;background:var(--card);border-radius:14px;overflow:hidden;
+        border:1px solid rgba(0,0,0,.10);box-shadow:0 4px 24px rgba(26,58,92,.08);}
+  header{background:var(--navy);padding:20px 24px;color:#fff;}
+  .kicker{font-size:12px;letter-spacing:2px;color:var(--steel-l);}
+  h1{font-family:'Playfair Display',serif;font-size:23px;margin:2px 0 0;font-weight:600;}
+  .sub{font-size:13px;color:var(--steel);margin-top:3px;}
+  .body{padding:22px 24px;}
+  .sec-title{font-family:'Playfair Display',serif;font-size:16px;color:var(--navy);
+             border-bottom:2px solid var(--orange);padding-bottom:5px;margin:0 0 12px;}
+  .sec{margin-bottom:24px;}
+  label.fld{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;}
+  input,select,textarea{width:100%;font-family:inherit;font-size:14px;color:var(--ink);
+    border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:#fbfcfd;}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--steel);}
+  textarea{min-height:110px;resize:vertical;}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .client-bar{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;}
+  .btn{font-family:inherit;cursor:pointer;border-radius:8px;font-size:14px;padding:10px 16px;border:1px solid var(--navy);}
+  .btn-primary{background:var(--navy);color:#fff;}
+  .btn-ghost{background:#fff;color:var(--navy);}
+  .btn-orange{background:var(--orange);color:#fff;border-color:var(--orange);}
+  .btn-sm{padding:8px 12px;font-size:13px;}
+  .drop{border:1.6px dashed var(--steel-l);border-radius:10px;padding:18px;text-align:center;
+        color:var(--muted);background:var(--bg);cursor:pointer;}
+  .drop i{font-size:25px;color:var(--navy);}
+  .drop .t{font-size:13px;margin-top:4px;}
+  .drop.has{border-style:solid;border-color:#2e7d32;background:#f1f8f1;color:#2e7d32;}
+  .thumb{max-height:120px;border-radius:8px;margin-top:8px;}
+  .scale{margin-bottom:16px;}
+  .scale .nm{font-size:13px;color:var(--navy);margin-bottom:6px;font-weight:500;}
+  .cells{display:flex;gap:5px;}
+  .cell{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;
+        padding:9px 0;font-size:13px;border-radius:6px;cursor:pointer;
+        background:var(--soft);color:var(--muted);user-select:none;transition:.1s;}
+  .cell:hover{background:#dfe7ee;}
+  .cell.on{background:var(--orange);color:#fff;font-weight:600;}
+  .ends{display:flex;justify-content:space-between;margin-top:4px;}
+  .ends span{font-size:11px;color:#8a96a3;}
+  .caps{display:flex;gap:5px;margin-top:5px;}
+  .cap{flex:1;text-align:center;font-size:11px;color:#5f6b78;line-height:1.3;padding:0 2px;word-break:break-word;}
+  .trend{background:var(--bg);border-radius:10px;padding:14px;margin-top:6px;}
+  .trend .h{font-size:13px;color:var(--navy);margin-bottom:12px;}
+  .bars{display:flex;align-items:flex-end;gap:12px;}
+  .tcol{flex:1;display:flex;flex-direction:column;align-items:center;}
+  .tval{font-size:13px;color:var(--navy);font-weight:600;margin-bottom:5px;}
+  .tbar-wrap{width:100%;height:90px;display:flex;align-items:flex-end;background:#e7edf2;border-radius:4px;}
+  .tbar{width:100%;background:var(--steel);border-radius:4px 4px 0 0;min-height:3px;}
+  .tbar.hot{background:var(--orange);}
+  .tdate{font-size:12px;color:#5f6b78;margin-top:6px;}
+  .actions{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;}
+  .actions .btn{flex:1;min-width:180px;}
+  .modal-bg{position:fixed;inset:0;background:rgba(20,40,60,.45);display:none;align-items:center;
+            justify-content:center;padding:16px;z-index:50;}
+  .modal{background:#fff;border-radius:12px;max-width:440px;width:100%;padding:22px;}
+  .modal h3{font-family:'Playfair Display',serif;color:var(--navy);margin:0 0 14px;}
+  .mrow{margin-bottom:10px;}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--navy);
+         color:#fff;padding:11px 20px;border-radius:8px;font-size:14px;opacity:0;transition:.3s;z-index:60;pointer-events:none;}
+  .toast.show{opacity:1;}
+  .status{font-size:12px;color:var(--muted);margin-top:10px;text-align:center;}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;background:#fff3e0;color:var(--orange);}
+  .legend{font-size:11px;color:#8a96a3;margin-top:4px;line-height:1.5;}
+  .scale .nm .hint{font-size:11px;color:#8a96a3;font-weight:400;}
+  #clientSearch{max-width:340px;}
+  .combo{position:relative;max-width:340px;}
+  .combo-list{position:absolute;left:0;right:0;top:100%;z-index:30;background:#fff;border:1px solid var(--line);
+    border-radius:8px;margin-top:3px;max-height:240px;overflow:auto;display:none;box-shadow:0 6px 18px rgba(26,58,92,.12);}
+  .combo-list.open{display:block;}
+  .combo-item{padding:9px 11px;font-size:14px;color:var(--ink);cursor:pointer;}
+  .combo-item:hover{background:var(--bg);}
+  .combo-item .ci-sub{font-size:12px;color:var(--muted);margin-top:1px;}
+  .combo-empty{padding:9px 11px;font-size:13px;color:#8a96a3;}
+  .rhist{display:flex;flex-direction:column;gap:8px;}
+  .rh-empty{font-size:13px;color:#8a96a3;padding:6px 2px;}
+  .rh-row{display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;
+          border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#fbfcfd;}
+  .rh-row:hover{border-color:var(--steel);background:#f4f7fa;}
+  .rh-title{font-size:14px;color:var(--navy);font-weight:500;}
+  .rh-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+  .rh-row i{color:var(--orange);font-size:18px;}
+  @media(max-width:560px){.row3{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.client-bar{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">MEDICGROUP AMBULANCE · CELOSTNÍ PÉČE</div>
+    <h1>TČM Diagnostika — vstupní data klienta</h1>
+    <div class="sub">Biorezonance · TČM · BBC sken <span id="modeflag" class="pill" style="margin-left:6px;">režim: lokální</span></div>
+  </header>
+  <div class="body">
+
+    <div class="sec">
+      <div class="sec-title">Klient</div>
+      <div class="client-bar">
+        <div>
+          <label class="fld" for="clientSearch">Vyberte klienta z kartotéky</label>
+          <div class="combo">
+            <input id="clientSearch" type="text" autocomplete="off" placeholder="Začněte psát jméno…" oninput="filterClients()" onfocus="openClientResults()">
+            <div id="clientResults" class="combo-list"></div>
+          </div>
+          <select id="clientSel" style="display:none"><option value="">— vyberte —</option></select>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="openClient()"><i class="ti ti-user-plus"></i> Nový klient</button>
+      </div>
+      <div class="row3" style="margin-top:12px;">
+        <div><label class="fld">Datum konzultace</label><input id="datum" type="date"></div>
+        <div><label class="fld">E-mail klienta</label><input id="email" type="email" placeholder="doplní se z kartotéky"></div>
+        <div><label class="fld">Telefon</label><input id="tel" type="text" placeholder="doplní se z kartotéky"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">1 · Anamnéza</div>
+      <textarea id="anamneza" placeholder="Sem vložte / nakopírujte odpovědi klienta na anamnestické otázky…"></textarea>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">2 · Výsledky BBC (PDF, obrázek nebo text)</div>
+      <div class="drop" id="bbcDrop" onclick="document.getElementById('bbcFile').click()">
+        <i class="ti ti-file-upload"></i>
+        <div class="t" id="bbcText">Přetáhněte sem PDF, obrázek (foto reportu) nebo textový soubor — nebo klikněte pro nahrání</div>
+        <img class="thumb" id="bbcImg" style="display:none">
+      </div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:6px;" onclick="openCamera('bbcFile')"><i class="ti ti-camera"></i> Vyfotit report kamerou</button>
+      <input id="bbcFile" type="file" accept="application/pdf,image/*,.txt,.text,text/plain" style="display:none">
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">3 · Fotodokumentace</div>
+      <div class="row2">
+        <div>
+          <div class="drop" id="jazykDrop" onclick="document.getElementById('jazykFile').click()">
+            <i class="ti ti-photo"></i><div class="t" id="jazykText">Foto jazyka</div>
+            <img class="thumb" id="jazykImg" style="display:none">
+          </div>
+          <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:6px;" onclick="openCamera('jazykFile')"><i class="ti ti-camera"></i> Vyfotit kamerou</button>
+        </div>
+        <div>
+          <div class="drop" id="ociDrop" onclick="document.getElementById('ociFile').click()">
+            <i class="ti ti-eye"></i><div class="t" id="ociText">Foto očí</div>
+            <img class="thumb" id="ociImg" style="display:none">
+          </div>
+          <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:6px;" onclick="openCamera('ociFile')"><i class="ti ti-camera"></i> Vyfotit kamerou</button>
+        </div>
+      </div>
+      <input id="jazykFile" type="file" accept="image/*" style="display:none">
+      <input id="ociFile" type="file" accept="image/*" style="display:none">
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">4 · Škálování — posledních 7 dní</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Klikněte na hodnotu, která nejlépe odpovídá uplynulému týdnu.</div>
+      <div id="scales"></div>
+      <div class="trend">
+        <div class="h"><i class="ti ti-chart-bar"></i> Trend — vyberte klienta pro zobrazení historie</div>
+        <div class="bars" id="trendBars"></div>
+        <div class="days" id="trendDays"></div>
+      </div>
+    </div>
+
+    <div class="sec" style="margin-bottom:14px;">
+      <label class="fld" for="pokyn">Doplňující pokyn pro AI (nepovinné)</label>
+      <input id="pokyn" type="text" placeholder="např. zaměř se na spánek a trávení">
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="saveAll()"><i class="ti ti-database"></i> Uložit do databáze</button>
+      <button class="btn btn-orange" onclick="createReport()"><i class="ti ti-file-text"></i> Vytvořit zprávu</button>
+    </div>
+    <div class="status" id="status"></div>
+
+    <div class="sec" style="margin-top:18px;">
+      <div class="sec-title">Historie zpráv</div>
+      <div id="reportList" class="rhist"><div class="rh-empty">Vyberte klienta pro zobrazení historie zpráv.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="clientModal">
+  <div class="modal">
+    <h3>Nový klient — kartotéka</h3>
+    <div class="row2">
+      <div class="mrow"><label class="fld">Příjmení *</label><input id="c_prijmeni"></div>
+      <div class="mrow"><label class="fld">Jméno *</label><input id="c_jmeno"></div>
+    </div>
+    <div class="mrow"><label class="fld">Datum narození</label><input id="c_datum" type="date"></div>
+    <div class="mrow"><label class="fld">Město</label><input id="c_mesto"></div>
+    <div class="row2">
+      <div class="mrow"><label class="fld">E-mail</label><input id="c_email" type="email"></div>
+      <div class="mrow"><label class="fld">Telefon</label><input id="c_tel" type="text"></div>
+    </div>
+    <div class="actions" style="margin-top:8px;">
+      <button class="btn btn-primary" onclick="saveClient()">Uložit klienta</button>
+      <button class="btn btn-ghost" onclick="closeClient()">Zrušit</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="cameraModal">
+  <div class="modal" style="max-width:540px;">
+    <h3>Vyfotit kamerou</h3>
+    <div id="camError" style="display:none;font-size:13px;color:#c62828;background:#fff5f5;border-radius:8px;padding:10px;margin-bottom:10px;"></div>
+    <video id="camVideo" playsinline muted style="width:100%;border-radius:10px;background:#000;max-height:360px;"></video>
+    <div class="actions" style="margin-top:10px;">
+      <button class="btn btn-primary" onclick="capturePhoto()"><i class="ti ti-camera"></i> Vyfotit</button>
+      <button class="btn btn-ghost" onclick="closeCamera()">Zavřít</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="reviewModal">
+  <div class="modal" style="max-width:700px;">
+    <h3>Náhled vygenerované zprávy — kontrola</h3>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Zkontrolujte a případně upravte text. Pak uložte do historie, nebo zahoďte.</div>
+    <textarea id="reviewText" style="min-height:340px;font-size:13px;line-height:1.5;"></textarea>
+    <div class="actions" style="margin-top:10px;">
+      <button class="btn btn-primary" onclick="saveGeneratedReport()"><i class="ti ti-check"></i> Uložit do historie</button>
+      <button class="btn btn-orange" onclick="previewGeneratedReport()"><i class="ti ti-eye"></i> Otevřít náhled</button>
+      <button class="btn btn-ghost" onclick="closeReview()">Zahodit</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const WEBHOOKS = {
+  clientsRead:  "https://hook.eu2.make.com/qznpke5iq49x8yavoxgnyzueymju9g6m",
+  clientsInsert:"https://hook.eu2.make.com/kvf1g7d2i2drykdn6h0ddjzqyw651331",
+  scaleInsert:  "https://hook.eu2.make.com/mssscdp387hj1et6ju88zcf7r8ifzytd",
+  scaleRead:    "https://hook.eu2.make.com/xg96yh8b2yjea4h2v9q7dcp9ud2nc07g",
+  zpravyInsert: "https://hook.eu2.make.com/0yoorkpogmfrydkh5wfff3o35or17gc0",
+  zpravyRead:   "https://hook.eu2.make.com/x5fd484p14omyot2cfdnw5c8n7qr38sp",
+  zpravaGen:    "https://hook.eu2.make.com/xnk7rqrjl6qc47p718huet1gsd52d9sr"
+};
+const LIVE = Object.values(WEBHOOKS).some(u => u);
+
+const METRICS = [
+  {key:"usinani", name:"Usínání", hint:"za jak dlouho večer usnu", min:1, max:5, dir:1, caps:["do 60 min a víc","do 30 min","do 15 min","do 10 min","do 5 min spím"]},
+  {key:"buzeni",  name:"Buzení v noci", hint:"kolikrát se v noci probudím", min:1, max:5, dir:1, caps:["více než 5×","3×","2×","1×","spím celou noc"]},
+  {key:"chut",    name:"Chuť k jídlu", min:1, max:5, dir:0, caps:["nemám","malou","střídavě","spíše mám","mám velikou"]},
+  {key:"stres",   name:"Stres", lo:"1 · nemám", hi:"10 · celý den ve stresu", min:1, max:10, dir:-1},
+  {key:"energie", name:"Energie", lo:"1 · vyčerpaný/á", hi:"10 · spousta energie", min:1, max:10, dir:1},
+  {key:"bolesti", name:"Bolesti", lo:"1 · žádná", hi:"10 · nedá se vydržet", min:1, max:10, dir:-1},
+];
+// dir: +1 = vyšší je lépe, -1 = vyšší je hůř, 0 = neutrální (do indexu nevstupuje)
+let scaleVals = {};
+let allClients = [];
+let pendingReport = null;
+
+const LS = {
+  clients(){ return JSON.parse(localStorage.getItem("tcm_clients")||"[]"); },
+  setClients(a){ localStorage.setItem("tcm_clients", JSON.stringify(a)); },
+  scales(){ return JSON.parse(localStorage.getItem("tcm_scales")||"[]"); },
+  setScales(a){ localStorage.setItem("tcm_scales", JSON.stringify(a)); },
+};
+
+function init(){
+  document.getElementById("datum").value = new Date().toISOString().slice(0,10);
+  buildScales();
+  loadClients();
+  document.getElementById("modeflag").textContent = LIVE ? "režim: Softr" : "režim: lokální";
+  setupUploads();
+  renderReportHistory("");
+  document.getElementById("clientSel").addEventListener("change", onClientChange);
+  document.addEventListener("click", function(e){ if(!e.target.closest(".combo")) closeClientResults(); });
+}
+
+function buildScales(){
+  const box = document.getElementById("scales");
+  box.innerHTML = "";
+  METRICS.forEach(m=>{
+    const wrap = document.createElement("div"); wrap.className="scale";
+    let cells="";
+    for(let v=m.min; v<=m.max; v++){
+      cells += '<div class="cell" data-k="'+m.key+'" data-v="'+v+'" onclick="pick(\''+m.key+'\','+v+')">'+v+'</div>';
+    }
+    let below;
+    if(m.caps){
+      below = '<div class="caps">'+m.caps.map(t=>'<div class="cap">'+t+'</div>').join('')+'</div>';
+    } else {
+      below = '<div class="ends"><span>'+m.lo+'</span><span>'+m.hi+'</span></div>';
+    }
+    wrap.innerHTML = '<div class="nm">'+m.name+(m.hint?' <span class="hint">— '+m.hint+'</span>':'')+'</div>'+
+      '<div class="cells">'+cells+'</div>'+ below;
+    box.appendChild(wrap);
+  });
+}
+function pick(key,val){
+  scaleVals[key]=val;
+  document.querySelectorAll('.cell[data-k="'+key+'"]').forEach(c=>{
+    c.classList.toggle("on", Number(c.dataset.v)===val);
+  });
+}
+// Normalizace hodnoty na 0-100 orientovaně "výš = lépe" (obrací škály s dir<0).
+function normMetric(m, v){
+  if(v==null || v==="") return null;
+  v = Number(v);
+  const span = m.max - m.min;
+  if(span<=0) return null;
+  const frac = m.dir<0 ? (m.max - v)/span : (v - m.min)/span;
+  return Math.round(frac*100);
+}
+// Celkový index pohody 0-100 (průměr směrových škál; chuť je neutrální, nevstupuje).
+function wellbeingIndex(vals){
+  let sum=0, n=0;
+  METRICS.forEach(m=>{
+    if(m.dir===0) return;
+    const nv = normMetric(m, vals[m.key]);
+    if(nv!=null){ sum+=nv; n++; }
+  });
+  return n ? Math.round(sum/n) : null;
+}
+
+function mapSoftrClient(rec){
+  const f = rec.fields || rec;
+  return {
+    id: f.ID_klienta || rec.id,
+    prijmeni: f.Prijmeni || "",
+    jmeno: f.Jmeno || "",
+    datum_narozeni: f.DatumNarozeni || "",
+    mesto: f.Mesto || "",
+    email: f.Email || "",
+    telefon: f.Telefon || ""
+  };
+}
+async function loadClients(){
+  let clients = LS.clients();
+  if(LIVE && WEBHOOKS.clientsRead){
+    try{
+      const r = await fetch(WEBHOOKS.clientsRead,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"load_all"})});
+      let data = await r.json();
+      if(data && !Array.isArray(data) && Array.isArray(data.data)) data = data.data;
+      if(Array.isArray(data)){
+        clients = data.map(mapSoftrClient).filter(c=>c.prijmeni || c.jmeno);
+        LS.setClients(clients);
+      }
+    }catch(e){ console.warn("Softr nedostupný, používám lokální data", e); }
+  }
+  renderClientOptions(clients);
+}
+function renderClientOptions(clients){
+  allClients = clients.slice();
+  allClients.sort((a,b)=> (a.prijmeni||"").localeCompare(b.prijmeni||"","cs"));
+  fillSelect(allClients);
+  renderClientResults();
+}
+function fillSelect(clients){
+  const sel = document.getElementById("clientSel");
+  const current = sel.value;
+  sel.innerHTML = '<option value="">— vyberte —</option>';
+  clients.forEach(c=>{
+    const o = document.createElement("option");
+    o.value = c.id;
+    o.textContent = (c.prijmeni+" "+c.jmeno).trim() + (c.datum_narozeni?" ("+c.datum_narozeni+")":"");
+    o.dataset.email = c.email||""; o.dataset.tel = c.telefon||"";
+    sel.appendChild(o);
+  });
+  if(current){ sel.value = current; }
+}
+function clientLabel(c){ return (c.prijmeni+" "+c.jmeno).trim(); }
+function filterClients(){ renderClientResults(); openClientResults(); }
+function renderClientResults(){
+  const box = document.getElementById("clientResults");
+  if(!box) return;
+  const q = (document.getElementById("clientSearch").value||"").toLowerCase().trim();
+  const list = allClients.filter(c=> (clientLabel(c)+" "+(c.datum_narozeni||"")).toLowerCase().includes(q));
+  if(list.length===0){ box.innerHTML='<div class="combo-empty">Žádný klient nenalezen</div>'; return; }
+  box.innerHTML="";
+  list.slice(0,50).forEach(c=>{
+    const it=document.createElement("div"); it.className="combo-item";
+    it.innerHTML='<div>'+escHtml(clientLabel(c))+'</div>'+(c.datum_narozeni?'<div class="ci-sub">'+escHtml(c.datum_narozeni)+'</div>':'');
+    it.onclick=()=>selectClient(c.id);
+    box.appendChild(it);
+  });
+}
+function openClientResults(){ renderClientResults(); const b=document.getElementById("clientResults"); if(b) b.classList.add("open"); }
+function closeClientResults(){ const b=document.getElementById("clientResults"); if(b) b.classList.remove("open"); }
+function selectClient(id){
+  const c = allClients.find(x=>x.id===id);
+  if(c) document.getElementById("clientSearch").value = clientLabel(c);
+  const sel = document.getElementById("clientSel");
+  sel.value = id; sel.dispatchEvent(new Event("change"));
+  closeClientResults();
+}
+function onClientChange(){
+  const o = this.options[this.selectedIndex];
+  if(!o){ return; }
+  document.getElementById("email").value = o.dataset.email||"";
+  document.getElementById("tel").value = o.dataset.tel||"";
+  loadScalesForClient(this.value);
+  loadReportsForClient(this.value);
+}
+function openClient(){ document.getElementById("clientModal").style.display="flex"; }
+function closeClient(){ document.getElementById("clientModal").style.display="none"; }
+async function saveClient(){
+  const c = {
+    id: "KL-"+Date.now().toString().slice(-7),
+    prijmeni: val("c_prijmeni").trim(),
+    jmeno: val("c_jmeno").trim(),
+    datum_narozeni: val("c_datum"),
+    mesto: val("c_mesto").trim(),
+    email: val("c_email").trim(),
+    telefon: val("c_tel").trim(),
+  };
+  if(!c.prijmeni || !c.jmeno){ toast("Vyplňte příjmení a jméno"); return; }
+  const arr = LS.clients(); arr.push(c); LS.setClients(arr);
+  if(LIVE && WEBHOOKS.clientsInsert){
+    try{ await fetch(WEBHOOKS.clientsInsert,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(c)}); }
+    catch(e){ console.warn(e); }
+  }
+  renderClientOptions(arr);
+  selectClient(c.id);
+  ["c_prijmeni","c_jmeno","c_datum","c_mesto","c_email","c_tel"].forEach(id=>document.getElementById(id).value="");
+  closeClient(); toast("Klient uložen do kartotéky");
+}
+
+function setupUploads(){
+  bindFile("bbcFile","bbcDrop","bbcText", f=>"Nahráno: "+f.name, "bbcImg");
+  bindFile("jazykFile","jazykDrop","jazykText", f=>"Jazyk: "+f.name, "jazykImg");
+  bindFile("ociFile","ociDrop","ociText", f=>"Oči: "+f.name, "ociImg");
+}
+function bindFile(inputId, dropId, textId, label, imgId){
+  const inp=document.getElementById(inputId), drop=document.getElementById(dropId);
+  inp.addEventListener("change", ()=>{
+    const f=inp.files[0]; if(!f) return;
+    document.getElementById(textId).textContent = label(f);
+    drop.classList.add("has");
+    const img = imgId ? document.getElementById(imgId) : null;
+    if(img){
+      if(f.type && f.type.indexOf("image/")===0){ img.src=URL.createObjectURL(f); img.style.display="inline-block"; }
+      else { img.removeAttribute("src"); img.style.display="none"; }
+    }
+  });
+  ["dragover","dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();
+    if(ev==="drop"&&e.dataTransfer.files[0]){ inp.files=e.dataTransfer.files; inp.dispatchEvent(new Event("change")); }}));
+}
+
+let cameraTarget=null, cameraStream=null;
+async function openCamera(inputId){
+  cameraTarget=inputId;
+  document.getElementById("cameraModal").style.display="flex";
+  const err=document.getElementById("camError"); err.style.display="none";
+  const video=document.getElementById("camVideo");
+  try{
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      throw new Error("Tento prohlížeč/kontext kameru nepovoluje");
+    }
+    cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false});
+    video.srcObject=cameraStream; await video.play();
+  }catch(e){
+    err.textContent="Kameru nelze otevřít ("+e.message+"). Kamera funguje jen když aplikace běží přes https (např. GitHub Pages), ne z lokálního souboru. Zatím použijte tlačítko Nahrát.";
+    err.style.display="block";
+  }
+}
+function closeCamera(){
+  if(cameraStream){ cameraStream.getTracks().forEach(t=>t.stop()); cameraStream=null; }
+  const v=document.getElementById("camVideo"); if(v) v.srcObject=null;
+  document.getElementById("cameraModal").style.display="none"; cameraTarget=null;
+}
+function capturePhoto(){
+  const video=document.getElementById("camVideo");
+  if(!cameraStream || !video.videoWidth){ toast("Kamera není připravená"); return; }
+  const canvas=document.createElement("canvas");
+  canvas.width=video.videoWidth; canvas.height=video.videoHeight;
+  canvas.getContext("2d").drawImage(video,0,0);
+  canvas.toBlob(function(blob){
+    if(!blob){ toast("Snímek se nepodařil"); return; }
+    const file=new File([blob], "foto-"+Date.now()+".jpg", {type:"image/jpeg"});
+    try{
+      const dt=new DataTransfer(); dt.items.add(file);
+      const inp=document.getElementById(cameraTarget);
+      inp.files=dt.files; inp.dispatchEvent(new Event("change"));
+    }catch(e){ console.warn(e); }
+    closeCamera(); toast("Foto pořízeno");
+  }, "image/jpeg", 0.9);
+}
+
+function mapSoftrScale(rec){
+  const f = rec.fields || rec;
+  return {
+    client_id: f.ID_klienta || "",
+    klient: f.Klient || "",
+    datum: f.Datum || "",
+    usinani: Number(f.Usinani)||0, buzeni: Number(f.Buzeni)||0, chut: Number(f.Chut)||0,
+    stres: Number(f.Stres)||0, energie: Number(f.Energie)||0, bolesti: Number(f.Bolesti)||0,
+    index_pohody: (f.Index_pohody!=null && f.Index_pohody!=="") ? Number(f.Index_pohody) : null
+  };
+}
+async function loadScalesForClient(clientId){
+  renderTrend(clientId);
+  if(!clientId || !LIVE || !WEBHOOKS.scaleRead) return;
+  try{
+    const r = await fetch(WEBHOOKS.scaleRead,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"load_all"})});
+    let data = await r.json();
+    if(data && !Array.isArray(data) && Array.isArray(data.data)) data = data.data;
+    if(Array.isArray(data)){
+      const all = data.map(mapSoftrScale).filter(s=>s.datum);
+      const others = LS.scales().filter(s=>s.client_id!==clientId);
+      LS.setScales(others.concat(all.filter(s=>s.client_id===clientId)));
+      renderTrend(clientId);
+    }
+  }catch(e){ console.warn("Historie škál ze Softru nedostupná", e); }
+}
+function fmtTrendDate(iso){
+  if(!iso) return "";
+  const p=String(iso).split("-");
+  return p.length>=3 ? (Number(p[2])+". "+Number(p[1])+".") : iso;
+}
+function renderTrend(clientId){
+  const bars=document.getElementById("trendBars"), days=document.getElementById("trendDays");
+  const head=document.querySelector(".trend .h");
+  bars.innerHTML=""; if(days) days.innerHTML="";
+  if(!clientId){ head.innerHTML='<i class="ti ti-chart-bar"></i> Trend — vyberte klienta pro zobrazení historie'; return; }
+  const recs = LS.scales().filter(s=>s.client_id===clientId)
+                 .sort((a,b)=>(a.datum||"").localeCompare(b.datum||"")).slice(-7);
+  head.innerHTML = '<i class="ti ti-chart-bar"></i> Trend — Index pohody (0–100, výš = líp)';
+  if(recs.length===0){ bars.innerHTML='<div style="font-size:12px;color:#8a96a3;">Zatím žádné záznamy.</div>'; return; }
+  recs.forEach((r,i)=>{
+    const idx = (r.index_pohody!=null && r.index_pohody!=="") ? Number(r.index_pohody) : (wellbeingIndex(r)||0);
+    const col=document.createElement("div"); col.className="tcol";
+    const val=document.createElement("div"); val.className="tval"; val.textContent=idx;
+    const track=document.createElement("div"); track.className="tbar-wrap";
+    const bar=document.createElement("div"); bar.className="tbar"+(i>=recs.length-2?" hot":"");
+    bar.style.height=Math.max(3, Math.min(100, idx))+"%";
+    bar.title="Index pohody "+idx+"/100 ("+fmtTrendDate(r.datum)+")";
+    track.appendChild(bar);
+    const dt=document.createElement("div"); dt.className="tdate"; dt.textContent=fmtTrendDate(r.datum);
+    col.appendChild(val); col.appendChild(track); col.appendChild(dt);
+    bars.appendChild(col);
+  });
+}
+
+async function saveAll(){
+  const sel = document.getElementById("clientSel");
+  const clientId = sel.value;
+  if(!clientId){ toast("Nejdřív vyberte klienta"); return; }
+  if(Object.keys(scaleVals).length < METRICS.length){ toast("Vyplňte všech 6 škál"); return; }
+  const idx = wellbeingIndex(scaleVals);
+  const rec = {
+    client_id: clientId,
+    klient: sel.options[sel.selectedIndex].textContent.replace(/\s*\(.*\)$/,"").trim(),
+    datum: document.getElementById("datum").value,
+    usinani: scaleVals.usinani, buzeni: scaleVals.buzeni, chut: scaleVals.chut,
+    stres: scaleVals.stres, energie: scaleVals.energie, bolesti: scaleVals.bolesti,
+    index_pohody: (idx==null?"":idx)
+  };
+  const arr = LS.scales(); arr.push(rec); LS.setScales(arr);
+  if(LIVE && WEBHOOKS.scaleInsert){
+    try{ await fetch(WEBHOOKS.scaleInsert,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(rec)}); }
+    catch(e){ console.warn(e); toast("Uloženo lokálně (Softr nedostupný)"); }
+  }
+  renderTrend(clientId);
+  setStatus("Uloženo: "+rec.datum+" · Index pohody "+(idx==null?"–":idx+"/100")+" · "+(LIVE?"Softr":"lokálně"));
+  toast("Škálování uloženo");
+}
+
+function reportsLS(){ return JSON.parse(localStorage.getItem("tcm_reports")||"[]"); }
+function buildSkalyText(){
+  const lines=[];
+  METRICS.forEach(m=>{
+    const v=scaleVals[m.key];
+    if(v==null) return;
+    const lab = (m.caps && m.caps[v-m.min]) ? " ("+m.caps[v-m.min]+")" : "";
+    lines.push("- "+m.name+": "+v+"/"+m.max+lab);
+  });
+  const idx=wellbeingIndex(scaleVals);
+  if(idx!=null) lines.push("- Index pohody: "+idx+"/100");
+  return lines.join("\n");
+}
+async function createReport(){
+  const sel = document.getElementById("clientSel");
+  const clientId = sel.value;
+  if(!clientId){ toast("Nejdřív vyberte klienta"); return; }
+  const klient = sel.options[sel.selectedIndex].textContent.replace(/\s*\(.*\)$/,"").trim();
+  const datum = document.getElementById("datum").value;
+  const pk = document.getElementById("pokyn");
+  const payload = {
+    client_id: clientId, klient: klient, datum: datum,
+    typ: "Vstupní celostní zpráva",
+    anamneza: (document.getElementById("anamneza").value||"").trim() || "(neuvedena)",
+    skaly: buildSkalyText() || "(nevyplněno)",
+    pokyn: (pk && pk.value.trim()) ? pk.value.trim() : "(žádný)"
+  };
+  if(!(LIVE && WEBHOOKS.zpravaGen)){ toast("Generování není napojeno"); return; }
+  const btn = event && event.target ? event.target.closest("button") : null;
+  if(btn){ btn.disabled = true; }
+  setStatus("Generuji zprávu… (může trvat ~10–20 s, počkejte prosím)");
+  toast("Generuji zprávu…");
+  try{
+    const r = await fetch(WEBHOOKS.zpravaGen,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    const md = await r.text();
+    if(!md || md.trim().length<20){ throw new Error("prázdná odpověď"); }
+    pendingReport = { client_id:clientId, klient:klient, datum:datum, typ:payload.typ, nadpis:"Celostní zpráva — "+datum, obsah:md };
+    document.getElementById("reviewText").value = md;
+    document.getElementById("reviewModal").style.display="flex";
+    setStatus("Zpráva vygenerována — zkontrolujte ji a uložte.");
+  }catch(e){ console.warn(e); setStatus("Generování selhalo: "+e.message); toast("Generování selhalo"); }
+  finally{ if(btn){ btn.disabled = false; } }
+}
+function closeReview(){ document.getElementById("reviewModal").style.display="none"; pendingReport=null; }
+function previewGeneratedReport(){
+  if(!pendingReport) return;
+  openReport(Object.assign({}, pendingReport, {obsah: document.getElementById("reviewText").value}));
+}
+async function saveGeneratedReport(){
+  if(!pendingReport){ closeReview(); return; }
+  const rep = Object.assign({}, pendingReport, {obsah: document.getElementById("reviewText").value});
+  const arr = reportsLS(); arr.push(rep); localStorage.setItem("tcm_reports", JSON.stringify(arr));
+  if(LIVE && WEBHOOKS.zpravyInsert){
+    try{ await fetch(WEBHOOKS.zpravyInsert,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(rep)}); }
+    catch(e){ console.warn(e); toast("Uloženo lokálně (Softr nedostupný)"); }
+  }
+  renderReportHistory(rep.client_id);
+  closeReview();
+  openReport(rep);
+  setStatus("Zpráva uložena do historie · "+(LIVE?"Softr":"lokálně"));
+  toast("Zpráva uložena do historie");
+}
+function mdToHtml(md){
+  const lines = String(md).replace(/\r/g,"").split("\n");
+  let html=""; let inList=false;
+  const inline = s => escHtml(s)
+     .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
+     .replace(/\*(.+?)\*/g,"<em>$1</em>");
+  lines.forEach(raw=>{
+    const line = raw.replace(/\s+$/,"");
+    if(/^### /.test(line)){ if(inList){html+="</ul>";inList=false;} html+="<h3>"+inline(line.slice(4))+"</h3>"; }
+    else if(/^## /.test(line)){ if(inList){html+="</ul>";inList=false;} html+="<h2>"+inline(line.slice(3))+"</h2>"; }
+    else if(/^# /.test(line)){ if(inList){html+="</ul>";inList=false;} html+="<h1>"+inline(line.slice(2))+"</h1>"; }
+    else if(/^[-*] /.test(line)){ if(!inList){html+="<ul>";inList=true;} html+="<li>"+inline(line.slice(2))+"</li>"; }
+    else if(line===""){ if(inList){html+="</ul>";inList=false;} }
+    else { if(inList){html+="</ul>";inList=false;} html+="<p>"+inline(line)+"</p>"; }
+  });
+  if(inList) html+="</ul>";
+  return html;
+}
+function mapSoftrReport(rec){
+  const f = rec.fields || rec;
+  return { client_id:f.ID_klienta||"", datum:f.Datum||"", typ:f.Typ||"", nadpis:f.Nadpis||"", obsah:f.Obsah||"", klient:"" };
+}
+async function loadReportsForClient(clientId){
+  renderReportHistory(clientId);
+  if(!clientId || !LIVE || !WEBHOOKS.zpravyRead) return;
+  try{
+    const r = await fetch(WEBHOOKS.zpravyRead,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"load_all"})});
+    let data = await r.json();
+    if(data && !Array.isArray(data) && Array.isArray(data.data)) data = data.data;
+    if(Array.isArray(data)){
+      const all = data.map(mapSoftrReport).filter(x=>x.nadpis||x.obsah);
+      const others = reportsLS().filter(x=>x.client_id!==clientId);
+      localStorage.setItem("tcm_reports", JSON.stringify(others.concat(all.filter(x=>x.client_id===clientId))));
+      renderReportHistory(clientId);
+    }
+  }catch(e){ console.warn("Historie zpráv ze Softru nedostupná", e); }
+}
+function renderReportHistory(clientId){
+  const box = document.getElementById("reportList");
+  if(!box) return;
+  if(!clientId){ box.innerHTML='<div class="rh-empty">Vyberte klienta pro zobrazení historie zpráv.</div>'; return; }
+  const list = reportsLS().filter(x=>x.client_id===clientId)
+                .sort((a,b)=>(b.datum||"").localeCompare(a.datum||""));
+  if(list.length===0){ box.innerHTML='<div class="rh-empty">Zatím žádné uložené zprávy.</div>'; return; }
+  box.innerHTML="";
+  list.forEach(rep=>{
+    const row=document.createElement("div"); row.className="rh-row";
+    row.innerHTML='<div><div class="rh-title">'+escHtml(rep.nadpis||rep.typ||"Zpráva")+'</div>'+
+      '<div class="rh-sub">'+escHtml(rep.datum||"")+' · '+escHtml(rep.typ||"")+'</div></div>'+
+      '<i class="ti ti-external-link"></i>';
+    row.onclick=()=>openReport(rep);
+    box.appendChild(row);
+  });
+}
+function escHtml(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function renderReportHTML(rep){
+  const body = mdToHtml(rep.obsah);
+  return '<!DOCTYPE html><html lang="cs"><head><meta charset="UTF-8">'+
+    '<meta name="viewport" content="width=device-width, initial-scale=1.0">'+
+    '<title>'+escHtml(rep.nadpis||"Celostní zpráva")+'</title>'+
+    '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">'+
+    "<style>body{margin:0;background:#f4f7fa;font-family:'Source Sans 3',system-ui,sans-serif;color:#22323f;}"+
+    ".page{max-width:760px;margin:24px auto;background:#fff;border-radius:14px;overflow:hidden;border:1px solid rgba(0,0,0,.1);box-shadow:0 4px 24px rgba(26,58,92,.08);}"+
+    "header{background:#1a3a5c;color:#fff;padding:24px 30px;}"+
+    ".kick{font-size:12px;letter-spacing:2px;color:#b8cdd9;}"+
+    "header h1{font-family:'Playfair Display',serif;font-weight:600;font-size:25px;margin:4px 0 0;}"+
+    ".meta{font-size:13px;color:#7a9ab5;margin-top:6px;}"+
+    ".content{padding:26px 30px;line-height:1.7;font-size:15px;}"+
+    ".content h1{font-family:'Playfair Display',serif;color:#1a3a5c;font-size:22px;margin:0 0 6px;}"+
+    ".content h2{font-family:'Playfair Display',serif;color:#1a3a5c;font-size:17px;border-bottom:2px solid #e65100;padding-bottom:4px;margin:22px 0 10px;}"+
+    ".content h3{color:#1a3a5c;font-size:15px;margin:16px 0 6px;}"+
+    ".content p{margin:8px 0;}.content ul{margin:8px 0;padding-left:20px;}.content li{margin:4px 0;}"+
+    ".content strong{color:#1a3a5c;}"+
+    "footer{padding:16px 30px;border-top:1px solid #eef2f6;color:#8a96a3;font-size:12px;}"+
+    "</style></head><body><div class=\"page\">"+
+    '<header><div class="kick">MEDICGROUP AMBULANCE · CELOSTNÍ PÉČE</div>'+
+    '<h1>'+escHtml(rep.nadpis||"Celostní zpráva")+'</h1>'+
+    '<div class="meta">Klient: '+escHtml(rep.klient||rep.client_id)+' · Datum: '+escHtml(rep.datum)+' · '+escHtml(rep.typ)+'</div></header>'+
+    '<div class="content">'+body+'</div>'+
+    '<footer>MedicGroup Ambulance s.r.o. · Biorezonance · TČM · vygenerováno aplikací TČM Diagnostika</footer>'+
+    '</div></body></html>';
+}
+function openReport(rep){
+  const html = renderReportHTML(rep);
+  const w = window.open("", "_blank");
+  if(w){ w.document.open(); w.document.write(html); w.document.close(); }
+  else {
+    const blob = new Blob([html],{type:"text/html"});
+    window.open(URL.createObjectURL(blob), "_blank");
+  }
+}
+
+function val(id){ return document.getElementById(id).value; }
+function setStatus(t){ document.getElementById("status").textContent=t; }
+function toast(t){ const el=document.getElementById("toast"); el.textContent=t; el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"),2200); }
+
+init();
+</script>
+</body>
+</html>
