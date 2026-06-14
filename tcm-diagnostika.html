@@ -97,6 +97,7 @@
   .rh-row i{color:var(--orange);font-size:18px;}
   @media(max-width:560px){.row3{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.client-bar{grid-template-columns:1fr}}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -452,6 +453,49 @@ function setupUploads(){
   bindFile("bbcFile","bbcDrop","bbcText", f=>"Nahráno: "+f.name, "bbcImg");
   bindFile("jazykFile","jazykDrop","jazykText", f=>"Jazyk: "+f.name, "jazykImg");
   bindFile("ociFile","ociDrop","ociText", f=>"Oči: "+f.name, "ociImg");
+  var bbcInp=document.getElementById("bbcFile");
+  if(bbcInp){ bbcInp.addEventListener("change", function(){ var f=this.files[0]; if(f) extractBbcFromFile(f); }); }
+}
+async function extractBbcFromFile(file){
+  var ta=document.getElementById("bbcTextarea");
+  var lbl=document.getElementById("bbcText");
+  var name=(file.name||"").toLowerCase();
+  var isPdf = file.type==="application/pdf" || name.endsWith(".pdf");
+  var isTxt = (file.type && file.type.indexOf("text/")===0) || name.endsWith(".txt") || name.endsWith(".text");
+  var isImg = file.type && file.type.indexOf("image/")===0;
+  try{
+    if(isTxt){
+      var txt = await file.text();
+      ta.value = (txt||"").trim();
+      if(lbl) lbl.textContent = "Načteno z textového souboru: "+file.name;
+      toast("Text BBC načten ze souboru");
+      return;
+    }
+    if(isPdf){
+      if(typeof pdfjsLib==="undefined"){ if(lbl) lbl.textContent="PDF knihovna nedostupná — vložte text BBC ručně do pole níže."; toast("PDF knihovna nedostupná"); return; }
+      pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      if(lbl) lbl.textContent="Načítám text z PDF…";
+      var buf = await file.arrayBuffer();
+      var pdf = await pdfjsLib.getDocument({data:buf}).promise;
+      var out=[];
+      for(var pg=1; pg<=pdf.numPages; pg++){
+        var page=await pdf.getPage(pg);
+        var tc=await page.getTextContent();
+        out.push(tc.items.map(function(it){return it.str;}).join(" "));
+      }
+      var text=out.join("\n").replace(/[ \t]+/g," ").trim();
+      if(text.length<10){ if(lbl) lbl.textContent="PDF nemá čitelný text (asi sken/foto) — vložte text BBC ručně do pole níže."; toast("PDF bez textové vrstvy"); return; }
+      ta.value=text;
+      if(lbl) lbl.textContent="Text z PDF načten ("+pdf.numPages+" str.): "+file.name;
+      toast("Text BBC vytažen z PDF");
+      return;
+    }
+    if(isImg){
+      if(lbl) lbl.textContent="Foto reportu: text z obrázku zatím nelze přečíst — vložte text BBC ručně do pole níže.";
+      toast("Z fotky text nevytáhnu — vložte ručně");
+      return;
+    }
+  }catch(e){ console.warn(e); if(lbl) lbl.textContent="Soubor se nepodařilo načíst — vložte text BBC ručně do pole níže."; toast("Načtení souboru selhalo"); }
 }
 function bindFile(inputId, dropId, textId, label, imgId){
   const inp=document.getElementById(inputId), drop=document.getElementById(dropId);
