@@ -134,37 +134,21 @@
     </div>
 
     <div class="sec">
-      <div class="sec-title">2 · Výsledky BBC (PDF, obrázek nebo text)</div>
+      <div class="sec-title">2 · Výsledky BBC (PDF nebo text)</div>
       <div class="drop" id="bbcDrop" onclick="document.getElementById('bbcFile').click()">
         <i class="ti ti-file-upload"></i>
-        <div class="t" id="bbcText">Přetáhněte sem PDF, obrázek (foto reportu) nebo textový soubor — nebo klikněte pro nahrání</div>
+        <div class="t" id="bbcText">Přetáhněte sem PDF nebo textový soubor — nebo klikněte pro nahrání</div>
         <img class="thumb" id="bbcImg" style="display:none">
       </div>
-      <button class="btn btn-ghost btn-sm" style="margin-top:6px;" onclick="openCamera('bbcFile')"><i class="ti ti-camera"></i> Vyfotit report kamerou</button>
-      <input id="bbcFile" type="file" accept="application/pdf,image/*,.txt,.text,text/plain" style="display:none">
+      <input id="bbcFile" type="file" accept="application/pdf,.txt,.text,text/plain" style="display:none">
       <textarea id="bbcTextarea" placeholder="…nebo sem VLOŽTE (zkopírujte) text výsledků BBC — oblasti, nerovnováhy, zátěže, koeficienty" style="margin-top:8px;min-height:90px;"></textarea>
     </div>
 
     <div class="sec">
-      <div class="sec-title">3 · Fotodokumentace</div>
-      <div class="row2">
-        <div>
-          <div class="drop" id="jazykDrop" onclick="document.getElementById('jazykFile').click()">
-            <i class="ti ti-photo"></i><div class="t" id="jazykText">Foto jazyka</div>
-            <img class="thumb" id="jazykImg" style="display:none">
-          </div>
-          <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:6px;" onclick="openCamera('jazykFile')"><i class="ti ti-camera"></i> Vyfotit kamerou</button>
-        </div>
-        <div>
-          <div class="drop" id="ociDrop" onclick="document.getElementById('ociFile').click()">
-            <i class="ti ti-eye"></i><div class="t" id="ociText">Foto očí</div>
-            <img class="thumb" id="ociImg" style="display:none">
-          </div>
-          <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:6px;" onclick="openCamera('ociFile')"><i class="ti ti-camera"></i> Vyfotit kamerou</button>
-        </div>
-      </div>
-      <input id="jazykFile" type="file" accept="image/*" style="display:none">
-      <input id="ociFile" type="file" accept="image/*" style="display:none">
+      <div class="sec-title">3 · Popis jazyka, očí a orgánů / termosnímků</div>
+      <textarea id="popisJazyk" placeholder="Popis jazyka — barva těla, povlak (barva/tloušťka), vlhkost, otisky zubů, praskliny, tvar…"></textarea>
+      <textarea id="popisOci" placeholder="Popis očí — barva bělma, cévní kresba, lesk, oblast pod očima…" style="margin-top:8px;"></textarea>
+      <textarea id="popisTermo" placeholder="Popis orgánů / termosnímků — rozložení tepla (horní/střední/dolní ohřívač), asymetrie, jednotlivé orgány…" style="margin-top:8px;"></textarea>
     </div>
 
     <div class="sec">
@@ -451,8 +435,6 @@ async function saveClient(){
 
 function setupUploads(){
   bindFile("bbcFile","bbcDrop","bbcText", f=>"Nahráno: "+f.name, "bbcImg");
-  bindFile("jazykFile","jazykDrop","jazykText", f=>"Jazyk: "+f.name, "jazykImg");
-  bindFile("ociFile","ociDrop","ociText", f=>"Oči: "+f.name, "ociImg");
   var bbcInp=document.getElementById("bbcFile");
   if(bbcInp){ bbcInp.addEventListener("change", function(){ var f=this.files[0]; if(f) extractBbcFromFile(f); }); }
 }
@@ -670,6 +652,15 @@ function buildSkalyText(){
   if(idx!=null) lines.push("- Index pohody: "+idx+"/100");
   return lines.join("\n");
 }
+function buildVizualText(){
+  const g=id=>{var e=document.getElementById(id);return e?(e.value||"").trim():"";};
+  const j=g("popisJazyk"), o=g("popisOci"), t=g("popisTermo");
+  const parts=[];
+  if(j) parts.push("JAZYK: "+j);
+  if(o) parts.push("OČI: "+o);
+  if(t) parts.push("TERMO/ORGÁNY: "+t);
+  return parts.length ? parts.join("\n") : "(nedodáno)";
+}
 async function createReport(){
   const sel = document.getElementById("clientSel");
   const clientId = sel.value;
@@ -686,7 +677,8 @@ async function createReport(){
     token: APP_TOKEN,
     terapeut_jmeno: THERAPIST_NAME,
     terapeut_email: THERAPIST_EMAIL,
-    bbc: ((document.getElementById("bbcTextarea")&&document.getElementById("bbcTextarea").value)||"").trim() || "(nedodáno)"
+    bbc: ((document.getElementById("bbcTextarea")&&document.getElementById("bbcTextarea").value)||"").trim() || "(nedodáno)",
+    vizual: buildVizualText()
   };
   if(!(LIVE && WEBHOOKS.zpravaGen)){ toast("Generování není napojeno"); return; }
   const btn = event && event.target ? event.target.closest("button") : null;
