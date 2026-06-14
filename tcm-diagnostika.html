@@ -650,7 +650,7 @@ async function createReport(){
   try{
     const r = await fetch(WEBHOOKS.zpravaGen,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
     let md = await r.text();
-    md = stripFences(md);
+    md = extractReportText(md);
     if(!md || md.trim().length<20){ throw new Error("prázdná odpověď"); }
     pendingReport = { client_id:clientId, klient:klient, datum:datum, typ:payload.typ, nadpis:"Celostní zpráva — "+datum, obsah:md };
     document.getElementById("reviewText").value = md;
@@ -734,6 +734,24 @@ function renderReportHistory(clientId){
 }
 function escHtml(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function stripFences(s){ return String(s||"").trim().replace(/^```html\s*/i,"").replace(/^```\s*/,"").replace(/```\s*$/,"").trim(); }
+function extractReportText(s){
+  s=String(s||"").trim();
+  if(s.charAt(0)==="["||s.charAt(0)==="{"){
+    try{
+      var o=JSON.parse(s); var t="";
+      function pull(a){ (a||[]).forEach(function(it){
+        if(it&&typeof it.text==="string") t+=it.text;
+        if(it&&Array.isArray(it.content)) it.content.forEach(function(c){ if(c&&typeof c.text==="string") t+=c.text; });
+      }); }
+      if(Array.isArray(o)) pull(o);
+      else if(o.output) pull(o.output);
+      else if(o.content) pull(o.content);
+      else if(o.raw_result&&o.raw_result.output) pull(o.raw_result.output);
+      if(t.trim()) s=t;
+    }catch(e){}
+  }
+  return stripFences(s);
+}
 function looksLikeHtml(s){ const t=stripFences(s); return /^<(!doctype|html|div|section|table|h1|h2|p)\b/i.test(t) || /class=["']page["']/.test(t); }
 function reportCss(){ return `
   * { box-sizing: border-box; margin: 0; padding: 0; }
