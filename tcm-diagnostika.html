@@ -244,6 +244,18 @@
 <div class="toast" id="toast"></div>
 
 <script>
+/* --- Softr embed: příjem přihlášeného terapeuta + tajný token z rodičovské stránky --- */
+let APP_TOKEN = "";
+let THERAPIST_NAME = "Mgr. Bc. Jiří Kabát";
+let THERAPIST_EMAIL = "";
+window.addEventListener("message", function(e){
+  var d = e && e.data;
+  if(d && d.type === "softr-auth"){
+    APP_TOKEN = d.token || "";
+    if(d.name) THERAPIST_NAME = d.name;
+    if(d.email) THERAPIST_EMAIL = d.email;
+  }
+});
 const WEBHOOKS = {
   clientsRead:  "https://hook.eu2.make.com/qznpke5iq49x8yavoxgnyzueymju9g6m",
   clientsInsert:"https://hook.eu2.make.com/kvf1g7d2i2drykdn6h0ddjzqyw651331",
@@ -625,7 +637,10 @@ async function createReport(){
     typ: "Vstupní celostní zpráva",
     anamneza: (document.getElementById("anamneza").value||"").trim() || "(neuvedena)",
     skaly: buildSkalyText() || "(nevyplněno)",
-    pokyn: (pk && pk.value.trim()) ? pk.value.trim() : "(žádný)"
+    pokyn: (pk && pk.value.trim()) ? pk.value.trim() : "(žádný)",
+    token: APP_TOKEN,
+    terapeut_jmeno: THERAPIST_NAME,
+    terapeut_email: THERAPIST_EMAIL
   };
   if(!(LIVE && WEBHOOKS.zpravaGen)){ toast("Generování není napojeno"); return; }
   const btn = event && event.target ? event.target.closest("button") : null;
