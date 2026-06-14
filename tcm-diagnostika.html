@@ -141,6 +141,7 @@
       </div>
       <button class="btn btn-ghost btn-sm" style="margin-top:6px;" onclick="openCamera('bbcFile')"><i class="ti ti-camera"></i> Vyfotit report kamerou</button>
       <input id="bbcFile" type="file" accept="application/pdf,image/*,.txt,.text,text/plain" style="display:none">
+      <textarea id="bbcTextarea" placeholder="…nebo sem VLOŽTE (zkopírujte) text výsledků BBC — oblasti, nerovnováhy, zátěže, koeficienty" style="margin-top:8px;min-height:90px;"></textarea>
     </div>
 
     <div class="sec">
@@ -640,7 +641,8 @@ async function createReport(){
     pokyn: (pk && pk.value.trim()) ? pk.value.trim() : "(žádný)",
     token: APP_TOKEN,
     terapeut_jmeno: THERAPIST_NAME,
-    terapeut_email: THERAPIST_EMAIL
+    terapeut_email: THERAPIST_EMAIL,
+    bbc: ((document.getElementById("bbcTextarea")&&document.getElementById("bbcTextarea").value)||"").trim() || "(nedodáno)"
   };
   if(!(LIVE && WEBHOOKS.zpravaGen)){ toast("Generování není napojeno"); return; }
   const btn = event && event.target ? event.target.closest("button") : null;
