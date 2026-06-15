@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<!-- saved from url=(0069)file:///C:/Users/kabat/Downloads/celostni-zprava-ziak-martina-v2.html -->
+<html lang="cs"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedicGroup — Celostní zpráva · Žiak Martina · 03.06.2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #dce3ea;
+    font-family: 'Source Sans 3', sans-serif;
+    padding: 2rem 1rem;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    background: #fff;
+    margin: 0 auto 14mm auto;
+    padding: 14mm 16mm 26mm 16mm;
+    box-shadow: 0 6px 40px rgba(0,0,0,0.16);
+    position: relative;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 7mm;
+    border-bottom: 0.5mm solid #1a3a5c;
+    margin-bottom: 6mm;
+  }
+
+  .logo-area h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20pt;
+    color: #1a3a5c;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+  }
+
+  .logo-area .subtitle {
+    font-size: 8.5pt;
+    color: #7a9ab5;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    margin-top: 1.5mm;
+  }
+
+  .header-right {
+    text-align: right;
+    font-size: 8pt;
+    color: #555;
+    line-height: 1.8;
+  }
+
+  .header-right strong { color: #1a3a5c; font-size: 9pt; font-weight: 700; }
+
+  .header-right .provozovna {
+    font-size: 7.5pt;
+    color: #888;
+    margin-top: 1mm;
+    line-height: 1.6;
+  }
+
+  .doc-type-bar {
+    background: #1a3a5c;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 12.5pt;
+    letter-spacing: 0.1em;
+    padding: 3mm 6mm;
+    margin-bottom: 6mm;
+  }
+
+  .client-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 2.5mm 6mm;
+    background: #f4f7fa;
+    border-left: 1mm solid #1a3a5c;
+    padding: 4mm 6mm;
+    margin-bottom: 7mm;
+    font-size: 8.5pt;
+  }
+
+  .client-box .item label {
+    display: block;
+    font-size: 7pt;
+    color: #7a9ab5;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5mm;
+  }
+
+  .client-box .item span {
+    font-weight: 600;
+    color: #1a3a5c;
+  }
+
+  .section {
+    margin-bottom: 6mm;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 11pt;
+    color: #1a3a5c;
+    border-bottom: 0.3mm solid #b8cdd9;
+    padding-bottom: 1.5mm;
+    margin-bottom: 3mm;
+    letter-spacing: 0.03em;
+  }
+
+  .section-num {
+    font-size: 8pt;
+    color: #7a9ab5;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 300;
+    margin-right: 2mm;
+    letter-spacing: 0.05em;
+  }
+
+  .odborne {
+    font-size: 8.5pt;
+    color: #333;
+    line-height: 1.65;
+    margin-bottom: 2mm;
+  }
+
+  .odborne-label {
+    font-size: 7pt;
+    font-weight: 700;
+    color: #7a9ab5;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 1mm;
+  }
+
+  .vysvetleni {
+    background: #f4f7fa;
+    border-left: 0.8mm solid #7a9ab5;
+    padding: 3mm 5mm;
+    font-size: 8.5pt;
+    color: #444;
+    line-height: 1.7;
+  }
+
+  .vysvetleni-label {
+    font-size: 7pt;
+    font-weight: 700;
+    color: #1a3a5c;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 1mm;
+  }
+
+  /* ELEMENTY */
+  .elementy-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2mm;
+    margin-bottom: 3mm;
+  }
+
+  .element {
+    text-align: center;
+    padding: 3mm 1mm;
+    border-radius: 1.5mm;
+    font-size: 8pt;
+  }
+
+  .element .nazev { font-weight: 700; font-size: 8.5pt; display: block; margin-bottom: 0.5mm; }
+  .element .stav  { font-size: 7pt; display: block; opacity: 0.85; }
+  .element .organ { font-size: 6.5pt; display: block; margin-top: 0.5mm; opacity: 0.7; font-style: italic; }
+
+  .el-drevo { background: #e8f5e9; color: #2e7d32; border: 0.3mm solid #a5d6a7; }
+  .el-ohen  { background: #fff3e0; color: #e65100; border: 0.3mm solid #ffcc80; }
+  .el-zeme  { background: #fdf3dc; color: #7c5c00; border: 0.3mm solid #f0d08a; }
+  .el-kov   { background: #f0f4f8; color: #37474f; border: 0.3mm solid #b0bec5; }
+  .el-voda  { background: #e3f2fd; color: #1565c0; border: 0.3mm solid #90caf9; }
+
+  .el-slaby   { opacity: 0.55; border-style: dashed; }
+  .el-pretlak { box-shadow: 0 0 0 0.6mm currentColor; }
+  .el-labilni { border-style: dashed; }
+
+  /* TŘÍSLOUPEC */
+  .trisloupcec {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2.5mm;
+    margin-bottom: 3mm;
+  }
+
+  .sloupec {
+    padding: 3mm 4mm;
+    border-radius: 1mm;
+    font-size: 8pt;
+    line-height: 1.55;
+  }
+
+  .sloupec .sloupec-title {
+    font-weight: 700;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 2mm;
+    display: block;
+  }
+
+  .sloupec ul { padding-left: 3mm; list-style: none; }
+
+  .sloupec ul li {
+    position: relative;
+    padding-left: 3mm;
+    margin-bottom: 1mm;
+  }
+
+  .sloupec ul li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+    font-size: 11pt;
+    line-height: 0.9;
+  }
+
+  .koren      { background: #fde8e8; color: #5c1a1a; border-top: 0.6mm solid #c62828; }
+  .kompenzace { background: #fff3e0; color: #5c3300; border-top: 0.6mm solid #e65100; }
+  .projev     { background: #f0f4f8; color: #2c3e50; border-top: 0.6mm solid #607d8b; }
+
+  /* BBC */
+  .bbc-blok { margin-bottom: 3mm; }
+
+  .bbc-blok-title {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #1a3a5c;
+    margin-bottom: 1.5mm;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-style: italic;
+  }
+
+  .bbc-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.2mm 0;
+    border-bottom: 0.2mm solid #eff2f5;
+    font-size: 8pt;
+    color: #333;
+    align-items: baseline;
+  }
+
+  .bbc-item .label { flex: 1; }
+  .bbc-item .val { font-weight: 600; white-space: nowrap; padding-left: 3mm; }
+
+  .bbc-red .label, .bbc-red .val { color: #c62828; }
+  .bbc-orange .label, .bbc-orange .val { color: #e65100; }
+
+  .bbc-skupina {
+    background: #f4f7fa;
+    padding: 1.5mm 3mm;
+    margin-bottom: 0.5mm;
+    font-weight: 700;
+    font-size: 8.5pt;
+    display: flex;
+    justify-content: space-between;
+    border-left: 0.5mm solid #1a3a5c;
+  }
+
+  .bbc-skupina.red   { border-left-color: #c62828; background: #fff5f5; }
+  .bbc-skupina.red   .label, .bbc-skupina.red   .val { color: #c62828; }
+  .bbc-skupina.orange{ border-left-color: #e65100; background: #fff8f0; }
+  .bbc-skupina.orange .label, .bbc-skupina.orange .val { color: #e65100; }
+
+  /* SEZENÍ */
+  .sezeni-list { list-style: none; margin-bottom: 3mm; }
+
+  .sezeni-list li {
+    border-left: 0.8mm solid #1a3a5c;
+    padding: 2.5mm 4mm;
+    margin-bottom: 2mm;
+    background: #f4f7fa;
+    font-size: 8.5pt;
+    line-height: 1.6;
+  }
+
+  .sezeni-list li .sezeni-num {
+    font-weight: 700;
+    color: #1a3a5c;
+    display: block;
+    font-size: 9pt;
+    margin-bottom: 0.5mm;
+  }
+
+  .sezeni-list li .sezeni-popis {
+    font-style: italic;
+    color: #555;
+    font-size: 8pt;
+    display: block;
+    margin-top: 0.5mm;
+  }
+
+  /* DOPORUČENÍ */
+  .doporuceni-list { list-style: none; margin-bottom: 3mm; }
+
+  .doporuceni-list li {
+    padding: 2mm 3mm;
+    border-bottom: 0.2mm solid #eff2f5;
+    font-size: 8.5pt;
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    gap: 3mm;
+    align-items: flex-start;
+  }
+
+  .doporuceni-list li .num {
+    font-weight: 700;
+    color: #1a3a5c;
+    min-width: 5mm;
+    font-size: 9pt;
+  }
+
+  .doporuceni-list li .text strong {
+    display: block;
+    font-size: 8.5pt;
+    color: #1a3a5c;
+    margin-bottom: 0.3mm;
+  }
+
+  .doporuceni-list li .text em {
+    font-size: 8pt;
+    color: #666;
+  }
+
+  /* ZÁVĚR */
+  .zaver-box {
+    background: #f0f5fb;
+    border-left: 1mm solid #1a3a5c;
+    padding: 5mm 6mm;
+    font-size: 8.5pt;
+    color: #2c3e50;
+    line-height: 1.75;
+    margin-bottom: 5mm;
+  }
+
+  .zaver-box p { margin-bottom: 2mm; }
+  .zaver-box p:last-child { margin-bottom: 0; }
+
+  .podpis {
+    text-align: right;
+    font-size: 8.5pt;
+    color: #333;
+    line-height: 1.8;
+    border-top: 0.3mm solid #b8cdd9;
+    padding-top: 4mm;
+    margin-top: 4mm;
+  }
+
+  .podpis strong {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    color: #1a3a5c;
+    font-size: 10pt;
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 8mm;
+    left: 16mm;
+    right: 16mm;
+    display: flex;
+    justify-content: space-between;
+    font-size: 7pt;
+    color: #aaa;
+    border-top: 0.3mm solid #e0e6ec;
+    padding-top: 2mm;
+  }
+
+  /* nerovnováha popis blok */
+  .nerovno-blok {
+    margin-bottom: 2.5mm;
+  }
+
+  .nerovno-skupina {
+    background: #f4f7fa;
+    padding: 1.5mm 3mm;
+    margin-bottom: 0.5mm;
+    font-weight: 700;
+    font-size: 8.5pt;
+    display: flex;
+    justify-content: space-between;
+    border-left: 0.5mm solid #1a3a5c;
+  }
+
+  .nerovno-skupina.red    { border-left-color: #c62828; background: #fff5f5; color: #c62828; }
+  .nerovno-skupina.orange { border-left-color: #e65100; background: #fff8f0; color: #e65100; }
+
+  .nerovno-popis {
+    font-size: 8pt;
+    color: #555;
+    padding: 1.5mm 3mm 1.5mm 5mm;
+    line-height: 1.6;
+    border-bottom: 0.2mm solid #eff2f5;
+  }
+
+  /* endokrinologie */
+  .endo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5mm;
+    margin-bottom: 2mm;
+  }
+
+  .endo-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1mm 2.5mm;
+    background: #f4f7fa;
+    font-size: 8pt;
+    color: #333;
+  }
+
+  .endo-item .val { font-weight: 600; color: #e65100; }
+
+</style>
+</head>
+<body>
+
+<!-- ═══ STRANA 1 ═══ -->
+<div class="page">
+
+  <div class="header">
+    <div class="logo-area">
+      <h1>MedicGroup Ambulance s.r.o.</h1>
+      <div class="subtitle">Celostní péče · Biorezonanční terapie · TČM</div>
+    </div>
+    <div class="header-right">
+      <strong>Mgr. Bc. Jiří Kabát</strong><br>
+      Celostní poradce<br>
+      <div class="provozovna">MedicGroup Ambulance s.r.o.<br>Praha</div>
+    </div>
+  </div>
+
+  <div class="doc-type-bar">Celostní zpráva klienta</div>
+
+  <div class="client-box">
+    <div class="item"><label>Klientka</label><span>Žiak Martina</span></div>
+    <div class="item"><label>Věk</label><span>51 let (nar. 18. 06. 1975)</span></div>
+    <div class="item"><label>Datum konzultace</label><span>03. 06. 2026</span></div>
+    <div class="item"><label>Typ zprávy</label><span>Vstupní celostní zpráva</span></div>
+  </div>
+
+  <!-- 1. DŮVOD KONZULTACE -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">01</span>Důvod konzultace</div>
+
+    <div class="odborne">
+      <span class="odborne-label">Odborně</span>
+      Klientka ve věku 51 let přichází s komplexní symptomatikou ve fázi klimakteria. Dominuje psychovegetativní přetížení s polyorgánovou expresí: dyspepsie na podkladě anamnestického duodenálního vředu, vertebrogenní algický syndrom bederní páteře s prolapsy disku, chronická insuficience žilního systému dolních končetin, porucha spánkové architektury s parasomniemi a noční hyperaktivitou v čase Jater (3:00 hod.), menopauzální symptomový komplex (vazomotorické projevy, emoční labilita, alopecie). Anamnesticky: hepatopatie v dětství léčena bylinami, opakovaná antibiotická terapie s vývojem tetracyklinových zubů, dlouhodobá hormonální antikoncepce, cysty v pravém prsu pod kontrolou. BBC skenovací měření provedeno 03. 06. 2026.
+    </div>
+
+    <div class="vysvetleni">
+      <span class="vysvetleni-label">Co to znamená</span>
+      Vaše tělo nám touto konzultací ukazuje, že nese souběžně více zátěží najednou: přechodové období, dlouhodobý stres z péče o blízké a výchovné výzvy, fyzická únava i trávicí nepohodlí. Nejde o izolované problémy — vaše tělo reaguje jako celek, a přesně takto k němu budeme přistupovat. Cílem první konzultace bylo porozumět tomuto celku a naplánovat postup, který bude respektovat vaše aktuální síly.
+    </div>
+  </div>
+
+  <!-- 2. VEGETATIVNÍ OSA -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">02</span>Stav vegetativní osy</div>
+
+    <div class="odborne">
+      <span class="odborne-label">Odborně</span>
+      Obraz odpovídá smíšené vegetativní dysregulaci s převahou sympatikotonie a vyčerpáním regulační kapacity. Pravidelné probuzení kolem 3:00 hod. indikuje přechod z Yin fáze do aktivní Jater-Qi (Jaterní čas dle TČM). Přemítání v noci, živé sny o povinnostech, tiky v obličeji a bušení srdce svědčí pro psychovegetativní přetížení s deplecí Srdce-Krve a neukotveným Shen. Nechutenství s výraznou postprandiální únavou a horší výkonností večer ukazuje na sníženou transformační kapacitu Slezina–Žaludek (Qi prázdnota Středu) kompenzovanou dopolední hyperregulací. Hormonální nerovnováha v BBC (koef. 15,565) potvrzuje přechodové narušení osy Čung-Mai/Ren-Mai.
+    </div>
+
+    <div class="vysvetleni">
+      <span class="vysvetleni-label">Co to znamená</span>
+      Představte si váš nervový systém jako motor, který dlouhodobě jede na příliš vysoké otáčky. Přes den fungujete, dokonce dobře — ale v noci se motor neumí bezpečně přepnout do klidového režimu. Proto se budíte ve tři ráno, proto sny „pracují" za vás. Vaše tělo není zlomené — jen přetížené a nedostatečně doplňované. <strong>Toto je základ, od kterého se vše odvíjí. Prvním krokem terapie bude vždy zklidnění, ukotvení a obnova schopnosti těla regenerovat.</strong>
+    </div>
+  </div>
+
+  <!-- 3. PĚT ELEMENTŮ -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">03</span>Analýza pěti elementů</div>
+
+    <div class="elementy-grid">
+      <div class="element el-drevo el-pretlak">
+        <span class="nazev">🌿 Dřevo</span>
+        <span class="stav">Přetlak / Stagnace</span>
+        <span class="organ">Játra · Žlučník</span>
+      </div>
+      <div class="element el-ohen el-labilni">
+        <span class="nazev">🔥 Oheň</span>
+        <span class="stav">Labilní / Shen</span>
+        <span class="organ">Srdce · T. střevo</span>
+      </div>
+      <div class="element el-zeme el-slaby">
+        <span class="nazev">🌾 Země</span>
+        <span class="stav">Oslabená</span>
+        <span class="organ">Slezina · Žaludek</span>
+      </div>
+      <div class="element el-kov el-labilni">
+        <span class="nazev">⚙️ Kov</span>
+        <span class="stav">Labilní</span>
+        <span class="organ">Plíce · Tl. střevo</span>
+      </div>
+      <div class="element el-voda el-slaby">
+        <span class="nazev">💧 Voda</span>
+        <span class="stav">Oslabená — Kořen</span>
+        <span class="organ">Ledviny · M. měchýř</span>
+      </div>
+    </div>
+
+    <div class="odborne">
+      <span class="odborne-label">Odborně</span>
+      Kořenový element: <strong>Voda</strong> — chronická deplece Ledvinového Yin a Yang (věk, přechod, chronický stres, antibiotická zátěž z dětství oslabující Esenci-Jing). Prázdnota Vody → Yang bez kotvy stoupá (návaly horka, tlak v hlavě, nespavost, bušení srdce). Přetlakový element: <strong>Dřevo</strong> — stagnace Jater-Qi prohloubená potlačováním emocí a chronickým stresem. Dřevo napadá Zemi → chronická dyspepsie, nechutenství, bolest žaludku. Oslabená Země nevyživuje Kov → ranní odkašlávání, pocit knedlíku, suchá kůže, lámavé nehty. Oslabený Kov nespouští sestup k Vodě — patologický kruh se uzavírá.
+    </div>
+
+    <div class="vysvetleni">
+      <span class="vysvetleni-label">Co to znamená</span>
+      V TČM je Voda živlem, který zásobuje celý strom života. Vaše kořeny — zásobárna životní energie v Ledvinách — jsou po letech námahy a přechodu méně výživné. Strom bez pevných kořenů v nestálém počasí snadno víří do výšky: energie stoupá do hlavy (návaly, tlak, bušení srdce) místo aby zůstala ukotvená dole. Zároveň vítr Dřeva fouká příliš silně, protože emoce nemají prostor. Terapie bude pracovat od kořene nahoru.
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>MedicGroup Ambulance s.r.o. | Mgr. Bc. Jiří Kabát · Celostní poradce</span>
+    <span>03. 06. 2026 · str. 1 / 4</span>
+  </div>
+</div>
+
+<!-- ═══ STRANA 2 ═══ -->
+<div class="page">
+
+  <div class="header">
+    <div class="logo-area">
+      <h1>MedicGroup Ambulance s.r.o.</h1>
+      <div class="subtitle">Celostní péče · Biorezonanční terapie · TČM</div>
+    </div>
+    <div class="header-right">
+      <strong>Mgr. Bc. Jiří Kabát</strong><br>
+      Celostní poradce<br>
+      <div class="provozovna">MedicGroup Ambulance s.r.o. · Praha</div>
+    </div>
+  </div>
+
+  <!-- 4. KOŘEN / KOMPENZACE / PROJEV -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">04</span>Co je kořen, co je kompenzace, co je projev</div>
+
+    <div class="trisloupcec">
+      <div class="sloupec koren">
+        <span class="sloupec-title">🌱 Kořen</span>
+        <ul>
+          <li>Deplece Ledvinového Yin a Yang — věk, přechod, chronický stres</li>
+          <li>Dětská hepatopatie + antibiotická zátěž — Jaterní Qi oslabena od počátku</li>
+          <li>Dlouhodobé potlačování emocí, péče o druhé na úkor sebe</li>
+          <li>Qi prázdnota Středu — Slezina–Žaludek</li>
+          <li>Nedostatečný příjem tekutin — Yin nedoplňováno zvenčí</li>
+        </ul>
+      </div>
+      <div class="sloupec kompenzace">
+        <span class="sloupec-title">⚖️ Kompenzace</span>
+        <ul>
+          <li>Hyperaktivita ráno — Yang bez kotvy hledá ventil</li>
+          <li>Stagnace Jater-Qi jako náhradní řídící systém</li>
+          <li>Noční probuzení v čase Jater — snaha o zpracování emocí</li>
+          <li>Výbuchy hněvu jako ventil potlačené Jaterní energie</li>
+          <li>Tvorba vlhkosti/hlenu — pocit knedlíku, ranní odkašlávání</li>
+        </ul>
+      </div>
+      <div class="sloupec projev">
+        <span class="sloupec-title">📍 Projev</span>
+        <ul>
+          <li>Návaly horka, noční pocení</li>
+          <li>Bolesti hlavy, tlak, světloplachost</li>
+          <li>Bolest žaludku po jídle, nechutenství</li>
+          <li>Otoky nohou, studené nohy</li>
+          <li>Bolest beder, vyvrknutý kotník</li>
+          <li>Úzkost, přetížení, emoční labilita</li>
+          <li>Vypadávání vlasů, suchá kůže, lámavé nehty</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="vysvetleni">
+      <span class="vysvetleni-label">Co to znamená</span>
+      Vaše potíže jsou jako kouř viditelný z okna. Kouř nám řekne, kde hoří — ale sám o sobě není příčinou. Kdybychom se soustředili jen na hašení kouře, plameny by pokračovaly. Terapie se proto zaměřuje na zdroj — na doplnění vašich kořenových zdrojů a uvolnění zablokované energie, aby mohlo dojít k přirozené rovnováze.
+    </div>
+  </div>
+
+  <!-- 5. JAZYK -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">05</span>Diagnostika jazyka</div>
+
+    <div class="odborne">
+      <span class="odborne-label">Odborně</span>
+      Tělo jazyka: bledě růžové s mírnou fialovou tónací na okrajích, střední až větší šíře, mírně oteklé — otisky zubů na okrajích naznačeny. Střední podélná rýha od základny do středu těla — signalizuje chronické napětí na ose páteře a prázdnotu Střední Qi. Potah: bílý, mírně suchý, přítomný na středu, výrazně tenčí na špičce a okrajích. Špička světlejší, bez výrazného zarudnutí.
+      <br><br>
+      TČM interpretace: Bílý suchý potach = vlhkost s tendencí k chladu na středu, suchý Yin na periferii — smíšený obraz vlhkost + deplece Yin. Bledé tělo = prázdnota Qi a Krve. Fialová tóne okrajů = stagnace Jater-Krve a Qi. Střední rýha = napětí na ose Srdce–Ledviny. Mírný otok = vlhkost/hlen jako produkt slabé transformace Sleziny.
+    </div>
+
+    <div class="vysvetleni">
+      <span class="vysvetleni-label">Co to znamená</span>
+      V TČM je jazyk mapou celého těla. Vaše tělo jazyka nám říká, že energetické zásoby jsou snížené — podobně jako půda, která potřebuje dobré zavlažení a výživu. Jemně fialové okraje jsou odrazem emočního napětí, které se ukládá v těle. Tento typ obrazu na biorezonanční terapii a změnách životního stylu reaguje velmi dobře.
+    </div>
+  </div>
+
+  <!-- 6. OČI -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">06</span>Diagnostika očí</div>
+
+    <div class="odborne">
+      <span class="odborne-label">Odborně</span>
+      Modrá duhovka, pohled soustředěný, mírně napjatý. Výraznější vrásky v zóně laterálního koutku bilaterálně — Jaterní linie. Levý vnitřní koutek: drobná kapilára — lehká aktivace Srdce-Tepla. Bilaterálně: ztmavení podoční oblasti — deplece Ledvinového Yin. Shen (duchovní vitalita): přítomný, oči živé, lesk zachován i přes únavu. Spojivky bez výrazného zarudnutí. Mírná asymetrie — pravé oko zdá se více zatažené, možná tenze Jater–Žlučník (pravá strana).
+      <br><br>
+      TČM: Modrá/šedá duhovka = Kovový typus s přesahem k Vodě. Temné kruhy = Ledviny/prázdnota. Laterální vrásky = stagnace Dřeva. Zachovaný Shen je pozitivní prognostický znak.
+    </div>
+
+    <div class="vysvetleni">
+      <span class="vysvetleni-label">Co to znamená</span>
+      Vaše oči jsou v TČM zrcadlem Jater a Ledvin — dvou klíčových systémů, které jsou nyní v centru naší pozornosti. Nejdůležitější je, co vidíme jako silné: váš Shen — životní jiskra, vůle a vitalita ducha — je přítomný a živý. I přes únavu a stres jste neztrácela sebe. To je silná výchozí pozice pro terapii.
+    </div>
+  </div>
+
+  <!-- 7. TERMOSNÍMKY -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">07</span>Termosnímky — rozložení energie v těle</div>
+
+    <div class="odborne">
+      <span class="odborne-label">Odborně</span>
+      Hodnocena obnažená záda od šíje po pas (šíje zakryta vlasy, dolní bederní a sakrální oblast zakryta oděvem — tyto části nelze hodnotit). Nález: výrazně homogenní vysokoteplotní zóna v celé oblasti horního a středního ohniště (36,6 °C interkapsulárně, 35,6 °C střední hrudní) bez fyziologického teplotního gradientu. Přetlak horního ohniště (oblast Srdce–Plíce, hrudní páteř). Bederní oblast — dolní ohniště (Ledviny, Ming-men) vykazuje přechod do chladnějšího spektra. Ramena bilaterálně symetrická. Dominující nález: energie hromadí v horním ohništi, dolní ohniště (kotevní Yang, Ming-men) je relativně chladné — potvrzuje prázdnotu Vody a nekotvenost Yang.
+    </div>
+
+    <div class="vysvetleni">
+      <span class="vysvetleni-label">Co to znamená</span>
+      Tepelná kamera nám ukazuje, jak energie proudí vaším tělem. Představte si, že teplo je jako voda, která by měla rovnoměrně zásobovat celou zahradu. U vás vidíme, že voda teče hodně do „horního poschodí" — do oblasti srdce a zad — zatímco „spodní část zahrady" (oblast ledvin a dolní páteře) dostává méně. To vysvětluje návaly horka nahoře i studené nohy dole. Terapie bude pomáhat tuto cirkulaci vyrovnat.
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>MedicGroup Ambulance s.r.o. | Mgr. Bc. Jiří Kabát · Celostní poradce</span>
+    <span>03. 06. 2026 · str. 2 / 4</span>
+  </div>
+</div>
+
+<!-- ═══ STRANA 3 ═══ -->
+<div class="page">
+
+  <div class="header">
+    <div class="logo-area">
+      <h1>MedicGroup Ambulance s.r.o.</h1>
+      <div class="subtitle">Celostní péče · Biorezonanční terapie · TČM</div>
+    </div>
+    <div class="header-right">
+      <strong>Mgr. Bc. Jiří Kabát</strong><br>
+      Celostní poradce<br>
+      <div class="provozovna">MedicGroup Ambulance s.r.o. · Praha</div>
+    </div>
+  </div>
+
+  <!-- 8. BBC -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">08</span>BBC měření — co ukázal energetický skener</div>
+
+    <span class="odborne-label" style="font-size:7pt; color:#7a9ab5; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:2mm; display:block;">Odborně</span>
+
+    <!-- OBLASTI -->
+    <div class="bbc-blok">
+      <div class="bbc-blok-title">A) Oblasti — energetická potřeba tkání (stupeň entropie)</div>
+
+      <div class="bbc-skupina red"><span class="label">Prsa</span><span class="val">stupeň 5</span></div>
+      <div class="bbc-item"><span class="label">MAMMA/PRS (orgán)</span><span class="val">33,914</span></div>
+
+      <div class="bbc-skupina red" style="margin-top:1mm;"><span class="label">Oči</span><span class="val">stupeň 4</span></div>
+      <div class="bbc-item"><span class="label">RETINA/SÍTNICE</span><span class="val">71,400</span></div>
+      <div class="bbc-item"><span class="label">LENS OCCULI/OČNÍ ČOČKA</span><span class="val">69,424</span></div>
+      <div class="bbc-item"><span class="label">OCULUS/OKO</span><span class="val">60,381</span></div>
+      <div class="bbc-item"><span class="label">CHORIOIDEA/CÉVNATKA</span><span class="val">21,319</span></div>
+      <div class="bbc-item"><span class="label">SCLERA/OČNÍ BĚLMO</span><span class="val">0,862</span></div>
+
+      <div class="bbc-skupina red" style="margin-top:1mm;"><span class="label">Krev, imunitní systém</span><span class="val">stupeň 4</span></div>
+      <div class="bbc-item"><span class="label">LEUCOCYTY/BÍLÉ KREVNÍ BUŇKY</span><span class="val">21,790</span></div>
+      <div class="bbc-item"><span class="label">LYMFOCYT</span><span class="val">11,137</span></div>
+      <div class="bbc-item"><span class="label">PLASMOCYTY/BÍLÉ KRVINKY</span><span class="val">2,009</span></div>
+      <div class="bbc-item"><span class="label">ÚSTŘICE (MOŘSKÉ PLODY)</span><span class="val">1,494</span></div>
+      <div class="bbc-item"><span class="label">ERYTROCYT/ČERVENÁ KRVINKA</span><span class="val">0,975</span></div>
+
+      <div class="bbc-skupina red" style="margin-top:1mm;"><span class="label">Štítná žláza</span><span class="val">stupeň 4</span></div>
+      <div class="bbc-item"><span class="label">GLANDULA THYREOIDEA/ŠTÍTNÁ ŽLÁZA</span><span class="val">11,914</span></div>
+      <div class="bbc-item"><span class="label">THYROCYTY/BUŇKY EPITELU ŠTÍTNÉ ŽLÁZY</span><span class="val">2,199</span></div>
+      <div class="bbc-item"><span class="label">PARATHYROID CELL/BUŇKY PŘÍŠTITNÉ ŽLÁZY</span><span class="val">2,016</span></div>
+      <div class="bbc-item"><span class="label">GLANDULA PARATHYREOID/PŘÍŠTITNÁ ŽLÁZA</span><span class="val">0,831</span></div>
+
+      <div class="bbc-skupina red" style="margin-top:1mm;"><span class="label">Ledviny a močový měchýř</span><span class="val">stupeň 4</span></div>
+      <div class="bbc-item"><span class="label">PELVIS RENALIS/RENÁLNÍ PÁNVIČKA</span><span class="val">13,851</span></div>
+      <div class="bbc-item"><span class="label">REN/LEDVINY</span><span class="val">4,489</span></div>
+      <div class="bbc-item"><span class="label">MOČOVÝ MĚCHÝŘ</span><span class="val">2,715</span></div>
+      <div class="bbc-item"><span class="label">PODOCYTY/BUŇKY LEDVINOVÉHO GLOMERULU</span><span class="val">2,429</span></div>
+      <div class="bbc-item"><span class="label">URETRA</span><span class="val">0,901</span></div>
+    </div>
+
+    <!-- NEROVNOVÁHY — pouze skupiny, bez konkrétních diagnóz -->
+    <div class="bbc-blok" style="margin-top:3mm;">
+      <div class="bbc-blok-title">B) Energetické nerovnováhy — přehled regulačních os (nižší koeficient = vyšší priorita)</div>
+
+      <div class="nerovno-blok">
+        <div class="nerovno-skupina red"><span>Krevní oběh</span><span>7,333</span></div>
+        <div class="nerovno-popis">Nejvyšší priorita. Energetická nerovnováha kardiovaskulární regulační osy — cévní zásobení a srdeční rytmika. V TČM: prázdnota Srdce-Krve a Qi, nekotvenost Yang. Odpovídá bušení srdce, návalům horka a tlakovým bolestem hlavy.</div>
+      </div>
+
+      <div class="nerovno-blok">
+        <div class="nerovno-skupina red"><span>Degenerativní a dystrofické poruchy</span><span>8,708</span></div>
+        <div class="nerovno-popis">Energetická nerovnováha tkáňové obnovy a trofiky — pojivové tkáně, kosti, cévy. V TČM: prázdnota Jing-Esence a Ledvinové Qi, oslabená Kostní osa. Odpovídá bolestem páteře, lámavým nehtům, žilní nedostatečnosti, snadné tvorbě modřin.</div>
+      </div>
+
+      <div class="nerovno-blok">
+        <div class="nerovno-skupina red"><span>Imunologická nerovnováha</span><span>13,505</span></div>
+        <div class="nerovno-popis">Nerovnováha imunitní regulační osy — obranyschopnost, lymfatický systém, zánětlivá reaktivita. V TČM: oslabená obranná Qi (Wei-Qi), deplece Slezina-Qi a lymfatické cirkulace. Přítomnost imunologické nerovnováhy potvrzuje nutnost stabilizace před eliminací zátěží.</div>
+      </div>
+
+      <div class="nerovno-blok">
+        <div class="nerovno-skupina red"><span>Hormonální nerovnováha</span><span>15,565</span></div>
+        <div class="nerovno-popis">Nerovnováha hormonální regulační osy — pohlavní hormony, thyreoidní osa, regulace cyklu. V TČM: narušení Čung-Mai a Ren-Mai, prázdnota Ledvinového Yin a Yang s menopauzálním projevem. Odpovídá návalům horka, emoční labilitě, vypadávání vlasů, cystám v prsu.</div>
+      </div>
+
+      <div class="nerovno-blok">
+        <div class="nerovno-skupina red"><span>Metabolická nerovnováha</span><span>18,137</span></div>
+        <div class="nerovno-popis">Nerovnováha metabolické a vylučovací regulační osy — ledvinová filtrace, minerálový metabolismus, kyselo-zásaditá rovnováha. V TČM: oslabení Ledviny-Yang, snížená transformační a transportní kapacita. Odpovídá nedostatečnému pitném režimu, otokům dolních končetin, metabolickému přetížení.</div>
+      </div>
+    </div>
+
+    <!-- ZÁTĚŽE -->
+    <div class="bbc-blok" style="margin-top:3mm;">
+      <div class="bbc-blok-title">C) Energetické zátěže — pořadí dle priority (nižší koeficient skupiny = vyšší priorita eliminace)</div>
+
+      <div class="bbc-skupina red"><span class="label">Viry</span><span class="val">5,676</span></div>
+      <div class="bbc-item bbc-red"><span class="label">PAPILLOMAVIRY</span><span class="val">0,057</span></div>
+
+      <div class="bbc-skupina red" style="margin-top:1mm;"><span class="label">Bakterie</span><span class="val">22,987</span></div>
+      <div class="bbc-item bbc-red"><span class="label">ENTEROCOCCUS FAECIUM</span><span class="val">0,173</span></div>
+      <div class="bbc-item bbc-red"><span class="label">BACTEROIDES FRAGILIS</span><span class="val">0,286</span></div>
+
+      <div class="bbc-skupina orange" style="margin-top:1mm;"><span class="label">Paraziti</span><span class="val">33,559</span></div>
+      <div class="bbc-item bbc-orange"><span class="label">ASCARIS LUMBRICOIDES</span><span class="val">0,336</span></div>
+
+      <div class="bbc-skupina orange" style="margin-top:1mm;"><span class="label">Pyl a rostliny</span><span class="val">36,983</span></div>
+      <div class="bbc-item"><span class="label">JILM MIX</span><span class="val">0,298</span></div>
+      <div class="bbc-item"><span class="label">EUKALYPTUS</span><span class="val">0,345</span></div>
+      <div class="bbc-item"><span class="label">LILKOVITÉ</span><span class="val">0,353</span></div>
+      <div class="bbc-item"><span class="label">LÍSKOVÝ OŘECH</span><span class="val">0,367</span></div>
+      <div class="bbc-item"><span class="label">LIPNICE</span><span class="val">0,377</span></div>
+
+      <div class="bbc-skupina orange" style="margin-top:1mm;"><span class="label">Zvířecí chlupy</span><span class="val">39,882</span></div>
+      <div class="bbc-item"><span class="label">PRACH OD KONÍ</span><span class="val">0,384</span></div>
+      <div class="bbc-item"><span class="label">SRST KŘEČKŮ</span><span class="val">0,402</span></div>
+      <div class="bbc-item"><span class="label">PSÍ CHLUPY</span><span class="val">0,410</span></div>
+    </div>
+
+    <!-- ENDOKRINOLOGIE -->
+    <div class="bbc-blok" style="margin-top:3mm;">
+      <div class="bbc-blok-title">D) Energetická endokrinologie — prioritní hormony</div>
+      <div class="endo-grid">
+        <div class="endo-item"><span>SOMATOTROPIN / STH (Růstový hormon)</span><span class="val">0,391</span></div>
+        <div class="endo-item"><span>FSH (Pohlavní hormon)</span><span class="val">0,426</span></div>
+        <div class="endo-item"><span>TESTOSTERON (Pohlavní hormon)</span><span class="val">0,430</span></div>
+        <div class="endo-item"><span>THYROXIN &amp; TRIJODOTHYRONI (Hormony ŠŽ)</span><span class="val">0,432</span></div>
+        <div class="endo-item"><span>MINERALOKORTIKOIDY (reg. krevního tlaku)</span><span class="val">0,446</span></div>
+      </div>
+    </div>
+
+    <div class="vysvetleni">
+      <span class="vysvetleni-label">Co to znamená</span>
+      BBC skener pracuje s frekvenčním profilem vašeho těla — podobně jako ladička, která detekuje, které oblasti potřebují energetickou podporu. Výsledky nám ukazují prioritní oblasti tkání, dominantní regulační osy v nerovnováze a energetické zátěže, které tělo nese. Tyto nálezy nejsou lékařskými diagnózami — jsou energetickými informacemi, které terapii pomáhají přesně zaměřit. Eliminace zátěží bude naplánována postupně, až poté, co bude regulační kapacita organismu dostatečně obnovena.
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>MedicGroup Ambulance s.r.o. | Mgr. Bc. Jiří Kabát · Celostní poradce</span>
+    <span>03. 06. 2026 · str. 3 / 4</span>
+  </div>
+</div>
+
+<!-- ═══ STRANA 4 ═══ -->
+<div class="page">
+
+  <div class="header">
+    <div class="logo-area">
+      <h1>MedicGroup Ambulance s.r.o.</h1>
+      <div class="subtitle">Celostní péče · Biorezonanční terapie · TČM</div>
+    </div>
+    <div class="header-right">
+      <strong>Mgr. Bc. Jiří Kabát</strong><br>
+      Celostní poradce<br>
+      <div class="provozovna">MedicGroup Ambulance s.r.o. · Praha</div>
+    </div>
+  </div>
+
+  <!-- 9. NÁVRH HARMONIZACE -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">09</span>Návrh harmonizace — postup v souladu s regulační kapacitou</div>
+
+    <div class="odborne">
+      <span class="odborne-label">Odborně</span>
+      Přítomnost imunologické nerovnováhy (koef. 13,505) a multisystémové nerovnováhy kardiovaskulární osy (koef. 7,333) kontraindikují předčasnou eliminaci zátěží. Protokol: stabilizace vegetativní osy → harmonizace Yin/Yang vodivosti → uvolnění stagnace Dřeva → podpora Vody a Středu → jemná eliminace virových a bakteriálních zátěží → kontrolní BBC.
+    </div>
+
+    <ul class="sezeni-list">
+      <li>
+        <span class="sezeni-num">1. sezení — Stabilizace a ukotvení (dnešní sezení)</span>
+        Vegetativní stabilizace — Program 1000, Bachovy esence (Hornbeam, Olive, Impatiens). Harmonizace základní vodivosti Yin/Yang — Program 960.4 H+Di. Podpora Ledvinové osy a Ming-men — cílené KTT Ledviny, Renální pánvička. Jemná harmonizace Jaterní stagnace — Játra/Žlučník. Závěrečná stabilizace Srdce-Shen.
+        <span class="sezeni-popis">Logika: bez stabilizace vegetativní osy a ukotvení Yang nelze pokračovat. Organismus musí nejprve získat kapacitu pro zpracování dalších intervencí.</span>
+      </li>
+      <li>
+        <span class="sezeni-num">2. sezení (doporučeno za 2–3 týdny) — Posílení Středu a hormonální harmonizace</span>
+        Posílení Sleziny–Žaludku. Harmonizace hormonální osy — podpora přechodového období (FSH, Thyroxin/T3, Somatotropin). Podpora imunitní osy — lymfatický systém. Energetická podpora prsní tkáně — KTT Mamma.
+        <span class="sezeni-popis">Logika: po stabilizaci přejdeme k výživě oslabeného kořene. Hormonální a imunitní osa pracují synergicky — nelze je oddělit. Přechodové období vyžaduje vlastní terapeutický modul.</span>
+      </li>
+      <li>
+        <span class="sezeni-num">3. sezení (doporučeno za 4–5 týdnů) — Počátek eliminace energetických zátěží</span>
+        Eliminace virové zátěže (Papillomaviry — invertní mód). Eliminace bakteriálních zátěží (Enterococcus, Bacteroides). Podpora Kovu — Plíce/Tlusté střevo. Metabolická osa — Ledviny, podpora vylučování.
+        <span class="sezeni-popis">Logika: eliminace je bezpečná teprve poté, kdy organismus má sílu zátěž zpracovat a vyloučit. Předčasná detoxikace při slabém Středu a prázdnotě Vody by vedla ke zhoršení příznaků.</span>
+      </li>
+      <li>
+        <span class="sezeni-num">Kontrolní BBC měření (doporučeno po 3. sezení, za cca 6–8 týdnů)</span>
+        Porovnání výchozích hodnot s aktuálním stavem. Přehodnocení priorit. Naplánování 4. a dalších sezení dle aktuálního regulačního obrazu.
+        <span class="sezeni-popis">Logika: kontrolní měření je navigace, ne formalita. Bez aktuálních dat bychom pracovali se zastaralou mapou.</span>
+      </li>
+    </ul>
+
+    <div class="vysvetleni">
+      <span class="vysvetleni-label">Co to znamená</span>
+      Náš postup je záměrně postupný — respektujeme přirozenou logiku těla. Strom, jehož kořeny jsme začali zásobovat, nejprve upevní základ a teprve potom může sdílet energii dál. Každé sezení staví na tom předchozím. Cílem není rychlá změna, ale trvalá rovnováha.
+    </div>
+  </div>
+
+  <!-- 10. DOPORUČENÍ -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">10</span>Doporučení pro každodenní život</div>
+
+    <ul class="doporuceni-list">
+      <li>
+        <span class="num">1.</span>
+        <span class="text">
+          <strong>Pitný režim — základ Yin</strong>
+          <em>Méně než 1 litr tekutin denně nestačí pro vaše Ledvinové Yin. Cíl: postupně navýšit na 1,5–2 l denně. Vlažná nebo teplá voda, bylinkový čaj. Malé doušky průběžně — tak jak to děláte — jen zvyšte frekvenci.</em>
+        </span>
+      </li>
+      <li>
+        <span class="num">2.</span>
+        <span class="text">
+          <strong>Strava — podpora Středu a Vody</strong>
+          <em>Teplá, vařená strava: polévky, kaše, dušená zelenina. Potraviny z BBC nevhodného seznamu prozatím omezte. Podporujte Ledviny: černé fazole, vlašské ořechy, kostní vývar. Malé porce jsou pro vás lepší než velká jídla. Nepřejídejte se večer.</em>
+        </span>
+      </li>
+      <li>
+        <span class="num">3.</span>
+        <span class="text">
+          <strong>Spánkový rituál — ukotvení Yang</strong>
+          <em>Před spaním: 10 minut teplá koupel nohou (kotví Yang dolů), bránicové dýchání 4-4-8. Vyvarujte se obrazovkám od 21 hod. Pravidelné probuzení kolem 3:00 je Jaterní čas — rituál zklidnění před spaním ho časem zmírní.</em>
+        </span>
+      </li>
+      <li>
+        <span class="num">4.</span>
+        <span class="text">
+          <strong>Pohyb — udržet, co funguje</strong>
+          <em>Jóga, plavání, chůze, kolo — ideální aktivity, dobře pokračujte. Otužování, které vám pomáhá při návalech, je v TČM přirozené ukotvení Yang — je to správná intuice. Vyhněte se extrémní fyzické zátěži, která vyčerpává Yin.</em>
+        </span>
+      </li>
+      <li>
+        <span class="num">5.</span>
+        <span class="text">
+          <strong>Emoční prostor — péče o Jaterní Qi</strong>
+          <em>Vaše Jaterní Qi potřebuje prostor pro vyjádření — jinak hledá výboj jinde. Denně 10–15 minut jen pro sebe: procházka, psaní, kreativní aktivita. Vědomé pojmenování emocí místo potlačení. To není slabost — je to péče o klíčový regulační systém.</em>
+        </span>
+      </li>
+      <li>
+        <span class="num">6.</span>
+        <span class="text">
+          <strong>Akupresura v domácím prostředí</strong>
+          <em>Bod Ledvin 1 (Yongquan) — střed chodidla: masírujte každý večer 2–3 minuty. Kotví Yang dolů, uklidňuje návaly. Bod Perikard 6 (Neiguan) — 3 šířky prstu nad zápěstní rýhou: pomáhá s bušením srdce a úzkostí.</em>
+        </span>
+      </li>
+      <li>
+        <span class="num">7.</span>
+        <span class="text">
+          <strong>Limity péče o druhé</strong>
+          <em>V TČM nelze zásobovat ostatní z prázdné nádoby. Každý den byť krátká aktivita jen pro vás — bez povinností — je podmínkou udržitelné péče o druhé, ne egoismem.</em>
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 11. ZÁVĚR -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">11</span>Závěr</div>
+
+    <div class="zaver-box">
+      <p>Vaše tělo nám ukázalo obraz, který je komplexní — ale logický a srozumitelný. Nejde o „mnoho různých problémů", ale o <strong>jeden regulační vzorec</strong>: vyčerpání kořenových zdrojů po letech námahy a péče o druhé, doplněné o přechodové období, které tento vzorec zesiluje.</p>
+      <p>Vaše <strong>silné stránky jsou výjimečné</strong>: pravidelný sport a pohyb, nekuřačka, žádná antibiotika v posledních 5 letech, aktivní otužování, schopnost vyhledat pomoc. Váš Shen — životní jiskra — je přítomný a živý. To je v terapii to nejdůležitější.</p>
+      <p>Terapie postupuje logicky: <strong>nejprve ukotvit a zklidnit, poté vyživit kořen, harmonizovat, a teprve v závěru jemně eliminovat zátěže.</strong> Cílem je obnovit autoregulační schopnost vašeho organismu tak, aby se o rovnováhu dokázal postarat sám.</p>
+    </div>
+  </div>
+
+  <div class="podpis">
+    S úctou<br>
+    <strong>Mgr. Bc. Jiří Kabát</strong>
+    Celostní poradce<br>
+    MedicGroup Ambulance s.r.o.
+  </div>
+
+  <div class="footer">
+    <span>MedicGroup Ambulance s.r.o. | Mgr. Bc. Jiří Kabát · Celostní poradce</span>
+    <span>03. 06. 2026 · str. 4 / 4</span>
+  </div>
+</div>
+
+
+
+</body></html>
