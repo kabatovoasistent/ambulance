@@ -249,7 +249,8 @@ const WEBHOOKS = {
   scaleRead:    "https://hook.eu2.make.com/xg96yh8b2yjea4h2v9q7dcp9ud2nc07g",
   zpravyInsert: "https://hook.eu2.make.com/0yoorkpogmfrydkh5wfff3o35or17gc0",
   zpravyRead:   "https://hook.eu2.make.com/x5fd484p14omyot2cfdnw5c8n7qr38sp",
-  zpravaGen:    "https://hook.eu2.make.com/xnk7rqrjl6qc47p718huet1gsd52d9sr"
+  zpravaGen:    "https://hook.eu2.make.com/xnk7rqrjl6qc47p718huet1gsd52d9sr",
+  zpravaVysledek:"https://hook.eu2.make.com/4269qeaqrbpaomn33vymlod3ehb8rrn8"
 };
 const LIVE = Object.values(WEBHOOKS).some(u => u);
 
@@ -668,7 +669,9 @@ async function createReport(){
   const klient = sel.options[sel.selectedIndex].textContent.replace(/\s*\(.*\)$/,"").trim();
   const datum = document.getElementById("datum").value;
   const pk = document.getElementById("pokyn");
+  const jobId = "job_"+Date.now()+"_"+Math.random().toString(36).slice(2,8);
   const payload = {
+    jobId: jobId,
     client_id: clientId, klient: klient, datum: datum,
     typ: "Vstupní celostní zpráva",
     anamneza: (document.getElementById("anamneza").value||"").trim() || "(neuvedena)",
@@ -683,13 +686,24 @@ async function createReport(){
   if(!(LIVE && WEBHOOKS.zpravaGen)){ toast("Generování není napojeno"); return; }
   const btn = event && event.target ? event.target.closest("button") : null;
   if(btn){ btn.disabled = true; }
-  setStatus("Generuji zprávu… (může trvat ~10–20 s, počkejte prosím)");
+  setStatus("Generuji zprávu… (obsáhlá zpráva, může trvat ~30–120 s, počkejte prosím)");
   toast("Generuji zprávu…");
   try{
-    const r = await fetch(WEBHOOKS.zpravaGen,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-    let md = await r.text();
-    md = extractReportText(md);
-    if(!md || md.trim().length<20){ throw new Error("prázdná odpověď"); }
+    // 1) spustit generování (webhook hned odpoví "OK", samotná zpráva se tvoří na pozadí)
+    await fetch(WEBHOOKS.zpravaGen,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    // 2) průběžně vyzvedávat výsledek dle jobId
+    let md="";
+    const started=Date.now(), maxMs=210000;
+    while(Date.now()-started < maxMs){
+      await new Promise(res=>setTimeout(res,4000));
+      try{
+        const rr = await fetch(WEBHOOKS.zpravaVysledek,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({jobId:jobId})});
+        const txt = await rr.text();
+        if(txt && txt.trim().length>60 && txt.indexOf("page")>-1){ md = extractReportText(txt); if(md && md.trim().length>40) break; }
+      }catch(err){ /* síťový výpadek pollingu — zkusíme znovu */ }
+      setStatus("Generuji zprávu… ("+Math.round((Date.now()-started)/1000)+" s)");
+    }
+    if(!md || md.trim().length<40){ throw new Error("vypršel čas (zkuste to prosím znovu)"); }
     pendingReport = { client_id:clientId, klient:klient, datum:datum, typ:payload.typ, nadpis:"Celostní zpráva — "+datum, obsah:md };
     document.getElementById("reviewText").value = md;
     document.getElementById("reviewModal").style.display="flex";
