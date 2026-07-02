@@ -514,7 +514,7 @@
 
         <div class="footer-row" style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 10px; border-top: 0.5px solid var(--border); font-size: 12px; color: var(--text-3);">
           <span id="list-status">—</span>
-          <span><i class="ti ti-cloud" style="vertical-align: -2px;"></i> Zdroj: Softr.io přes Make</span>
+          <span><a href="#" onclick="changeAccessKey(); return false;" style="color: var(--text-3); text-decoration: underline; margin-right: 12px;"><i class="ti ti-key" style="vertical-align: -2px;"></i> Změnit přístupový klíč</a><i class="ti ti-cloud" style="vertical-align: -2px;"></i> Zdroj: Softr.io přes Make</span>
         </div>
       </main>
     </div>
@@ -1089,6 +1089,25 @@ const WEBHOOK_URL_CENIK_LOAD   = "https://hook.eu2.make.com/sxklgjh8hhssgk4spha0
 const WEBHOOK_URL_KOMM_LOG     = "https://hook.eu2.make.com/svh70fk3vd7kltqz4qv9lt6vdyyvz9od";
 const WEBHOOK_URL_KOMM_LOG_READ = "https://hook.eu2.make.com/mgm2qmupnz2gxsx9s8p2l7nv7rda1bit";
 
+// ---- Přístupový klíč pro webhooky (zabezpečení čtení dat) ----
+const ACCESS_KEY_STORAGE = 'kp_access_key';
+function getAccessKey() {
+  let k = null;
+  try { k = localStorage.getItem(ACCESS_KEY_STORAGE); } catch(e) {}
+  if (!k) {
+    k = (prompt('Zadejte přístupový klíč aplikace') || '').trim();
+    if (k) { try { localStorage.setItem(ACCESS_KEY_STORAGE, k); } catch(e) {} }
+  }
+  return k || '';
+}
+function withToken(payload) {
+  return Object.assign({}, payload, { token: getAccessKey() });
+}
+function changeAccessKey() {
+  try { localStorage.removeItem(ACCESS_KEY_STORAGE); } catch(e) {}
+  getAccessKey();
+}
+
 // stav filtru kartiček: 'all' | 'scheduled' | 'calendar'
 let pillFilter = 'all';
 
@@ -1228,7 +1247,7 @@ async function loadKlientiFromServer() {
   if (!WEBHOOK_URL || WEBHOOK_URL.indexOf('REPLACE_ME') >= 0) { showListStatus('error', 'WEBHOOK_URL není nastavena.'); return; }
   showListStatus('loading', 'Načítám klienty ze serveru…');
   let resp;
-  try { resp = await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'READ' }) }); }
+  try { resp = await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(withToken({ action: 'READ' })) }); }
   catch (err) { showListStatus('error', 'Síťová chyba (fetch selhal): ' + (err && err.message ? err.message : String(err))); return; }
   try {
     if (!resp.ok) { const txt = await resp.text(); showListStatus('error', 'Make vrátil ' + resp.status + ': ' + (txt || resp.statusText)); return; }
@@ -1251,7 +1270,7 @@ async function syncToWebhook(action, patient) {
   const payload = buildKlientPayload(action, patient);
   showSyncStatus('loading', (action === 'INSERT' ? 'Přidávám pacienta…' : 'Ukládám změny…'));
   try {
-    const resp = await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    const resp = await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(withToken(payload)) });
     if (!resp.ok) { const txt = await resp.text(); showSyncStatus('error', 'Make vrátil chybu ' + resp.status + ': ' + (txt || resp.statusText)); return { ok: false, status: resp.status }; }
     let data = null; try { data = await resp.json(); } catch {}
     const verb = (action === 'INSERT') ? 'přidán' : 'uložen';
@@ -1723,7 +1742,7 @@ async function sendGdprWebhook(patient, opts) {
   };
   const detail = 'GDPR žádost · ' + (patient.email || patient.phone || '');
   try {
-    const resp = await fetch(GDPR_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    const resp = await fetch(GDPR_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(withToken(payload)) });
     if (!resp.ok) { const txt = await resp.text(); logKomunikace('email_gdpr', patient, detail, 'error', resp.status + ': ' + (txt || resp.statusText)); alert('GDPR souhlas — Make vrátil ' + resp.status + ': ' + (txt || resp.statusText)); }
     else { logKomunikace('email_gdpr', patient, detail, 'ok'); if (!opts.silent) alert('Žádost o GDPR souhlas byla odeslána klientovi.'); }
   } catch (err) { const msg = err && err.message ? err.message : String(err); logKomunikace('email_gdpr', patient, detail, 'error', msg); alert('GDPR souhlas se nepodařilo odeslat: ' + msg); }
@@ -1749,7 +1768,7 @@ async function sendPristiTerminWebhook(patient, gdprRequest) {
   const payload = { akce: 'pristi_termin', jmeno: patient.name || '', email: patient.email || '', telefon: telefon, typ: typ, sluzba: typ, typ_vysetreni: typNeutral, ordinace: patient.ordinace || '', kategorie: serviceToGroup(patient.therapy), nazev_udalosti: nazev, datum: datum, cas_zacatku: t, start: startStr, konec: endStr, delka_min: dur, timezone: 'Europe/Prague', id_klienta: patient.id || '', gdpr_souhlas: patient.gdpr === true, gdpr_request: !!gdprRequest, poznamka: '' };
   const detail = 'Příští termín ' + datum + ' ' + t + ' · ' + typ;
   try {
-    const resp = await fetch(OBJEDNAVKA_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    const resp = await fetch(OBJEDNAVKA_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(withToken(payload)) });
     if (!resp.ok) { const txt = await resp.text(); const errMsg = resp.status + ': ' + (txt || resp.statusText); logKomunikace('email_pristi', patient, detail, 'error', errMsg); alert('Zpráva o termínu — Make vrátil ' + errMsg); }
     else { logKomunikace('email_pristi', patient, detail, 'ok'); alert('Zpráva o termínu byla odeslána klientovi.'); }
   }
@@ -1809,7 +1828,7 @@ async function sendObjednavkaWebhook(patient, visit) {
   const payload = { jmeno: patient.name || '', email: patient.email || '', telefon: telefon, typ: typ, sluzba: typ, ordinace: ordinace, kategorie: serviceToGroup(typ), nazev_udalosti: nazev, datum: visit.d, cas_zacatku: t, start: startStr, konec: endStr, delka_min: dur, timezone: 'Europe/Prague', id_klienta: patient.id || '', poznamka: '' };
   const detail = 'Termín ' + (visit.d || '') + ' ' + (visit.t || '') + ' · ' + (visit.service || typ);
   try {
-    const resp = await fetch(OBJEDNAVKA_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    const resp = await fetch(OBJEDNAVKA_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(withToken(payload)) });
     if (!resp.ok) { const txt = await resp.text(); const errMsg = resp.status + ': ' + (txt || resp.statusText); logKomunikace('email_objednavka', patient, detail, 'error', errMsg); alert('Objednávka — Make vrátil ' + errMsg); }
     else { logKomunikace('email_objednavka', patient, detail, 'ok'); }
   }
@@ -1871,7 +1890,7 @@ const LAST_LIST_KEY = 'kabat_last_seznam_vysetreni';
 function saveLastList(htmlContent) { try { localStorage.setItem(LAST_LIST_KEY, JSON.stringify({ html: htmlContent || '', ts: new Date().toISOString() })); } catch (e) {} }
 function loadLastList() { try { const raw = localStorage.getItem(LAST_LIST_KEY); if (!raw) return null; return JSON.parse(raw); } catch { return null; } }
 function showLastList() { const cached = loadLastList(); if (!cached || !cached.html) { showListStatus('error', 'Žádný uložený seznam — stiskněte nejdřív „Odešli mi seznam vyšetření na mail".'); return; } const tsTxt = cached.ts ? new Date(cached.ts).toLocaleString('cs-CZ') : ''; let html = cached.html; if (tsTxt) { const banner = '<div style="position:sticky;top:0;background:#fef3c7;color:#78350f;padding:8px 16px;font-family:Arial;font-size:13px;border-bottom:1px solid #fcd34d;z-index:10;">Archivní verze — naposled odeslána ' + tsTxt + '</div>'; html = /<body[^>]*>/i.test(html) ? html.replace(/<body([^>]*)>/i, '<body$1>' + banner) : banner + html; } openEmailModal(html); }
-async function sendListByEmail() { if (!SEZNAM_MAIL_WEBHOOK_URL) return; try { saveLastList(buildSeznamVysetreniHtml()); } catch (e) {} showListStatus('loading', 'Pokyn k odeslání mailu byl odeslán, akce může pár sekund trvat.'); try { const resp = await fetch(SEZNAM_MAIL_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'send_list', ts: new Date().toISOString() }) }); if (!resp.ok) { const txt = await resp.text(); showListStatus('error', 'Make vrátil ' + resp.status + ': ' + (txt || resp.statusText)); return; } const rawText = await resp.text(); let serverHtml = null; try { const data = JSON.parse(rawText); if (data && typeof data === 'object') serverHtml = data.html || data.body || data.content || null; } catch { if (rawText && (rawText.trim().startsWith('<') || rawText.indexOf('<html') >= 0)) serverHtml = rawText; } if (serverHtml) saveLastList(serverHtml); showListStatus('ok', 'Pokyn k odeslání mailu byl odeslán, akce může pár sekund trvat.'); } catch (err) { showListStatus('error', 'Síťová chyba: ' + (err && err.message ? err.message : String(err))); } }
+async function sendListByEmail() { if (!SEZNAM_MAIL_WEBHOOK_URL) return; try { saveLastList(buildSeznamVysetreniHtml()); } catch (e) {} showListStatus('loading', 'Pokyn k odeslání mailu byl odeslán, akce může pár sekund trvat.'); try { const resp = await fetch(SEZNAM_MAIL_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(withToken({ action: 'send_list', ts: new Date().toISOString() })) }); if (!resp.ok) { const txt = await resp.text(); showListStatus('error', 'Make vrátil ' + resp.status + ': ' + (txt || resp.statusText)); return; } const rawText = await resp.text(); let serverHtml = null; try { const data = JSON.parse(rawText); if (data && typeof data === 'object') serverHtml = data.html || data.body || data.content || null; } catch { if (rawText && (rawText.trim().startsWith('<') || rawText.indexOf('<html') >= 0)) serverHtml = rawText; } if (serverHtml) saveLastList(serverHtml); showListStatus('ok', 'Pokyn k odeslání mailu byl odeslán, akce může pár sekund trvat.'); } catch (err) { showListStatus('error', 'Síťová chyba: ' + (err && err.message ? err.message : String(err))); } }
 document.getElementById('btn-send-list').addEventListener('click', sendListByEmail);
 document.getElementById('btn-last-list').addEventListener('click', showLastList);
 
@@ -2036,14 +2055,14 @@ function logKomunikace(type, patient, detail, status, errorMsg) {
       fetch(WEBHOOK_URL_KOMM_LOG, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: JSON.stringify(withToken({
           id_klienta: entry.patientId,
           timestamp: entry.ts,
           typ: entry.type,
           detail: entry.detail,
           status: entry.status,
           chyba: entry.error
-        })
+        }))
       }).catch(function() {});
     } catch(e) {}
   }
@@ -2078,13 +2097,13 @@ function saveCenik(data) {
           fetch(WEBHOOK_URL_CENIK_SAVE, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+            body: JSON.stringify(withToken({
               nazev: s.nazev,
               kategorie: kat.kategorie || '',
               cena: s.cena || 0,
               doba: s.doba || 0,
               poradi: poradi
-            })
+            }))
           }).catch(function() {});
         } catch(e) {}
       });
@@ -2097,7 +2116,7 @@ async function loadCenikFromServer() {
     const resp = await fetch(WEBHOOK_URL_CENIK_LOAD, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'load' })
+      body: JSON.stringify(withToken({ action: 'load' }))
     });
     if (!resp.ok) return;
     const text = (await resp.text()).trim();
@@ -2297,7 +2316,7 @@ async function zapisPlatbu(dekurzData, idDekurz, patient) {
     const resp = await fetch(WEBHOOK_URL_PLATBA_ZAPIS, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(Object.assign({}, zaznam, { datum: datum + 'T00:00:00.000Z' }))
+      body: JSON.stringify(withToken(Object.assign({}, zaznam, { datum: datum + 'T00:00:00.000Z' })))
     });
     if (!resp.ok) {
       const txt = await resp.text();
@@ -2633,7 +2652,7 @@ async function sendReminders() {
   for (let i = 0; i < items.length; i++) {
     showRemStatus('loading', 'Odesílám připomínky… ' + (i + 1) + ' / ' + items.length);
     try {
-      const resp = await fetch(PRIPOMINKA_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(buildPripominkaPayload(items[i])) });
+      const resp = await fetch(PRIPOMINKA_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(withToken(buildPripominkaPayload(items[i]))) });
       if (resp.ok) ok++; else fail++;
     } catch (e) { fail++; }
   }
@@ -2659,14 +2678,14 @@ async function syncKomunikaceToCloud() {
       const r = await fetch(WEBHOOK_URL_KOMM_LOG, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: JSON.stringify(withToken({
           id_klienta: e.patientId,
           timestamp: e.ts,
           typ: e.type,
           detail: e.detail,
           status: e.status,
           chyba: e.error
-        })
+        }))
       });
       if (r.ok) ok++; else fail++;
     } catch(e2) { fail++; }
@@ -2744,7 +2763,7 @@ function renderKomunikace() {
     fetch(WEBHOOK_URL_KOMM_LOG_READ, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'load_all' })
+      body: JSON.stringify(withToken({ action: 'load_all' }))
     })
       .then(function(r) { return r.json(); })
       .then(function(data) {
@@ -2906,7 +2925,7 @@ async function uploadFileToDrive(patientId, patientName, filename, dataUrl) {
     const resp = await fetch(WEBHOOK_URL_DRIVE, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'upload_file', id_klienta: patientId, jmeno: patientName, filename: filename, mimetype: mimetype, data: base64 })
+      body: JSON.stringify(withToken({ action: 'upload_file', id_klienta: patientId, jmeno: patientName, filename: filename, mimetype: mimetype, data: base64 }))
     });
     if (!resp.ok) return null;
     return await resp.json();
@@ -2920,7 +2939,7 @@ async function callDekurzWebhook(payload) {
   const r = await fetch(WEBHOOK_URL_DEKURZ, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(withToken(payload))
   });
   if (!r.ok) {
     const txt = await r.text();
