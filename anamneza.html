@@ -8,132 +8,125 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --paper:#EEF2EE; --surface:#FFFFFF; --ink:#1B2A24; --muted:#6C7C74;
-  --line:#D4DED7; --jade:#2F6B57; --jade-soft:#DFEAE3; --clay:#9C5F35; --r:14px;
-}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{background:var(--paper);color:var(--ink);
-  font-family:"Inter Tight",-apple-system,"Segoe UI",Roboto,sans-serif;
-  font-size:16px;line-height:1.45;-webkit-text-size-adjust:100%}
+:root{--paper:#EEF2EE;--surface:#FFFFFF;--ink:#1B2A24;--muted:#6C7C74;
+--line:#D4DED7;--jade:#2F6B57;--jade-soft:#DFEAE3;--clay:#9C5F35;--r:14px}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:"Inter Tight",-apple-system,"Segoe UI",Roboto,sans-serif;
+font-size:16px;line-height:1.45;-webkit-text-size-adjust:100%}
 button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--jade);outline-offset:2px}
-
 .app{display:grid;grid-template-columns:252px 1fr;min-height:100vh}
-.rail{border-right:1px solid var(--line);background:var(--surface);
-  padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.rail{border-right:1px solid var(--line);background:var(--surface);padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto}
 .brand{font-family:"Newsreader",Georgia,serif;font-size:21px;margin:0 0 2px}
-.brand-sub{color:var(--muted);font-size:13px;margin:0 0 20px}
+.brand-sub{color:var(--muted);font-size:13px;margin:0 0 8px}
+.mode-pill{display:inline-block;font-size:12.5px;padding:3px 10px;border-radius:99px;background:var(--jade-soft);color:var(--jade);margin:0 0 18px;font-weight:600}
 .nav{display:flex;flex-direction:column;gap:2px}
-.nav-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;
-  background:none;border:0;padding:9px 10px;border-radius:10px;font-size:14.5px}
+.nav-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;padding:9px 10px;border-radius:10px;font-size:14.5px}
 .nav-item:hover{background:var(--paper)}
 .nav-item[aria-current="true"]{background:var(--jade-soft);color:var(--jade);font-weight:600}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--line);flex:none}
 .nav-item[data-done="true"] .dot{background:var(--jade)}
-
-.main{padding:26px 30px 130px;max-width:780px}
+.main{padding:26px 30px 130px;max-width:800px}
 .topbar{display:none}
 h2.sec-title{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:27px;margin:0 0 4px}
 .sec-hint{color:var(--muted);margin:0 0 22px;font-size:14.5px}
-
 .q{padding:15px 0;border-top:1px solid var(--line)}
 .q:first-of-type{border-top:0;padding-top:0}
-.q.detail{border-top:0;padding:6px 0 6px 14px;margin-left:2px;border-left:2px solid var(--jade-soft)}
+.q.detail{border-top:0;padding:6px 0 6px 14px;border-left:2px solid var(--jade-soft)}
 .q-text{font-weight:500;margin:0 0 9px}
 .q.detail .q-text{font-weight:400;color:var(--muted);font-size:15px}
+.q-last{color:var(--muted);font-size:13.5px;margin:7px 0 0}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{background:var(--surface);border:1px solid var(--line);border-radius:999px;
-  padding:9px 15px;font-size:15px;min-height:42px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 15px;font-size:15px;min-height:42px}
 .chip:hover{border-color:var(--jade)}
 .chip[aria-pressed="true"]{background:var(--jade);border-color:var(--jade);color:#fff}
 .chip.neg[aria-pressed="true"]{background:var(--ink);border-color:var(--ink)}
-
 .matice{display:flex;flex-direction:column;gap:6px}
-.mrow{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;
-  padding:6px 0;border-bottom:1px solid var(--line)}
+.mrow{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
 .mrow:last-child{border-bottom:0}
-.mrow-label{font-size:15px}
 .mbtns{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface)}
 .mbtns button{border:0;background:none;padding:7px 11px;font-size:13.5px;min-height:38px;white-space:nowrap}
-.mbtns button + button{border-left:1px solid var(--line)}
+.mbtns button+button{border-left:1px solid var(--line)}
 .mbtns button[aria-pressed="true"]{background:var(--jade);color:#fff}
 .mbtns button[data-v="ne"][aria-pressed="true"]{background:var(--ink)}
-
 .scale{display:flex;align-items:center;gap:14px}
 .scale input{flex:1;accent-color:var(--jade)}
 .scale output{font-variant-numeric:tabular-nums;font-weight:600;min-width:52px}
+.scale-legend{color:var(--muted);font-size:13px;margin:6px 0 0}
 .num{display:flex;align-items:center;gap:9px}
 .num input{width:110px;text-align:center;font-variant-numeric:tabular-nums}
 .unit{color:var(--muted)}
 .calc{color:var(--jade);font-size:14px;margin:8px 0 0}
-textarea,input[type=text],input[type=number]{width:100%;border:1px solid var(--line);
-  border-radius:10px;background:var(--surface);padding:11px 13px;font:inherit;resize:vertical}
+textarea,input[type=text],input[type=number]{width:100%;border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:11px 13px;font:inherit;resize:vertical}
 .note-toggle{background:none;border:0;color:var(--muted);font-size:13.5px;padding:6px 0;text-decoration:underline}
 .q-note{margin-top:8px}
-
+.bbc{display:flex;flex-direction:column;gap:8px}
+.bbcrow{display:flex;gap:8px;align-items:center}
+.bbcrow input[type=text]{flex:1}
+.bbcnum{width:82px;text-align:center}
+.bbcsel{border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--surface);font:inherit}
+.bbcdel{border:1px solid var(--line);background:var(--surface);border-radius:10px;width:42px;min-height:42px;color:var(--muted)}
+.mrizka{width:100%;border-collapse:collapse;font-size:14.5px}
+.mrizka th,.mrizka td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+.mrizka th:first-child,.mrizka td:first-child{text-align:left}
+.mrizka td.el{font-weight:600}
+.mrizka small{color:var(--muted);font-weight:400}
+.shoda-ok{color:var(--jade)}.shoda-ne{color:var(--clay)}
+.zatez{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:14.5px}
 .sec-actions{display:flex;gap:10px;margin:22px 0 4px;flex-wrap:wrap}
-.btn{border:1px solid var(--line);background:var(--surface);border-radius:10px;
-  padding:10px 16px;min-height:44px;font-size:15px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 16px;min-height:44px;font-size:15px}
 .btn:hover{border-color:var(--jade)}
 .btn-primary{background:var(--jade);border-color:var(--jade);color:#fff}
 .btn-primary:hover{background:#26584a}
-
-.footbar{position:fixed;left:252px;right:0;bottom:0;background:var(--surface);
-  border-top:1px solid var(--line);padding:12px 30px;display:flex;gap:10px;align-items:center}
+.footbar{position:fixed;left:252px;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:12px 30px;display:flex;gap:10px;align-items:center}
 .progress{flex:1;height:6px;background:var(--paper);border-radius:99px;overflow:hidden}
 .progress i{display:block;height:100%;background:var(--jade);width:0;transition:width .25s}
 .count{color:var(--muted);font-size:13.5px;font-variant-numeric:tabular-nums}
-
-.record{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.record{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;margin-bottom:16px}
 .record h3{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:20px;margin:0 0 12px}
-#zapisText{font-family:"Newsreader",Georgia,serif;font-size:16px;line-height:1.65;
-  min-height:460px;border:0;padding:0;background:none}
+#zapisText{font-family:"Newsreader",Georgia,serif;font-size:16px;line-height:1.65;min-height:460px;border:0;padding:0;background:none}
 #zapisText:focus{outline:none}
-.pattern{border-top:1px solid var(--line);padding:13px 0}
-.pattern:first-of-type{border-top:0}
-.pattern-head{display:flex;align-items:baseline;gap:10px}
-.pattern-name{font-weight:600}
-.pattern-score{color:var(--muted);font-size:13.5px;font-variant-numeric:tabular-nums}
-.bar{height:5px;background:var(--paper);border-radius:99px;margin:7px 0 8px;overflow:hidden}
+.el{padding:10px 0;border-top:1px solid var(--line)}
+.el:first-of-type{border-top:0}
+.el-head{display:flex;align-items:baseline;gap:10px}
+.el-name{font-weight:600}
+.el-pct{color:var(--muted);font-size:13.5px;font-variant-numeric:tabular-nums;margin-left:auto}
+.bar{height:6px;background:var(--paper);border-radius:99px;margin:7px 0 8px;overflow:hidden}
 .bar i{display:block;height:100%;background:var(--clay)}
-.why{color:var(--muted);font-size:14px;margin:0}
+.bar.loc i{background:var(--jade)}
+.why{color:var(--muted);font-size:13.5px;margin:0}
 .disclaimer{color:var(--muted);font-size:13.5px;margin:14px 0 0}
 .empty{color:var(--muted)}
-
+.vzorec{font-family:"Newsreader",Georgia,serif;font-size:19px;margin:0 0 6px}
+table.trend{width:100%;border-collapse:collapse;font-size:14.5px}
+table.trend th,table.trend td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+table.trend th:first-child,table.trend td:first-child{text-align:left}
+.up{color:var(--clay);font-weight:600}.down{color:var(--jade);font-weight:600}
+.obraz{font-size:14.5px}
+.obraz div{display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--line)}
+.obraz b{font-weight:500;flex:1}
+.obraz span{color:var(--muted);white-space:nowrap}
+.stale{color:var(--clay)}
 @media (max-width:860px){
-  .app{grid-template-columns:1fr}
-  .rail{display:none}
-  .topbar{display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5;
-    background:var(--surface);border-bottom:1px solid var(--line);padding:11px 16px}
-  .topbar .brand{font-size:17px;margin:0}
-  .sheet{position:fixed;inset:0;background:rgba(20,32,27,.35);z-index:20;display:none}
-  .sheet[data-open="true"]{display:block}
-  .sheet-inner{position:absolute;left:0;right:0;bottom:0;background:var(--surface);
-    border-radius:18px 18px 0 0;padding:16px 14px 26px;max-height:78vh;overflow:auto}
-  .main{padding:18px 16px 116px}
-  h2.sec-title{font-size:23px}
-  .footbar{left:0;padding:10px 16px}
-  .chip{font-size:15.5px;padding:11px 16px}
-  .mrow{grid-template-columns:1fr;gap:6px}
-  .mbtns{width:100%}
-  .mbtns button{flex:1}
-}
-@media print{
-  .rail,.footbar,.topbar,.sec-actions{display:none}
-  body{background:#fff}
-  .main{padding:0;max-width:none}
-  .record{border:0;padding:0}
-}
+.app{grid-template-columns:1fr}.rail{display:none}
+.topbar{display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--line);padding:11px 16px}
+.topbar .brand{font-size:17px;margin:0}
+.sheet{position:fixed;inset:0;background:rgba(20,32,27,.35);z-index:20;display:none}
+.sheet[data-open="true"]{display:block}
+.sheet-inner{position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-radius:18px 18px 0 0;padding:16px 14px 26px;max-height:78vh;overflow:auto}
+.main{padding:18px 16px 116px}h2.sec-title{font-size:23px}
+.footbar{left:0;padding:10px 16px}.chip{font-size:15.5px;padding:11px 16px}
+.mrow{grid-template-columns:1fr;gap:6px}.mbtns{width:100%}.mbtns button{flex:1}
+table.trend{font-size:13px}table.trend th,table.trend td{padding:5px 4px}}
+@media print{.rail,.footbar,.topbar,.sec-actions{display:none}body{background:#fff}.main{padding:0;max-width:none}.record{border:0;padding:0}}
 </style>
 </head>
 <body>
-
 <div class="app">
   <aside class="rail">
     <p class="brand">Anamnéza TČM</p>
     <p class="brand-sub" id="klientInfo">Nový odběr</p>
+    <p class="mode-pill" id="modePill">Vstupní odběr</p>
     <nav class="nav" id="nav"></nav>
   </aside>
   <div>
@@ -144,310 +137,634 @@ textarea,input[type=text],input[type=number]{width:100%;border:1px solid var(--l
     <main class="main" id="main"></main>
   </div>
 </div>
-
 <div class="footbar">
   <button class="btn" id="prevBtn">Zpět</button>
   <div class="progress"><i id="progressBar"></i></div>
   <span class="count" id="countLabel"></span>
   <button class="btn btn-primary" id="nextBtn">Další</button>
 </div>
-
 <div class="sheet" id="sheet"><div class="sheet-inner"><nav class="nav" id="navMobile"></nav></div></div>
 
 <script>
-/* ====================================================================
-   TYPY OTÁZEK
-   frek      — ne / výjimečně / občas / často  (váha 0 / .25 / .5 / 1)
-   vyber     — jedna možnost      vicevyber — více možností
-   anone     — ano / ne           skala — 0 až 10
-   cislo     — číselný vstup      text — volný text
-   matice    — seznam položek, u každé frekvence
-   ==================================================================== */
-const FREK=[{l:'ne',w:0},{l:'výjimečně',w:.25},{l:'občas',w:.5},{l:'často',w:1}];
-
-const VZORCE={
-  pi_qi_xu:{nazev:'Nedostatek Qi sleziny',text:'Slabé trávení a tvorba Qi, sklon k vlhkosti a únavě.'},
-  shen_yang_xu:{nazev:'Nedostatek Yangu ledvin',text:'Oslabené prohřívání, chlad v bedrech a dolním ohřívači.'},
-  shen_yin_xu:{nazev:'Nedostatek Yinu ledvin',text:'Úbytek tekutin a chladivé složky, prázdné horko.'},
-  gan_qi_yu:{nazev:'Stagnace Qi jater',text:'Vázne volné plynutí Qi, obtíže kolísají se stresem.'},
-  gan_huo:{nazev:'Vzestup ohně jater',text:'Horko stoupá vzhůru, podrážděnost, hořká chuť, buzení v noci.'},
-  xue_xu:{nazev:'Nedostatek krve',text:'Nedostatečná výživa tkání, očí a mysli.'},
-  xue_yu:{nazev:'Stáza krve',text:'Fixní bodavé bolesti, tmavé zbarvení, sraženiny.'},
-  tan_shi:{nazev:'Vlhkost a hlen',text:'Tíha, otoky, mazlavý povlak, kluzký puls.'},
-  shi_re:{nazev:'Vlhké horko',text:'Horkost s mazlavostí, tmavá moč, žlutý povlak.'},
-  fei_qi_xu:{nazev:'Nedostatek Qi plic',text:'Slabá obranná Qi, sklon k nachlazení a pocení.'}
+/* ===================================================================
+   SYNDROMOVÉ ELEMENTY
+   povaha = jaká je porucha, lokalizace = kde sídlí.
+   Skóre se počítá vždy znovu z odpovědí a nikdy se neukládá.
+   =================================================================== */
+const POVAHA={
+ qi_xu:{n:'Nedostatek Qi',sab:'Nedostatek Qi %g'},
+ yang_xu:{n:'Nedostatek Yangu',sab:'Nedostatek Yangu %g'},
+ yin_xu:{n:'Nedostatek Yinu',sab:'Nedostatek Yinu %g'},
+ xue_xu:{n:'Nedostatek krve',sab:'Nedostatek krve %g'},
+ qi_zhi:{n:'Stagnace Qi',sab:'Stagnace Qi %g'},
+ xue_yu:{n:'Stáza krve',sab:'Stáza krve'},
+ tan:{n:'Vlhkost a hlen',sab:'Vlhkost a hlen zatěžující %a'},
+ re:{n:'Horko',sab:'Horko v %l'},
+ han:{n:'Chlad',sab:'Chlad v %l'}
 };
+const LOKALIZACE={
+ pi:{n:'Slezina',g:'sleziny',l:'slezině',a:'slezinu'},
+ wei:{n:'Žaludek',g:'žaludku',l:'žaludku',a:'žaludek'},
+ gan:{n:'Játra',g:'jater',l:'játrech',a:'játra'},
+ shen:{n:'Ledviny',g:'ledvin',l:'ledvinách',a:'ledviny'},
+ fei:{n:'Plíce',g:'plic',l:'plicích',a:'plíce'},
+ xin:{n:'Srdce',g:'srdce',l:'srdci',a:'srdce'}
+};
+const ELEMENTY={
+ drevo:{n:'Dřevo',org:'játra, žlučník, oči, šlachy'},
+ ohen:{n:'Oheň',org:'srdce, tenké střevo, cévy'},
+ zeme:{n:'Země',org:'slezina, žaludek, svaly'},
+ kov:{n:'Kov',org:'plíce, tlusté střevo, kůže'},
+ voda:{n:'Voda',org:'ledviny, měchýř, kosti'}
+};
+const LOK2EL={gan:'drevo',xin:'ohen',pi:'zeme',wei:'zeme',fei:'kov',shen:'voda'};
+const OSY={
+ oslabeni:{n:'Oslabení',pov:['qi_xu','yang_xu','yin_xu','xue_xu']},
+ stagnace:{n:'Stagnace',pov:['qi_zhi','xue_yu','tan']},
+ teplo:{n:'Teplo a chlad',pov:['re','han'],znamenko:{re:1,han:-1}}
+};
+const MAPA_ORGANU={'játra':'drevo','žlučník':'drevo','oči':'drevo','šlachy':'drevo','zrak':'drevo',
+ 'srdce':'ohen','tenké střevo':'ohen','osrdečník':'ohen','cévy':'ohen','oběh':'ohen','štítná žláza':'ohen',
+ 'slezina':'zeme','žaludek':'zeme','slinivka':'zeme','svaly':'zeme','ústa':'zeme','lymfa':'zeme','trávení':'zeme',
+ 'plíce':'kov','tlusté střevo':'kov','kůže':'kov','nos':'kov','průdušky':'kov','střevo':'kov',
+ 'ledviny':'voda','močový měchýř':'voda','měchýř':'voda','kosti':'voda','uši':'voda','nadledviny':'voda',
+ 'prostata':'voda','děloha':'voda','vaječníky':'voda','páteř':'voda','mozek':'voda','zuby':'voda'};
+function organNaElement(n){
+  const t=(n||'').toLowerCase().trim();
+  if(MAPA_ORGANU[t])return MAPA_ORGANU[t];
+  const k=Object.keys(MAPA_ORGANU).filter(x=>t.indexOf(x)>=0)[0];
+  return k?MAPA_ORGANU[k]:'';
+}
+const FREK=[{l:'ne',w:0},{l:'výjimečně',w:.25},{l:'občas',w:.5},{l:'často',w:1}];
+const PULS_KOEF=0.6;
+const PRAH_PRITOMEN=20,PRAH_VYRAZNY=45;
+const MIN_PODKLAD=5; // méně než tolik váhy = příliš tenký podklad, buňka se nevyhodnocuje
+// s kterými lokalizacemi dává povaha klinicky smysl (pořadí nerozhoduje)
+const AFINITA={qi_xu:['pi','fei','xin','shen'],yang_xu:['shen','pi'],yin_xu:['shen','fei','xin'],
+ xue_xu:['gan','xin','pi'],qi_zhi:['gan'],xue_yu:[],tan:['pi','fei'],
+ re:['gan','wei','xin','fei'],han:['pi','shen']};
 
-/* ====================================================================
-   DOTAZNÍK — obsah podle podkladu klienta
-   ==================================================================== */
+/* ===================================================================
+   DOTAZNÍK   s:1 = pevná sada pro kontrolu   t:{} = váhy k elementům
+   =================================================================== */
 const DOTAZNIK=[
 
-{id:'zaklad',nazev:'Základní údaje',hint:'Rámec návštěvy a osobní anamnéza.',otazky:[
- {id:'klient',typ:'text',text:'Označení klienta (iniciály nebo ID, ne celé jméno)',zapis:'Klient'},
- {id:'typ_navstevy',typ:'vyber',text:'Důvod návštěvy',zapis:'Důvod návštěvy',volby:[{l:'prevence'},{l:'konkrétní potíž'}]},
- {id:'pohlavi',typ:'vyber',text:'Pohlaví',zapis:'Pohlaví',volby:[{l:'žena'},{l:'muž'}]},
+{id:'zaklad',nazev:'Základní údaje',hint:'Rámec návštěvy a osobní anamnéza.',vzdy:1,otazky:[
+ {id:'klient',typ:'text',text:'Označení klienta (iniciály nebo ID, ne celé jméno)',zapis:'Klient',s:1},
+ {id:'typ_navstevy',typ:'vyber',text:'Důvod návštěvy',zapis:'Důvod návštěvy',s:1,volby:[{l:'prevence'},{l:'konkrétní potíž'}]},
+ {id:'pohlavi',typ:'vyber',text:'Pohlaví',zapis:'Pohlaví',s:1,volby:[{l:'žena'},{l:'muž'}]},
  {id:'vek',typ:'cislo',text:'Věk',jednotka:'let',zapis:'Věk'},
  {id:'potize',typ:'text',text:'Současné potíže vlastními slovy',zapis:'Současné potíže',podminka:a=>a.typ_navstevy==='konkrétní potíž'},
  {id:'potize_trvani',typ:'vyber',text:'Doba trvání',zapis:'Trvání',detail:1,podminka:a=>a.typ_navstevy==='konkrétní potíž',volby:[{l:'dny'},{l:'týdny'},{l:'měsíce'},{l:'roky'}]},
  {id:'spoustec',typ:'vicevyber',text:'Spouštěcí faktor',zapis:'Spouštěč',detail:1,podminka:a=>a.typ_navstevy==='konkrétní potíž',volby:[
-   {l:'neznámý'},{l:'stres',t:{gan_qi_yu:2}},{l:'úraz',t:{xue_yu:2}},{l:'infekce'},{l:'prochlazení',t:{shen_yang_xu:1}},{l:'chyba ve stravě',t:{pi_qi_xu:1}},{l:'přepracování',t:{pi_qi_xu:2}}]},
+   {l:'neznámý'},{l:'stres',t:{qi_zhi:2,gan:1}},{l:'úraz',t:{xue_yu:2}},{l:'infekce'},
+   {l:'prochlazení',t:{han:2,yang_xu:1}},{l:'chyba ve stravě',t:{pi:2}},{l:'přepracování',t:{qi_xu:2}}]},
  {id:'zhorsuje',typ:'vicevyber',text:'Co potíže zhoršuje',zapis:'Zhoršuje',detail:1,podminka:a=>a.typ_navstevy==='konkrétní potíž',volby:[
-   {l:'chlad',t:{shen_yang_xu:2}},{l:'teplo',t:{shi_re:2}},{l:'vlhko',t:{tan_shi:2}},{l:'stres',t:{gan_qi_yu:2}},
-   {l:'námaha',t:{pi_qi_xu:2}},{l:'klid',t:{xue_yu:1}},{l:'jídlo',t:{pi_qi_xu:1}},{l:'ráno'},{l:'večer',t:{shen_yin_xu:1}},{l:'noc',t:{xue_yu:1}}]},
+   {l:'chlad',t:{han:3,yang_xu:1}},{l:'teplo',t:{re:3}},{l:'vlhko',t:{tan:3}},{l:'stres',t:{qi_zhi:3,gan:1}},
+   {l:'námaha',t:{qi_xu:3}},{l:'klid',t:{xue_yu:1,qi_zhi:1}},{l:'jídlo',t:{pi:2}},{l:'ráno'},
+   {l:'večer',t:{yin_xu:1}},{l:'noc',t:{xue_yu:1,yin_xu:1}}]},
  {id:'zlepsuje',typ:'vicevyber',text:'Co potíže zlepšuje',zapis:'Zlepšuje',detail:1,podminka:a=>a.typ_navstevy==='konkrétní potíž',volby:[
-   {l:'teplo',t:{shen_yang_xu:2}},{l:'chlad',t:{shi_re:1}},{l:'klid',t:{pi_qi_xu:1}},{l:'pohyb',t:{gan_qi_yu:2}},
-   {l:'jídlo',t:{pi_qi_xu:1}},{l:'spánek'},{l:'tlak a masáž',t:{pi_qi_xu:1}}]},
+   {l:'teplo',t:{han:3,yang_xu:2}},{l:'chlad',t:{re:2}},{l:'klid',t:{qi_xu:2}},{l:'pohyb',t:{qi_zhi:3}},
+   {l:'jídlo',t:{qi_xu:1,pi:1}},{l:'spánek'},{l:'tlak a masáž',t:{qi_xu:2}}]},
  {id:'detstvi',typ:'vicevyber',text:'Choroby v dětství',zapis:'Dětství',volby:[
-   {l:'nic závažného'},{l:'běžné dětské nemoci'},{l:'časté angíny',t:{fei_qi_xu:2}},{l:'opakované záněty uší'},
-   {l:'bronchitidy',t:{fei_qi_xu:2}},{l:'astma',t:{fei_qi_xu:2}},{l:'ekzém',t:{shi_re:1}}]},
- {id:'atb_detstvi',typ:'anone',text:'Časté antibiotikum v dětství',zapis:'časté ATB v dětství',t:{pi_qi_xu:2,tan_shi:1}},
+   {l:'nic závažného'},{l:'běžné dětské nemoci'},{l:'časté angíny',t:{fei:2,re:1}},{l:'opakované záněty uší'},
+   {l:'bronchitidy',t:{fei:2,tan:1}},{l:'astma',t:{fei:3,tan:1}},{l:'ekzém',t:{re:1,tan:1}}]},
+ {id:'atb_detstvi',typ:'anone',text:'Časté antibiotikum v dětství',zapis:'časté ATB v dětství',t:{qi_xu:2,pi:2}},
  {id:'atb_detstvi_co',typ:'text',text:'Jaké a proč',zapis:'ATB v dětství',detail:1,podminka:a=>a.atb_detstvi==='ano'},
  {id:'dospelost',typ:'text',text:'Závažné nebo časté choroby v dospělosti',zapis:'Dospělost'}
 ]},
 
+{id:'vysledek',nazev:'Sledované potíže',hint:'Klient si pojmenuje, co ho trápí. Při každé kontrole se hodnotí totéž znovu.',vzdy:1,otazky:[
+ {id:'pot1',typ:'text',text:'Potíž 1 — vlastními slovy klienta',zapis:'Potíž 1',s:1},
+ {id:'pot1_s',typ:'skala6',text:'Jak silná byla potíž 1 za poslední týden',zapis:'Potíž 1 — skóre',s:1,detail:1},
+ {id:'pot2',typ:'text',text:'Potíž 2 — vlastními slovy klienta',zapis:'Potíž 2',s:1},
+ {id:'pot2_s',typ:'skala6',text:'Jak silná byla potíž 2 za poslední týden',zapis:'Potíž 2 — skóre',s:1,detail:1},
+ {id:'cinnost',typ:'text',text:'Běžná činnost, kterou to omezuje',zapis:'Omezená činnost',s:1},
+ {id:'cinnost_s',typ:'skala6',text:'Jak moc byla omezená za poslední týden',zapis:'Omezení činnosti',s:1,detail:1},
+ {id:'pohoda',typ:'skala6',text:'Celková pohoda za poslední týden',zapis:'Celková pohoda',s:1},
+ {id:'novy_priznak',typ:'text',text:'Nový příznak, který se objevil od minule',zapis:'Nový příznak',s:1}
+]},
+
 {id:'styl',nazev:'Životní styl',hint:'Operace, návyky, zátěž, farmakoterapie.',otazky:[
- {id:'atb5',typ:'anone',text:'Antibiotikum za posledních 5 let',zapis:'ATB v posledních 5 letech',t:{pi_qi_xu:1}},
+ {id:'atb5',typ:'anone',text:'Antibiotikum za posledních 5 let',zapis:'ATB v posledních 5 letech',t:{qi_xu:1,pi:1}},
  {id:'atb5_duvod',typ:'text',text:'Důvod užívání',zapis:'Důvod ATB',detail:1,podminka:a=>a.atb5==='ano'},
  {id:'operace',typ:'anone',text:'Prodělané operace',zapis:'operace v anamnéze',t:{xue_yu:1}},
  {id:'operace_co',typ:'text',text:'Jaké a kdy',zapis:'Operace',detail:1,podminka:a=>a.operace==='ano'},
- {id:'alergie',typ:'anone',text:'Alergie',zapis:'alergie'},
+ {id:'alergie',typ:'anone',text:'Alergie',zapis:'alergie',t:{fei:1}},
  {id:'alergie_co',typ:'text',text:'Na co a jak se projevuje',zapis:'Alergie',detail:1,podminka:a=>a.alergie==='ano'},
- {id:'koureni',typ:'vyber',text:'Kouření',zapis:'Kouření',volby:[{l:'nekuřák'},{l:'bývalý kuřák'},{l:'kuřák',t:{tan_shi:1,shi_re:1}}]},
+ {id:'koureni',typ:'vyber',text:'Kouření',zapis:'Kouření',volby:[{l:'nekuřák'},{l:'bývalý kuřák'},{l:'kuřák',t:{tan:2,re:1,fei:2}}]},
  {id:'koureni_pocet',typ:'cislo',text:'Cigaret denně',jednotka:'ks',zapis:'Cigaret denně',detail:1,podminka:a=>a.koureni==='kuřák'},
  {id:'koureni_konec',typ:'text',text:'Kdy přestal a jak silný kuřák byl',zapis:'Kouření v minulosti',detail:1,podminka:a=>a.koureni==='bývalý kuřák'},
- {id:'alkohol',typ:'vyber',text:'Alkohol',zapis:'Alkohol',volby:[{l:'ne'},{l:'příležitostně'},{l:'1–2× týdně'},{l:'denně',t:{shi_re:3,tan_shi:1}}]},
- {id:'kava',typ:'vyber',text:'Káva',zapis:'Káva',volby:[{l:'ne'},{l:'1 denně'},{l:'2–3 denně',t:{shen_yin_xu:1}},{l:'více než 3',t:{shen_yin_xu:2,gan_huo:1}},{l:'nepravidelně'}]},
- {id:'sport',typ:'vyber',text:'Sport a pohyb',zapis:'Pohyb',volby:[{l:'3× týdně a více'},{l:'1–2× týdně'},{l:'občas'},{l:'nesportuje',t:{tan_shi:1,gan_qi_yu:1}}]},
+ {id:'alkohol',typ:'vyber',text:'Alkohol',zapis:'Alkohol',volby:[{l:'ne'},{l:'příležitostně'},{l:'1–2× týdně'},{l:'denně',t:{re:3,tan:2}}]},
+ {id:'kava',typ:'vyber',text:'Káva',zapis:'Káva',volby:[{l:'ne'},{l:'1 denně'},{l:'2–3 denně',t:{yin_xu:1}},{l:'více než 3',t:{yin_xu:2,re:1}},{l:'nepravidelně'}]},
+ {id:'sport',typ:'vyber',text:'Sport a pohyb',zapis:'Pohyb',volby:[{l:'3× týdně a více'},{l:'1–2× týdně'},{l:'občas'},{l:'nesportuje',t:{qi_zhi:1,tan:1}}]},
  {id:'sport_druh',typ:'text',text:'Jaký druh a intenzita',zapis:'Druh sportu',detail:1,podminka:a=>a.sport&&a.sport!=='nesportuje'},
- {id:'stres_mira',typ:'skala',text:'Míra stresu v posledních měsících',zapis:'Míra stresu'},
+ {id:'stres_mira',typ:'skala',text:'Míra stresu v posledních měsících',zapis:'Míra stresu',s:1,t:{qi_zhi:3,gan:2}},
  {id:'stres_zdroj',typ:'vicevyber',text:'Zdroj stresu',zapis:'Zdroj stresu',volby:[
-   {l:'práce',t:{gan_qi_yu:2}},{l:'lidé a jejich chování',t:{gan_qi_yu:2}},{l:'rodina',t:{gan_qi_yu:1}},
-   {l:'finance'},{l:'zdraví'},{l:'nedostatek času',t:{gan_qi_yu:1}}]},
+   {l:'práce',t:{qi_zhi:1,gan:1}},{l:'lidé a jejich chování',t:{qi_zhi:1,gan:1}},{l:'rodina',t:{qi_zhi:1}},
+   {l:'finance'},{l:'zdraví'},{l:'nedostatek času',t:{qi_zhi:1}}]},
  {id:'leky',typ:'text',text:'Užívané léky a doplňky',zapis:'Farmakoterapie'}
 ]},
 
 {id:'termo',nazev:'Termoregulace a pocení',hint:'Vnímání teploty, pocení, hrudník.',otazky:[
- {id:'preference_teploty',typ:'vyber',text:'Preferuje',zapis:'Preferuje',volby:[
-   {l:'nevyhraněně'},{l:'teplo',t:{shen_yang_xu:3}},{l:'chlad',t:{shi_re:2,shen_yin_xu:1}}]},
- {id:'studene_casti',typ:'vicevyber',text:'Míváte studené',zapis:'Studené partie',volby:[
-   {l:'žádné'},{l:'ruce',t:{shen_yang_xu:1,gan_qi_yu:1}},{l:'nohy',t:{shen_yang_xu:2}},
-   {l:'bedra',t:{shen_yang_xu:3}},{l:'břicho',t:{pi_qi_xu:2}},{l:'celkově',t:{shen_yang_xu:2}}]},
- {id:'vitr',typ:'vyber',text:'Vítr nebo průvan',zapis:'Vítr a průvan',volby:[{l:'nevadí'},{l:'vadí',t:{fei_qi_xu:2}}]},
- {id:'horkost',typ:'frek',text:'Pocit horkosti',zapis:'pocit horkosti',t:{shen_yin_xu:3,shi_re:1}},
- {id:'poceni',typ:'vyber',text:'Pocení',zapis:'Pocení',volby:[
-   {l:'přiměřené'},{l:'spontánní a snadné',t:{pi_qi_xu:3,fei_qi_xu:2}},{l:'silné',t:{shi_re:2}},{l:'chybí',t:{shen_yin_xu:1}}]},
- {id:'poceni_lok',typ:'vicevyber',text:'Lokalizace pocení',zapis:'Lokalizace pocení',detail:1,podminka:a=>a.poceni&&a.poceni!=='přiměřené'&&a.poceni!=='chybí',volby:[
-   {l:'celé tělo'},{l:'hlava',t:{shi_re:1}},{l:'dlaně a chodidla',t:{shen_yin_xu:2}},{l:'hrudník',t:{shen_yin_xu:1}},{l:'záda'}]},
- {id:'nocni_poceni',typ:'frek',text:'Noční pocení',zapis:'noční pocení',t:{shen_yin_xu:4}},
+ {id:'preference_teploty',typ:'vyber',text:'Preferuje',zapis:'Preferuje',s:1,volby:[
+   {l:'nevyhraněně'},{l:'teplo',t:{han:3,yang_xu:3}},{l:'chlad',t:{re:3,yin_xu:1}}]},
+ {id:'studene_casti',typ:'vicevyber',text:'Míváte studené',zapis:'Studené partie',s:1,volby:[
+   {l:'žádné'},{l:'ruce',t:{yang_xu:1,qi_zhi:1}},{l:'nohy',t:{yang_xu:2,shen:1}},
+   {l:'bedra',t:{yang_xu:3,shen:3}},{l:'břicho',t:{yang_xu:2,pi:2}},{l:'celkově',t:{yang_xu:3,han:1}}]},
+ {id:'vitr',typ:'vyber',text:'Vítr nebo průvan',zapis:'Vítr a průvan',volby:[{l:'nevadí'},{l:'vadí',t:{qi_xu:2,fei:2}}]},
+ {id:'horkost',typ:'frek',text:'Pocit horkosti',zapis:'pocit horkosti',s:1,t:{yin_xu:3,re:1}},
+ {id:'poceni',typ:'vyber',text:'Pocení',zapis:'Pocení',s:1,volby:[
+   {l:'přiměřené'},{l:'spontánní a snadné',t:{qi_xu:3,fei:2}},{l:'silné',t:{re:2}},{l:'chybí',t:{yin_xu:1}}]},
+ {id:'poceni_lok',typ:'vicevyber',text:'Lokalizace pocení',zapis:'Lokalizace pocení',detail:1,s:1,
+   podminka:a=>a.poceni&&a.poceni!=='přiměřené'&&a.poceni!=='chybí',volby:[
+   {l:'celé tělo'},{l:'hlava',t:{re:1,tan:1}},{l:'dlaně a chodidla',t:{yin_xu:2}},{l:'hrudník',t:{yin_xu:1,xin:1}},{l:'záda'}]},
+ {id:'nocni_poceni',typ:'frek',text:'Noční pocení',zapis:'noční pocení',s:1,t:{yin_xu:4,shen:2}},
  {id:'hrudnik',typ:'vicevyber',text:'Hrudník',zapis:'Hrudník',volby:[
-   {l:'bez potíží'},{l:'tlak',t:{gan_qi_yu:2}},{l:'sevření',t:{gan_qi_yu:2}},{l:'bolest',t:{xue_yu:2}},{l:'dušnost',t:{fei_qi_xu:2}}]},
- {id:'buseni',typ:'frek',text:'Bušení srdce',zapis:'palpitace',t:{xue_xu:2}},
- {id:'buseni_kdy',typ:'vicevyber',text:'Kdy se objevuje',zapis:'Palpitace při',detail:1,podminka:a=>a.buseni&&a.buseni!=='ne',volby:[
-   {l:'při stresu a adrenalinu',t:{gan_qi_yu:1}},{l:'v klidu',t:{xue_xu:2}},{l:'v noci',t:{shen_yin_xu:1}},{l:'po námaze',t:{pi_qi_xu:1}}]}
+   {l:'bez potíží'},{l:'tlak',t:{qi_zhi:2,gan:1}},{l:'sevření',t:{qi_zhi:2,xin:1}},
+   {l:'bolest',t:{xue_yu:2,xin:2}},{l:'dušnost',t:{qi_xu:1,fei:2}}]},
+ {id:'buseni',typ:'frek',text:'Bušení srdce',zapis:'palpitace',t:{xin:3,xue_xu:2}},
+ {id:'buseni_kdy',typ:'vicevyber',text:'Kdy se objevuje',zapis:'Palpitace při',detail:1,
+   podminka:a=>a.buseni&&a.buseni!=='ne',volby:[
+   {l:'při stresu a adrenalinu',t:{qi_zhi:1}},{l:'v klidu',t:{xue_xu:2,xin:1}},{l:'v noci',t:{yin_xu:1}},{l:'po námaze',t:{qi_xu:2}}]}
 ]},
 
-{id:'bolesti',nazev:'Bolesti',hint:'Břicho a hlava. Detaily se rozbalí podle frekvence.',otazky:[
+{id:'bolesti',nazev:'Bolesti',hint:'Břicho a hlava.',otazky:[
  {id:'bolest_bricha',typ:'frek',text:'Bolest břicha',zapis:'bolest břicha'},
- {id:'bricho_char',typ:'vicevyber',text:'Charakter bolesti břicha',zapis:'Charakter bolesti břicha',detail:1,podminka:a=>a.bolest_bricha&&a.bolest_bricha!=='ne',volby:[
-   {l:'křeč',t:{gan_qi_yu:2}},{l:'tupá',t:{pi_qi_xu:2}},{l:'bodavá',t:{xue_yu:3}},{l:'tlak a plnost',t:{gan_qi_yu:2}},
-   {l:'zlepší teplo',t:{shen_yang_xu:2}},{l:'zlepší tlak',t:{pi_qi_xu:2}},{l:'zhorší tlak',t:{xue_yu:1}}]},
- {id:'bolest_hlavy',typ:'frek',text:'Bolesti hlavy',zapis:'bolesti hlavy'},
- {id:'hlava_lok',typ:'vicevyber',text:'Lokalizace',zapis:'Lokalizace bolesti hlavy',detail:1,podminka:a=>a.bolest_hlavy&&a.bolest_hlavy!=='ne',volby:[
-   {l:'čelo',t:{tan_shi:1}},{l:'spánky',t:{gan_huo:3}},{l:'temeno',t:{gan_huo:2}},{l:'týl',t:{shen_yang_xu:1}},{l:'celá hlava'},{l:'za očima',t:{xue_xu:1}}]},
- {id:'hlava_char',typ:'vicevyber',text:'Charakter',zapis:'Charakter bolesti hlavy',detail:1,podminka:a=>a.bolest_hlavy&&a.bolest_hlavy!=='ne',volby:[
-   {l:'tupá tíživá',t:{tan_shi:3}},{l:'bodavá fixní',t:{xue_yu:3}},{l:'pulzující',t:{gan_huo:3}},
-   {l:'prázdná',t:{xue_xu:3}},{l:'svíravá',t:{gan_qi_yu:2}}]},
- {id:'hlava_kdy',typ:'vicevyber',text:'Kdy přichází',zapis:'Bolest hlavy přichází',detail:1,podminka:a=>a.bolest_hlavy&&a.bolest_hlavy!=='ne',volby:[
-   {l:'ráno',t:{tan_shi:1}},{l:'odpoledne',t:{xue_xu:1}},{l:'večer',t:{shen_yin_xu:1}},
-   {l:'při stresu',t:{gan_qi_yu:3}},{l:'po námaze',t:{pi_qi_xu:2}},{l:'při hladu',t:{pi_qi_xu:1}},{l:'při změně počasí',t:{tan_shi:1}}]},
- {id:'hlava_uleva',typ:'vicevyber',text:'Co ulevuje',zapis:'Bolesti hlavy ulevuje',detail:1,podminka:a=>a.bolest_hlavy&&a.bolest_hlavy!=='ne',volby:[
-   {l:'klid'},{l:'spánek',t:{xue_xu:1}},{l:'analgetikum'},{l:'teplo',t:{shen_yang_xu:1}},{l:'chlad',t:{gan_huo:2}},{l:'jídlo',t:{pi_qi_xu:1}},{l:'pohyb',t:{gan_qi_yu:1}}]}
+ {id:'bricho_char',typ:'vicevyber',text:'Charakter bolesti břicha',zapis:'Charakter bolesti břicha',detail:1,
+   podminka:a=>a.bolest_bricha&&a.bolest_bricha!=='ne',volby:[
+   {l:'křeč',t:{qi_zhi:2,gan:1}},{l:'tupá',t:{qi_xu:2,pi:2}},{l:'bodavá',t:{xue_yu:3}},{l:'tlak a plnost',t:{qi_zhi:2}},
+   {l:'zlepší teplo',t:{han:2,yang_xu:2}},{l:'zlepší tlak',t:{qi_xu:2}},{l:'zhorší tlak',t:{xue_yu:1}}]},
+ {id:'bolest_hlavy',typ:'frek',text:'Bolesti hlavy',zapis:'bolesti hlavy',s:1},
+ {id:'hlava_lok',typ:'vicevyber',text:'Lokalizace',zapis:'Lokalizace bolesti hlavy',detail:1,s:1,
+   podminka:a=>a.bolest_hlavy&&a.bolest_hlavy!=='ne',volby:[
+   {l:'čelo',t:{tan:1,wei:1}},{l:'spánky',t:{gan:3,re:1}},{l:'temeno',t:{gan:2}},
+   {l:'týl',t:{han:1,shen:1}},{l:'celá hlava'},{l:'za očima',t:{xue_xu:1,gan:1}}]},
+ {id:'hlava_char',typ:'vicevyber',text:'Charakter',zapis:'Charakter bolesti hlavy',detail:1,s:1,
+   podminka:a=>a.bolest_hlavy&&a.bolest_hlavy!=='ne',volby:[
+   {l:'tupá tíživá',t:{tan:3}},{l:'bodavá fixní',t:{xue_yu:3}},{l:'pulzující',t:{re:2,gan:2}},
+   {l:'prázdná',t:{xue_xu:3}},{l:'svíravá',t:{qi_zhi:2}}]},
+ {id:'hlava_kdy',typ:'vicevyber',text:'Kdy přichází',zapis:'Bolest hlavy přichází',detail:1,
+   podminka:a=>a.bolest_hlavy&&a.bolest_hlavy!=='ne',volby:[
+   {l:'ráno',t:{tan:1}},{l:'odpoledne',t:{xue_xu:1}},{l:'večer',t:{yin_xu:1}},
+   {l:'při stresu',t:{qi_zhi:3,gan:1}},{l:'po námaze',t:{qi_xu:2}},{l:'při hladu',t:{qi_xu:1,pi:1}},{l:'při změně počasí',t:{tan:1}}]},
+ {id:'hlava_uleva',typ:'vicevyber',text:'Co ulevuje',zapis:'Bolesti hlavy ulevuje',detail:1,
+   podminka:a=>a.bolest_hlavy&&a.bolest_hlavy!=='ne',volby:[
+   {l:'klid'},{l:'spánek',t:{xue_xu:1}},{l:'analgetikum'},{l:'teplo',t:{han:2}},
+   {l:'chlad',t:{re:2}},{l:'jídlo',t:{qi_xu:1}},{l:'pohyb',t:{qi_zhi:2}}]}
 ]},
 
 {id:'pohyb',nazev:'Krk, páteř a klouby',hint:'Pohybový aparát a končetiny.',otazky:[
  {id:'bolest_krku',typ:'frek',text:'Bolest v krku',zapis:'bolest v krku'},
  {id:'bolest_patere',typ:'frek',text:'Bolest páteře',zapis:'bolest páteře'},
- {id:'patere_lok',typ:'vicevyber',text:'Lokalizace',zapis:'Lokalizace bolesti páteře',detail:1,podminka:a=>a.bolest_patere&&a.bolest_patere!=='ne',volby:[
-   {l:'krční'},{l:'hrudní'},{l:'bederní a kříž',t:{shen_yang_xu:3}}]},
- {id:'patere_kdy',typ:'vicevyber',text:'Souvislost',zapis:'Bolest páteře po',detail:1,podminka:a=>a.bolest_patere&&a.bolest_patere!=='ne',volby:[
-   {l:'po špatném ležení'},{l:'po sezení'},{l:'po námaze',t:{pi_qi_xu:1}},{l:'v chladu a vlhku',t:{tan_shi:2}},{l:'ráno se rozhýbe',t:{tan_shi:1}}]},
+ {id:'patere_lok',typ:'vicevyber',text:'Lokalizace',zapis:'Lokalizace bolesti páteře',detail:1,
+   podminka:a=>a.bolest_patere&&a.bolest_patere!=='ne',volby:[
+   {l:'krční'},{l:'hrudní'},{l:'bederní a kříž',t:{shen:3,yang_xu:2}}]},
+ {id:'patere_kdy',typ:'vicevyber',text:'Souvislost',zapis:'Bolest páteře po',detail:1,
+   podminka:a=>a.bolest_patere&&a.bolest_patere!=='ne',volby:[
+   {l:'po špatném ležení'},{l:'po sezení'},{l:'po námaze',t:{qi_xu:2}},
+   {l:'v chladu a vlhku',t:{han:2,tan:2}},{l:'ráno se rozhýbe',t:{tan:1}}]},
  {id:'bolest_kloubu',typ:'frek',text:'Bolest kloubů',zapis:'bolest kloubů'},
- {id:'klouby_lok',typ:'vicevyber',text:'Které klouby',zapis:'Postižené klouby',detail:1,podminka:a=>a.bolest_kloubu&&a.bolest_kloubu!=='ne',volby:[
-   {l:'ramena'},{l:'lokty'},{l:'zápěstí'},{l:'kyčle',t:{shen_yang_xu:1}},{l:'kolena',t:{shen_yang_xu:1}},{l:'kotníky'},{l:'drobné klouby'}]},
- {id:'klouby_char',typ:'vicevyber',text:'Charakter',zapis:'Charakter bolesti kloubů',detail:1,podminka:a=>a.bolest_kloubu&&a.bolest_kloubu!=='ne',volby:[
-   {l:'po fyzické námaze',t:{pi_qi_xu:1}},{l:'ranní ztuhlost',t:{tan_shi:2}},{l:'otok',t:{tan_shi:3}},
-   {l:'zhoršuje vlhko',t:{tan_shi:3}},{l:'zhoršuje chlad',t:{shen_yang_xu:2}},{l:'stěhovavá',t:{gan_qi_yu:1}}]},
- {id:'tiky',typ:'frek',text:'Záchvěvy a tiky končetin',zapis:'záchvěvy končetin',t:{xue_xu:3}},
- {id:'krece',typ:'frek',text:'Křeče',zapis:'křeče',t:{xue_xu:3}},
- {id:'modriny',typ:'frek',text:'Snadná tvorba modřin',zapis:'snadná tvorba modřin',t:{pi_qi_xu:3,xue_yu:1}}
+ {id:'klouby_lok',typ:'vicevyber',text:'Které klouby',zapis:'Postižené klouby',detail:1,
+   podminka:a=>a.bolest_kloubu&&a.bolest_kloubu!=='ne',volby:[
+   {l:'ramena'},{l:'lokty'},{l:'zápěstí'},{l:'kyčle',t:{shen:1}},{l:'kolena',t:{shen:1}},{l:'kotníky'},{l:'drobné klouby'}]},
+ {id:'klouby_char',typ:'vicevyber',text:'Charakter',zapis:'Charakter bolesti kloubů',detail:1,
+   podminka:a=>a.bolest_kloubu&&a.bolest_kloubu!=='ne',volby:[
+   {l:'po fyzické námaze',t:{qi_xu:1}},{l:'ranní ztuhlost',t:{tan:2}},{l:'otok',t:{tan:3}},
+   {l:'zhoršuje vlhko',t:{tan:3}},{l:'zhoršuje chlad',t:{han:3}},{l:'stěhovavá',t:{qi_zhi:1}}]},
+ {id:'tiky',typ:'frek',text:'Záchvěvy a tiky končetin',zapis:'záchvěvy končetin',t:{xue_xu:3,gan:2}},
+ {id:'krece',typ:'frek',text:'Křeče',zapis:'křeče',s:1,t:{xue_xu:3,gan:2}},
+ {id:'modriny',typ:'frek',text:'Snadná tvorba modřin',zapis:'snadná tvorba modřin',t:{qi_xu:3,pi:3}}
 ]},
 
 {id:'traveni',nazev:'Trávení a vylučování',hint:'Apetit, žaludek, váha, pitný režim, stolice, moč.',otazky:[
- {id:'chut_k_jidlu',typ:'vyber',text:'Chuť k jídlu',zapis:'Chuť k jídlu',volby:[
-   {l:'normální'},{l:'snížená',t:{pi_qi_xu:3}},{l:'nadměrná',t:{shi_re:2}},{l:'kolísá',t:{gan_qi_yu:2}}]},
+ {id:'chut_k_jidlu',typ:'vyber',text:'Chuť k jídlu',zapis:'Chuť k jídlu',s:1,volby:[
+   {l:'normální'},{l:'snížená',t:{qi_xu:3,pi:3}},{l:'nadměrná',t:{re:2,wei:2}},{l:'kolísá',t:{qi_zhi:2,gan:1}}]},
  {id:'preference_chuti',typ:'vicevyber',text:'Preference chuti',zapis:'Preference chuti',volby:[
-   {l:'bez preference'},{l:'sladká',t:{pi_qi_xu:2}},{l:'slaná',t:{shen_yang_xu:1}},
-   {l:'kyselá',t:{gan_qi_yu:1}},{l:'hořká',t:{gan_huo:1}},{l:'pálivá',t:{shen_yang_xu:1}}]},
- {id:'unava_po_jidle',typ:'frek',text:'Únava po jídle',zapis:'únava po jídle',t:{pi_qi_xu:4}},
- {id:'paleni_zahy',typ:'frek',text:'Pálení žáhy',zapis:'pálení žáhy',t:{gan_qi_yu:2,shi_re:1}},
- {id:'rihani',typ:'frek',text:'Říhání',zapis:'říhání',t:{gan_qi_yu:2}},
- {id:'traveni_dalsi',typ:'vicevyber',text:'Další potíže',zapis:'Další potíže trávení',volby:[
-   {l:'bez potíží'},{l:'nevolnost',t:{tan_shi:2}},{l:'zvracení',t:{tan_shi:1}},
-   {l:'nadýmání',t:{pi_qi_xu:3}},{l:'plynatost',t:{pi_qi_xu:2,gan_qi_yu:1}}]},
- {id:'bolest_zaludku',typ:'frek',text:'Bolest žaludku',zapis:'bolest žaludku'},
+   {l:'bez preference'},{l:'sladká',t:{pi:2}},{l:'slaná',t:{shen:1}},
+   {l:'kyselá',t:{gan:1}},{l:'hořká',t:{re:1}},{l:'pálivá',t:{han:1}}]},
+ {id:'unava_po_jidle',typ:'frek',text:'Únava po jídle',zapis:'únava po jídle',s:1,t:{qi_xu:4,pi:4}},
+ {id:'paleni_zahy',typ:'frek',text:'Pálení žáhy',zapis:'pálení žáhy',t:{qi_zhi:2,wei:2,re:1}},
+ {id:'rihani',typ:'frek',text:'Říhání',zapis:'říhání',t:{qi_zhi:2,wei:2}},
+ {id:'traveni_dalsi',typ:'vicevyber',text:'Další potíže',zapis:'Další potíže trávení',s:1,volby:[
+   {l:'bez potíží'},{l:'nevolnost',t:{tan:2,wei:2}},{l:'zvracení',t:{wei:2}},
+   {l:'nadýmání',t:{qi_xu:2,pi:3}},{l:'plynatost',t:{pi:2,qi_zhi:1}}]},
+ {id:'bolest_zaludku',typ:'frek',text:'Bolest žaludku',zapis:'bolest žaludku',t:{wei:2}},
  {id:'vyska',typ:'cislo',text:'Výška',jednotka:'cm',zapis:'Výška'},
- {id:'vaha',typ:'cislo',text:'Váha',jednotka:'kg',zapis:'Váha',bmi:1},
+ {id:'vaha',typ:'cislo',text:'Váha',jednotka:'kg',zapis:'Váha',bmi:1,s:1},
  {id:'zmena_vahy',typ:'vyber',text:'Změna váhy za poslední rok',zapis:'Změna váhy',volby:[
-   {l:'beze změny'},{l:'zhubl cíleně'},{l:'zhubl nechtěně',t:{pi_qi_xu:2,shen_yin_xu:1}},{l:'přibral',t:{tan_shi:2,pi_qi_xu:1}}]},
+   {l:'beze změny'},{l:'zhubl cíleně'},{l:'zhubl nechtěně',t:{qi_xu:2,yin_xu:1}},{l:'přibral',t:{tan:2,pi:1}}]},
  {id:'tekutiny',typ:'vyber',text:'Množství tekutin za den',zapis:'Příjem tekutin',volby:[
    {l:'do 1 l'},{l:'1–2 l'},{l:'2–3 l'},{l:'3 l a více'}]},
- {id:'zizen',typ:'frek',text:'Velký pocit žízně',zapis:'velká žízeň',t:{shi_re:2,shen_yin_xu:1}},
+ {id:'zizen',typ:'frek',text:'Velký pocit žízně',zapis:'velká žízeň',s:1,t:{re:2,yin_xu:1}},
  {id:'napoje',typ:'vyber',text:'Preference nápojů',zapis:'Preference nápojů',volby:[
-   {l:'nevyhraněná'},{l:'teplé',t:{shen_yang_xu:2}},{l:'studené',t:{shi_re:2}}]},
- {id:'piti_v_noci',typ:'frek',text:'Pití v noci',zapis:'pití v noci',t:{shen_yin_xu:3}},
+   {l:'nevyhraněná'},{l:'teplé',t:{han:2,yang_xu:1}},{l:'studené',t:{re:2}}]},
+ {id:'piti_v_noci',typ:'frek',text:'Pití v noci',zapis:'pití v noci',t:{yin_xu:3,shen:2}},
  {id:'stolice_frekvence',typ:'vyber',text:'Stolice kolikrát denně',zapis:'Frekvence stolice',volby:[
-   {l:'1× denně'},{l:'2–3× denně'},{l:'obden'},{l:'méně často',t:{shen_yin_xu:1}}]},
- {id:'stolice_konzistence',typ:'vicevyber',text:'Konzistence stolice',zapis:'Stolice',volby:[
-   {l:'normální'},{l:'zácpa',t:{shen_yin_xu:2,gan_qi_yu:1}},{l:'průjem',t:{pi_qi_xu:3}},
-   {l:'kašovitá',t:{pi_qi_xu:3,tan_shi:1}},{l:'lepivá a zapáchající',t:{shi_re:3}},{l:'nestrávené zbytky',t:{pi_qi_xu:3,shen_yang_xu:1}}]},
- {id:'hemeroidy',typ:'anone',text:'Hemeroidy',zapis:'hemeroidy',t:{pi_qi_xu:2,shi_re:1}},
- {id:'moceni',typ:'vicevyber',text:'Močení',zapis:'Močení',volby:[
-   {l:'bez potíží'},{l:'časté',t:{shen_yang_xu:2}},{l:'noční',t:{shen_yang_xu:3}},
-   {l:'přerušované',t:{shen_yang_xu:1}},{l:'pálení',t:{shi_re:3}},{l:'slabý proud',t:{shen_yang_xu:2}},{l:'tmavá moč',t:{shi_re:2}}]}
+   {l:'1× denně'},{l:'2–3× denně'},{l:'obden'},{l:'méně často',t:{yin_xu:1}}]},
+ {id:'stolice_konzistence',typ:'vicevyber',text:'Konzistence stolice',zapis:'Stolice',s:1,volby:[
+   {l:'normální'},{l:'zácpa',t:{yin_xu:2,qi_zhi:1}},{l:'průjem',t:{qi_xu:3,pi:3}},
+   {l:'kašovitá',t:{pi:3,tan:1}},{l:'lepivá a zapáchající',t:{tan:2,re:3}},{l:'nestrávené zbytky',t:{pi:3,yang_xu:2}}]},
+ {id:'hemeroidy',typ:'anone',text:'Hemeroidy',zapis:'hemeroidy',t:{qi_xu:2,pi:2}},
+ {id:'moceni',typ:'vicevyber',text:'Močení',zapis:'Močení',s:1,volby:[
+   {l:'bez potíží'},{l:'časté',t:{yang_xu:2,shen:2}},{l:'noční',t:{yang_xu:3,shen:3}},
+   {l:'přerušované',t:{shen:1}},{l:'pálení',t:{re:3}},{l:'slabý proud',t:{yang_xu:2,shen:1}},{l:'tmavá moč',t:{re:2}}]}
 ]},
 
 {id:'spanek',nazev:'Spánek',hint:'Usínání, buzení, sny.',otazky:[
- {id:'usinani',typ:'vyber',text:'Usínání',zapis:'Usínání',volby:[
-   {l:'rychlé a bez potíží'},{l:'dlouhé',t:{xue_xu:3,gan_huo:1}}]},
- {id:'premitani',typ:'frek',text:'Přemítání před spaním',zapis:'přemítání před spaním',t:{pi_qi_xu:2,gan_qi_yu:2}},
- {id:'probouzeni',typ:'frek',text:'Probouzení v noci',zapis:'noční probouzení'},
- {id:'probouzeni_kdy',typ:'vicevyber',text:'V kolik hodin',zapis:'Budí se',detail:1,podminka:a=>a.probouzeni&&a.probouzeni!=='ne',volby:[
-   {l:'23–01',t:{gan_qi_yu:2}},{l:'01–03',t:{gan_huo:3,gan_qi_yu:1}},{l:'03–05',t:{fei_qi_xu:2}},{l:'05–07',t:{shen_yang_xu:1}},{l:'nepravidelně'}]},
- {id:'zpetne_usnuti',typ:'vyber',text:'Po probuzení',zapis:'Po probuzení',detail:1,podminka:a=>a.probouzeni&&a.probouzeni!=='ne',volby:[
-   {l:'usne zase hned'},{l:'chvíli trvá'},{l:'nemůže usnout',t:{shen_yin_xu:3}}]},
- {id:'sny',typ:'frek',text:'Hojné nebo živé sny',zapis:'živé snění',t:{gan_huo:2,xue_xu:1}}
+ {id:'usinani',typ:'vyber',text:'Usínání',zapis:'Usínání',s:1,volby:[
+   {l:'rychlé a bez potíží'},{l:'dlouhé',t:{xue_xu:3,xin:2}}]},
+ {id:'premitani',typ:'frek',text:'Přemítání před spaním',zapis:'přemítání před spaním',t:{pi:2,qi_zhi:2}},
+ {id:'probouzeni',typ:'frek',text:'Probouzení v noci',zapis:'noční probouzení',s:1},
+ {id:'probouzeni_kdy',typ:'vicevyber',text:'V kolik hodin',zapis:'Budí se',detail:1,s:1,
+   podminka:a=>a.probouzeni&&a.probouzeni!=='ne',volby:[
+   {l:'23–01',t:{gan:2,qi_zhi:1}},{l:'01–03',t:{gan:3,re:2}},{l:'03–05',t:{fei:2}},
+   {l:'05–07',t:{shen:1,yang_xu:1}},{l:'nepravidelně'}]},
+ {id:'zpetne_usnuti',typ:'vyber',text:'Po probuzení',zapis:'Po probuzení',detail:1,
+   podminka:a=>a.probouzeni&&a.probouzeni!=='ne',volby:[
+   {l:'usne zase hned'},{l:'chvíli trvá'},{l:'nemůže usnout',t:{yin_xu:3,xin:1}}]},
+ {id:'sny',typ:'frek',text:'Hojné nebo živé sny',zapis:'živé snění',s:1,t:{xin:2,re:1,xue_xu:1}}
 ]},
 
 {id:'smysly',nazev:'Smysly',hint:'Oči a uši.',otazky:[
- {id:'oci',typ:'vicevyber',text:'Oči',zapis:'Oči',volby:[
-   {l:'bez potíží'},{l:'únava očí',t:{xue_xu:3}},{l:'suché oči',t:{shen_yin_xu:2,xue_xu:1}},
-   {l:'zhoršený zrak',t:{xue_xu:2}},{l:'brýle na čtení'},{l:'mžitky',t:{xue_xu:2}},{l:'zarudlé oči',t:{gan_huo:3}}]},
+ {id:'oci',typ:'vicevyber',text:'Oči',zapis:'Oči',s:1,volby:[
+   {l:'bez potíží'},{l:'únava očí',t:{xue_xu:2,gan:2}},{l:'suché oči',t:{yin_xu:2,gan:1}},
+   {l:'zhoršený zrak',t:{xue_xu:1,gan:1}},{l:'brýle na čtení'},{l:'mžitky',t:{xue_xu:2}},{l:'zarudlé oči',t:{re:3,gan:3}}]},
  {id:'usi',typ:'vicevyber',text:'Uši',zapis:'Uši',volby:[
-   {l:'bez potíží'},{l:'pískání',t:{shen_yin_xu:3}},{l:'šumění',t:{shen_yin_xu:2}},
-   {l:'zhoršený sluch',t:{shen_yang_xu:2}},{l:'tlak v uších',t:{tan_shi:1}}]}
+   {l:'bez potíží'},{l:'pískání',t:{yin_xu:2,shen:2}},{l:'šumění',t:{yin_xu:1,shen:1}},
+   {l:'zhoršený sluch',t:{shen:2,yang_xu:1}},{l:'tlak v uších',t:{tan:1}}]}
 ]},
 
 {id:'dychani',nazev:'Dýchací cesty',hint:'Nos, rýma, kašel, dech.',otazky:[
- {id:'cich',typ:'vyber',text:'Čich',zapis:'Čich',volby:[{l:'v pořádku'},{l:'snížený',t:{tan_shi:2}}]},
- {id:'krvaceni_z_nosu',typ:'frek',text:'Krvácení z nosu',zapis:'epistaxe',t:{gan_huo:2,shi_re:1}},
+ {id:'cich',typ:'vyber',text:'Čich',zapis:'Čich',volby:[{l:'v pořádku'},{l:'snížený',t:{tan:2,fei:1}}]},
+ {id:'krvaceni_z_nosu',typ:'frek',text:'Krvácení z nosu',zapis:'epistaxe',t:{re:2,fei:1}},
  {id:'ryma',typ:'vyber',text:'Rýma',zapis:'Rýma',volby:[
-   {l:'nevyskytuje se'},{l:'sezónní',t:{fei_qi_xu:1}},{l:'častá',t:{fei_qi_xu:3,tan_shi:1}}]},
- {id:'kasel',typ:'frek',text:'Kašel',zapis:'kašel'},
- {id:'kasel_char',typ:'vicevyber',text:'Charakter kašle',zapis:'Charakter kašle',detail:1,podminka:a=>a.kasel&&a.kasel!=='ne',volby:[
-   {l:'suchý',t:{shen_yin_xu:2}},{l:'s hlenem',t:{tan_shi:3}},{l:'noční'},{l:'ranní',t:{tan_shi:1}}]},
+   {l:'nevyskytuje se'},{l:'sezónní',t:{fei:1}},{l:'častá',t:{fei:3,tan:1}}]},
+ {id:'kasel',typ:'frek',text:'Kašel',zapis:'kašel',t:{fei:2}},
+ {id:'kasel_char',typ:'vicevyber',text:'Charakter kašle',zapis:'Charakter kašle',detail:1,
+   podminka:a=>a.kasel&&a.kasel!=='ne',volby:[
+   {l:'suchý',t:{yin_xu:2,fei:1}},{l:'s hlenem',t:{tan:3,fei:1}},{l:'noční'},{l:'ranní',t:{tan:1}}]},
  {id:'dychaci_potize',typ:'vicevyber',text:'Dýchací potíže',zapis:'Dýchání',volby:[
-   {l:'bez potíží'},{l:'dušnost při námaze',t:{fei_qi_xu:3,pi_qi_xu:1}},{l:'dušnost v klidu',t:{fei_qi_xu:2}},
-   {l:'mělký dech',t:{fei_qi_xu:2}},{l:'nemůže se nadechnout do hloubky',t:{gan_qi_yu:2}}]}
+   {l:'bez potíží'},{l:'dušnost při námaze',t:{qi_xu:3,fei:3}},{l:'dušnost v klidu',t:{fei:2,qi_xu:1}},
+   {l:'mělký dech',t:{fei:2}},{l:'nemůže se nadechnout do hloubky',t:{qi_zhi:2}}]}
 ]},
 
 {id:'kuze',nazev:'Ústa, kůže, vlasy',hint:'Sliznice, kožní projevy, adnexa.',otazky:[
- {id:'afty',typ:'frek',text:'Afty',zapis:'afty',t:{shi_re:2}},
- {id:'opary',typ:'frek',text:'Opary',zapis:'opary',t:{shi_re:1}},
+ {id:'afty',typ:'frek',text:'Afty',zapis:'afty',t:{re:2,xin:1}},
+ {id:'opary',typ:'frek',text:'Opary',zapis:'opary',t:{re:1}},
  {id:'vlasy',typ:'vicevyber',text:'Vlasy',zapis:'Vlasy',volby:[
-   {l:'bez potíží'},{l:'vypadávání',t:{xue_xu:3}},{l:'předčasné šedivění',t:{shen_yin_xu:2}},
-   {l:'lámavost',t:{xue_xu:2}},{l:'mastné',t:{tan_shi:2}},{l:'suché',t:{xue_xu:1}}]},
+   {l:'bez potíží'},{l:'vypadávání',t:{xue_xu:3,shen:1}},{l:'předčasné šedivění',t:{shen:2,yin_xu:1}},
+   {l:'lámavost',t:{xue_xu:2}},{l:'mastné',t:{tan:2}},{l:'suché',t:{xue_xu:1}}]},
  {id:'nehty',typ:'vicevyber',text:'Nehty',zapis:'Nehty',volby:[
-   {l:'bez potíží'},{l:'lámavé',t:{xue_xu:3}},{l:'roztřepené',t:{xue_xu:2}},{l:'rýhy',t:{xue_xu:1}},{l:'bledé lůžko',t:{xue_xu:2}}]},
+   {l:'bez potíží'},{l:'lámavé',t:{xue_xu:3,gan:2}},{l:'roztřepené',t:{xue_xu:1,gan:1}},
+   {l:'rýhy',t:{xue_xu:1}},{l:'bledé lůžko',t:{xue_xu:2}}]},
  {id:'kuze_typ',typ:'vyber',text:'Kůže',zapis:'Kůže',volby:[
-   {l:'normální'},{l:'suchá',t:{xue_xu:2,shen_yin_xu:1}},{l:'mastná',t:{tan_shi:2}}]},
- {id:'ekzem',typ:'frek',text:'Ekzém nebo vyrážky',zapis:'ekzém a vyrážky',t:{shi_re:2}}
+   {l:'normální'},{l:'suchá',t:{xue_xu:2,yin_xu:1}},{l:'mastná',t:{tan:2}}]},
+ {id:'ekzem',typ:'frek',text:'Ekzém nebo vyrážky',zapis:'ekzém a vyrážky',t:{re:2,tan:1}}
 ]},
 
-{id:'gynuro',nazev:'Gynekologie a urologie',hint:'Zobrazí se podle pohlaví.',
- podminka:a=>!!a.pohlavi,otazky:[
- {id:'erekce',typ:'frek',text:'Problémy s erekcí',zapis:'poruchy erekce',t:{shen_yang_xu:3},podminka:a=>a.pohlavi==='muž'},
+{id:'gynuro',nazev:'Gynekologie a urologie',hint:'Podle pohlaví.',podminka:a=>!!a.pohlavi,otazky:[
+ {id:'erekce',typ:'frek',text:'Problémy s erekcí',zapis:'poruchy erekce',s:1,t:{yang_xu:3,shen:3},podminka:a=>a.pohlavi==='muž'},
  {id:'prostata',typ:'vicevyber',text:'Prostata',zapis:'Prostata',podminka:a=>a.pohlavi==='muž',volby:[
-   {l:'bez potíží'},{l:'časté nucení',t:{shen_yang_xu:2}},{l:'noční nucení',t:{shen_yang_xu:3}},{l:'obtížný start',t:{shen_yang_xu:2}}]},
- {id:'libido',typ:'vyber',text:'Libido',zapis:'Libido',volby:[{l:'přiměřené'},{l:'snížené',t:{shen_yang_xu:3}},{l:'zvýšené',t:{shen_yin_xu:1}}]},
- {id:'cyklus',typ:'vyber',text:'Cyklus',zapis:'Cyklus',podminka:a=>a.pohlavi==='žena',volby:[
-   {l:'pravidelný'},{l:'krátký',t:{shi_re:2}},{l:'dlouhý',t:{xue_xu:2}},{l:'nepravidelný',t:{gan_qi_yu:2}},{l:'menopauza'}]},
- {id:'menses_barva',typ:'vyber',text:'Barva a charakter krve',zapis:'Menses',podminka:a=>a.pohlavi==='žena'&&a.cyklus&&a.cyklus!=='menopauza',volby:[
+   {l:'bez potíží'},{l:'časté nucení',t:{yang_xu:2,shen:2}},{l:'noční nucení',t:{yang_xu:3,shen:3}},{l:'obtížný start',t:{qi_xu:2,shen:2}}]},
+ {id:'libido',typ:'vyber',text:'Libido',zapis:'Libido',s:1,volby:[
+   {l:'přiměřené'},{l:'snížené',t:{yang_xu:3,shen:2}},{l:'zvýšené',t:{yin_xu:1}}]},
+ {id:'cyklus',typ:'vyber',text:'Cyklus',zapis:'Cyklus',s:1,podminka:a=>a.pohlavi==='žena',volby:[
+   {l:'pravidelný'},{l:'krátký',t:{re:2}},{l:'dlouhý',t:{xue_xu:2}},{l:'nepravidelný',t:{qi_zhi:2,gan:1}},{l:'menopauza'}]},
+ {id:'menses_barva',typ:'vyber',text:'Barva a charakter krve',zapis:'Menses',s:1,
+   podminka:a=>a.pohlavi==='žena'&&a.cyklus&&a.cyklus!=='menopauza',volby:[
    {l:'sytě červená'},{l:'bledá a řídká',t:{xue_xu:3}},{l:'tmavá se sraženinami',t:{xue_yu:3}}]},
- {id:'dysmenorea',typ:'frek',text:'Bolestivá menstruace',zapis:'dysmenorea',t:{xue_yu:2,gan_qi_yu:2},podminka:a=>a.pohlavi==='žena'&&a.cyklus&&a.cyklus!=='menopauza'},
- {id:'pms',typ:'frek',text:'Napětí prsou a podrážděnost před menses',zapis:'PMS',t:{gan_qi_yu:3},podminka:a=>a.pohlavi==='žena'&&a.cyklus&&a.cyklus!=='menopauza'},
+ {id:'dysmenorea',typ:'frek',text:'Bolestivá menstruace',zapis:'dysmenorea',s:1,t:{xue_yu:2,qi_zhi:2},
+   podminka:a=>a.pohlavi==='žena'&&a.cyklus&&a.cyklus!=='menopauza'},
+ {id:'pms',typ:'frek',text:'Napětí prsou a podrážděnost před menses',zapis:'PMS',t:{qi_zhi:3,gan:2},
+   podminka:a=>a.pohlavi==='žena'&&a.cyklus&&a.cyklus!=='menopauza'},
  {id:'vytok',typ:'vyber',text:'Výtok',zapis:'Výtok',podminka:a=>a.pohlavi==='žena',volby:[
-   {l:'bez potíží'},{l:'bílý hojný',t:{tan_shi:3}},{l:'žlutý zapáchající',t:{shi_re:3}}]}
+   {l:'bez potíží'},{l:'bílý hojný',t:{tan:3,pi:1}},{l:'žlutý zapáchající',t:{tan:2,re:3}}]}
 ]},
 
 {id:'psychika',nazev:'Psychika',hint:'Ladění a zvládání zátěže.',otazky:[
  {id:'vlastnosti',typ:'text',text:'Jaké tři vlastnosti vás nejlépe vystihují',zapis:'Sebehodnocení'},
- {id:'nalady',typ:'matice',text:'Pociťujete některé z těchto nálad častěji',zapis:'Nálady',polozky:[
-   {id:'motivace',l:'ztráta motivace',t:{gan_qi_yu:2}},
-   {id:'zahlceni',l:'pocit zahlcení',t:{gan_qi_yu:2,pi_qi_xu:1}},
-   {id:'pretizeni',l:'přetížení',t:{pi_qi_xu:2}},
-   {id:'energie',l:'nedostatek energie',t:{pi_qi_xu:3}},
-   {id:'nesoustredenost',l:'nesoustředěnost',t:{pi_qi_xu:2,xue_xu:1}},
-   {id:'deprese',l:'depresivní nálada',t:{gan_qi_yu:3}},
-   {id:'vyhoreni',l:'vyhoření',t:{shen_yang_xu:2,pi_qi_xu:1}},
-   {id:'vina',l:'pocity viny',t:{gan_qi_yu:1}},
-   {id:'menecennost',l:'pocity méněcennosti',t:{gan_qi_yu:1}},
-   {id:'uzkost',l:'úzkost',t:{xue_xu:2,gan_qi_yu:1}},
-   {id:'prokrastinace',l:'prokrastinace',t:{gan_qi_yu:2}},
-   {id:'podrazdenost',l:'podrážděnost',t:{gan_qi_yu:3,gan_huo:2}}
- ]},
+ {id:'nalady',typ:'matice',text:'Pociťujete některé z těchto nálad častěji',zapis:'Nálady',s:1,polozky:[
+   {id:'motivace',l:'ztráta motivace',t:{qi_zhi:2,gan:1}},
+   {id:'zahlceni',l:'pocit zahlcení',t:{qi_zhi:2}},
+   {id:'pretizeni',l:'přetížení',t:{qi_xu:2}},
+   {id:'energie',l:'nedostatek energie',t:{qi_xu:3,pi:1}},
+   {id:'nesoustredenost',l:'nesoustředěnost',t:{qi_xu:2,xue_xu:1}},
+   {id:'deprese',l:'depresivní nálada',t:{qi_zhi:3,gan:2}},
+   {id:'vyhoreni',l:'vyhoření',t:{yang_xu:2,shen:2}},
+   {id:'vina',l:'pocity viny',t:{qi_zhi:1}},
+   {id:'menecennost',l:'pocity méněcennosti',t:{qi_zhi:1}},
+   {id:'uzkost',l:'úzkost',t:{xue_xu:2,xin:2}},
+   {id:'prokrastinace',l:'prokrastinace',t:{qi_zhi:2}},
+   {id:'podrazdenost',l:'podrážděnost',t:{qi_zhi:3,gan:3,re:1}}]},
  {id:'zvladani',typ:'vicevyber',text:'Jak řešíte vypjaté situace',zapis:'Zvládání zátěže',volby:[
    {l:'zachová chladnou hlavu'},{l:'fyzická práce'},{l:'sport'},{l:'mluví s blízkým'},
-   {l:'stáhne se do sebe',t:{gan_qi_yu:2}},{l:'vybuchne',t:{gan_huo:2}},{l:'přemítá',t:{pi_qi_xu:1}}]}
+   {l:'stáhne se do sebe',t:{qi_zhi:2}},{l:'vybuchne',t:{re:2,gan:2}},{l:'přemítá',t:{pi:1}}]}
 ]},
 
-{id:'objektiv',nazev:'Jazyk a puls',hint:'Objektivní nález. Bez něj je návrh syndromu jen orientační.',otazky:[
- {id:'jazyk_barva',typ:'vyber',text:'Barva těla jazyka',zapis:'Tělo jazyka',volby:[
-   {l:'světle červená'},{l:'bledá',t:{xue_xu:3,shen_yang_xu:2}},{l:'červená',t:{shi_re:2,shen_yin_xu:2}},
-   {l:'tmavě fialová',t:{xue_yu:3}},{l:'červené okraje',t:{gan_huo:3}},{l:'červená špička',t:{gan_huo:1}}]},
- {id:'jazyk_tvar',typ:'vicevyber',text:'Tvar',zapis:'Tvar jazyka',volby:[
-   {l:'přiměřený'},{l:'oteklý s otisky zubů',t:{pi_qi_xu:3,tan_shi:2}},{l:'tenký',t:{xue_xu:2}},
-   {l:'praskliny',t:{shen_yin_xu:2}},{l:'třes',t:{pi_qi_xu:1}}]},
- {id:'jazyk_povlak',typ:'vyber',text:'Povlak',zapis:'Povlak',volby:[
-   {l:'tenký bílý'},{l:'silný bílý mazlavý',t:{tan_shi:3}},{l:'žlutý mazlavý',t:{shi_re:3}},
-   {l:'bez povlaku',t:{shen_yin_xu:3}},{l:'suchý',t:{shen_yin_xu:2}}]},
- {id:'jazyk_sublingual',typ:'anone',text:'Rozšířené sublingvální žíly',zapis:'rozšířené sublingvální žíly',t:{xue_yu:3}},
- {id:'puls_hloubka',typ:'vyber',text:'Puls — hloubka',zapis:'Puls hloubka',volby:[
-   {l:'střední'},{l:'povrchový',t:{fei_qi_xu:1}},{l:'hluboký',t:{shen_yang_xu:2}}]},
- {id:'puls_rychlost',typ:'vyber',text:'Puls — rychlost',zapis:'Puls rychlost',volby:[
-   {l:'přiměřená'},{l:'rychlý',t:{shi_re:2,gan_huo:2}},{l:'pomalý',t:{shen_yang_xu:2}}]},
- {id:'puls_kvalita',typ:'vicevyber',text:'Puls — kvalita',zapis:'Puls kvalita',volby:[
-   {l:'plný'},{l:'slabý',t:{pi_qi_xu:3}},{l:'napjatý strunový',t:{gan_qi_yu:3}},
-   {l:'kluzký',t:{tan_shi:3}},{l:'drsný',t:{xue_yu:2}},{l:'tenký',t:{xue_xu:3}}]},
+{id:'objektiv',nazev:'Jazyk a puls',hint:'Objektivní nález. Sbírá se při každém odběru.',otazky:[
+ {id:'jazyk_barva',typ:'vyber',text:'Barva těla jazyka',zapis:'Tělo jazyka',s:1,volby:[
+   {l:'světle červená'},{l:'bledá',t:{xue_xu:3,yang_xu:2}},{l:'červená',t:{re:2,yin_xu:2}},
+   {l:'tmavě fialová',t:{xue_yu:3}},{l:'červené okraje',t:{gan:3,re:2}},{l:'červená špička',t:{xin:2,re:1}}]},
+ {id:'jazyk_tvar',typ:'vicevyber',text:'Tvar',zapis:'Tvar jazyka',s:1,volby:[
+   {l:'přiměřený'},{l:'oteklý s otisky zubů',t:{qi_xu:3,pi:3,tan:2}},{l:'tenký',t:{xue_xu:2}},
+   {l:'praskliny',t:{yin_xu:2}},{l:'třes',t:{qi_xu:1}}]},
+ {id:'jazyk_povlak',typ:'vyber',text:'Povlak',zapis:'Povlak',s:1,volby:[
+   {l:'tenký bílý'},{l:'silný bílý mazlavý',t:{tan:3,han:1}},{l:'žlutý mazlavý',t:{tan:2,re:3}},
+   {l:'bez povlaku',t:{yin_xu:3}},{l:'suchý',t:{yin_xu:2}}]},
+ {id:'jazyk_sublingual',typ:'anone',text:'Rozšířené sublingvální žíly',zapis:'rozšířené sublingvální žíly',s:1,t:{xue_yu:3}},
+ {id:'puls_hloubka',typ:'vyber',text:'Puls — hloubka',zapis:'Puls hloubka',s:1,puls:1,volby:[
+   {l:'střední'},{l:'povrchový',t:{fei:1}},{l:'hluboký',t:{yang_xu:2,shen:1}}]},
+ {id:'puls_rychlost',typ:'vyber',text:'Puls — rychlost',zapis:'Puls rychlost',s:1,puls:1,volby:[
+   {l:'přiměřená'},{l:'rychlý',t:{re:3}},{l:'pomalý',t:{han:3,yang_xu:1}}]},
+ {id:'puls_kvalita',typ:'vicevyber',text:'Puls — kvalita',zapis:'Puls kvalita',s:1,puls:1,volby:[
+   {l:'plný'},{l:'slabý',t:{qi_xu:3}},{l:'napjatý strunový',t:{qi_zhi:3,gan:2}},
+   {l:'kluzký',t:{tan:3}},{l:'drsný',t:{xue_yu:2}},{l:'tenký',t:{xue_xu:3}}]},
  {id:'puls_pozice',typ:'text',text:'Poznámka k pozicím cun / guan / chi',zapis:'Pozice pulsu'}
 ]},
 
-{id:'zapis',nazev:'Zápis',hint:'Kontrola, úprava a export.',vystup:true,otazky:[]}
+{id:'bbc',nazev:'BBC měření',hint:'Opište z přístroje. Směry čísel program otočí sám, vyšší naléhavost je vždy nahoře.',vzdy:1,otazky:[
+ {id:'bbc_oblasti',typ:'bbc',rezim:'el',smer:'primy',s:1,
+   text:'Oblasti vyžadující energetickou podporu',zapis:'BBC podpora',
+   napoveda:'vyšší číslo = větší potřeba podpory'},
+ {id:'bbc_nerovnovahy',typ:'bbc',rezim:'el',smer:'inverzni',s:1,
+   text:'Energetické nerovnováhy',zapis:'BBC nerovnováhy',
+   napoveda:'nižší číslo = větší potřeba vyrovnání'},
+ {id:'bbc_zateze',typ:'bbc',rezim:'zatez',smer:'inverzni',s:1,
+   text:'Energetické zátěže (bakterie, viry, kovy)',zapis:'BBC zátěže',
+   napoveda:'nižší číslo = závažnější'}
+]},
+
+{id:'prubeh',nazev:'Průběh',hint:'Historie odběrů, trend elementů a stáří nálezů.',prubeh:1,vzdy:1,otazky:[]},
+{id:'zapis',nazev:'Zápis',hint:'Kontrola, uložení a export.',vystup:1,vzdy:1,otazky:[]}
 ];
 
-/* ====================================================================
+/* ===================================================================
    STAV
-   ==================================================================== */
-const KEY='tcm_anamneza_v2';
-let odpovedi={},poznamky={},aktivni=0;
-try{const r=localStorage.getItem(KEY);if(r){const d=JSON.parse(r);odpovedi=d.odpovedi||{};poznamky=d.poznamky||{};}}catch(e){}
-const klientId=new URLSearchParams(location.search).get('id')||'';
-const klientJmeno=new URLSearchParams(location.search).get('jmeno')||'';
-if(klientId||klientJmeno) document.getElementById('klientInfo').textContent=(klientJmeno||'Klient')+(klientId?' · '+klientId:'');
+   =================================================================== */
+const K_DRAFT='tcm_draft_v3',K_HIST='tcm_historie_v3';
+let odpovedi={},poznamky={},aktivni=0,rezim='vstup',rozsireno={},historie=[];
+try{const r=localStorage.getItem(K_DRAFT);if(r){const d=JSON.parse(r);
+  odpovedi=d.odpovedi||{};poznamky=d.poznamky||{};rezim=d.rezim||'vstup';rozsireno=d.rozsireno||{};}}catch(e){}
+try{const h=localStorage.getItem(K_HIST);if(h)historie=JSON.parse(h)||[];}catch(e){}
+if(!historie.length)rezim='vstup';
 
-const uloz=()=>{try{localStorage.setItem(KEY,JSON.stringify({odpovedi,poznamky,ts:Date.now()}));}catch(e){}};
+const klientId=new URLSearchParams(location.search).get('id')||'';
+const uloz=()=>{try{localStorage.setItem(K_DRAFT,JSON.stringify({odpovedi,poznamky,rezim,rozsireno}));}catch(e){}};
+const ulozHist=()=>{try{localStorage.setItem(K_HIST,JSON.stringify(historie));}catch(e){}};
+
+const vsechnyOtazky=()=>DOTAZNIK.reduce((a,s)=>a.concat(s.otazky),[]);
 const sekce=()=>DOTAZNIK.filter(s=>!s.podminka||s.podminka(odpovedi));
-const otazky=s=>s.otazky.filter(q=>!q.podminka||q.podminka(odpovedi));
+function viditelna(s,q){
+  if(q.podminka&&!q.podminka(odpovedi))return false;
+  if(rezim==='vstup')return q.id!=='novy_priznak';
+  return !!(q.s||s.vzdy||rozsireno[s.id]);
+}
+const otazky=s=>s.otazky.filter(q=>viditelna(s,q));
 function zodpovezeno(q){
   const v=odpovedi[q.id];
-  if(q.typ==='matice') return !!(v&&Object.keys(v).length);
-  if(v===undefined||v===null||v==='') return false;
+  if(q.typ==='matice')return !!(v&&Object.keys(v).length);
+  if(v===undefined||v===null||v==='')return false;
   return Array.isArray(v)?v.length>0:true;
 }
 
-/* ====================================================================
+/* ===================================================================
+   SKLÁDÁNÍ OBRAZU V ČASE
+   =================================================================== */
+function dnesnyDatum(){return new Date().toISOString().slice(0,10);}
+function czDatum(s){const p=s.split('-');return (+p[2])+'. '+(+p[1])+'. '+p[0];}
+function stariDnu(s){return Math.round((Date.now()-new Date(s+'T00:00:00').getTime())/86400000);}
+function prazdna(v){return v===''||v===undefined||v===null||(Array.isArray(v)&&!v.length);}
+
+function obrazDo(index){
+  const o={};
+  historie.slice(0,index+1).forEach(od=>{
+    Object.keys(od.odpovedi||{}).forEach(k=>{
+      const v=od.odpovedi[k];
+      if(prazdna(v))return;
+      o[k]={v:v,datum:od.datum};
+    });
+  });
+  return o;
+}
+function obrazAktualni(){
+  const o=obrazDo(historie.length-1),d=dnesnyDatum();
+  Object.keys(odpovedi).forEach(k=>{
+    if(prazdna(odpovedi[k]))return;
+    o[k]={v:odpovedi[k],datum:d};
+  });
+  return o;
+}
+
+/* ===================================================================
+   SKÓRE ELEMENTŮ
+   pct = dosažené váhy / dosažitelné váhy u zodpovězených otázek
+   =================================================================== */
+function skore(obraz){
+  const raw={},max={},proc={};
+  Object.keys(POVAHA).concat(Object.keys(LOKALIZACE)).forEach(k=>{raw[k]=0;max[k]=0;proc[k]=[];});
+  let pocet=0,pocetDnes=0;
+  const dnes=dnesnyDatum();
+
+  const pripis=(t,podil,popis,koef)=>{
+    if(!t)return false;
+    Object.keys(t).forEach(k=>{
+      if(raw[k]===undefined)return;
+      const w=t[k];
+      max[k]+=w*koef;
+      if(podil>0){raw[k]+=w*podil*koef;proc[k].push(popis);}
+    });
+    return true;
+  };
+
+  vsechnyOtazky().forEach(q=>{
+    const zaz=obraz[q.id];if(!zaz)return;
+    const v=zaz.v,koef=q.puls?PULS_KOEF:1;
+    let prispel=false;
+
+    if(q.typ==='frek'&&q.t){
+      const f=FREK.filter(x=>x.l===v)[0];if(!f)return;
+      prispel=pripis(q.t,f.w,q.zapis+(f.w?' ('+v+')':''),koef);
+    }else if(q.typ==='anone'&&q.t){
+      prispel=pripis(q.t,v==='ano'?1:0,q.zapis,koef);
+    }else if(q.typ==='skala'&&q.t){
+      prispel=pripis(q.t,Number(v)/10,q.zapis+': '+v+'/10',koef);
+    }else if(q.typ==='vyber'&&q.volby){
+      const mx={};q.volby.forEach(o=>{if(o.t)Object.keys(o.t).forEach(k=>{mx[k]=Math.max(mx[k]||0,o.t[k]);});});
+      if(Object.keys(mx).length){
+        Object.keys(mx).forEach(k=>{if(max[k]!==undefined)max[k]+=mx[k]*koef;});
+        const z=q.volby.filter(x=>x.l===v)[0];
+        if(z&&z.t)Object.keys(z.t).forEach(k=>{
+          if(raw[k]===undefined)return;raw[k]+=z.t[k]*koef;proc[k].push(q.zapis.toLowerCase()+': '+v);});
+        prispel=true;
+      }
+    }else if(q.typ==='vicevyber'&&q.volby&&Array.isArray(v)){
+      const mx={};q.volby.forEach(o=>{if(o.t)Object.keys(o.t).forEach(k=>{mx[k]=Math.max(mx[k]||0,o.t[k]);});});
+      if(Object.keys(mx).length){
+        Object.keys(mx).forEach(k=>{if(max[k]!==undefined)max[k]+=mx[k]*koef;});
+        v.forEach(l=>{
+          const o=q.volby.filter(x=>x.l===l)[0];
+          if(o&&o.t)Object.keys(o.t).forEach(k=>{
+            if(raw[k]===undefined)return;raw[k]+=o.t[k]*koef;proc[k].push(q.zapis.toLowerCase()+': '+l);});
+        });
+        prispel=true;
+      }
+    }else if(q.typ==='matice'&&q.polozky&&v&&typeof v==='object'){
+      q.polozky.forEach(p=>{
+        const x=v[p.id];if(!x)return;
+        const f=FREK.filter(y=>y.l===x)[0];if(!f)return;
+        pripis(p.t,f.w,p.l+(f.w?' ('+x+')':''),koef);
+      });
+      prispel=true;
+    }
+    if(prispel){pocet++;if(zaz.datum===dnes)pocetDnes++;}
+  });
+
+  const vysl=k=>({k:k,raw:Math.round(raw[k]*10)/10,max:Math.round(max[k]*10)/10,
+    pct:max[k]>0?Math.round(raw[k]/max[k]*100):0,
+    proc:proc[k].filter((x,i,a)=>a.indexOf(x)===i)});
+  return {
+    povaha:Object.keys(POVAHA).map(vysl).filter(x=>x.max>0).sort((a,b)=>b.pct-a.pct),
+    lokalizace:Object.keys(LOKALIZACE).map(vysl).filter(x=>x.max>0).sort((a,b)=>b.pct-a.pct),
+    pocet:pocet,pocetDnes:pocetDnes,pocetStarsi:pocet-pocetDnes
+  };
+}
+
+function nazevVzorce(sk){
+  if(!sk.povaha.length)return 'Bez dostatku dat';
+  const top=sk.povaha[0].pct;
+  const p=sk.povaha.filter(x=>x.pct>=PRAH_PRITOMEN&&x.pct>=top*0.7).slice(0,2);
+  if(!p.length)return 'Bez výrazné převahy elementu';
+  const locPct={};sk.lokalizace.forEach(x=>{locPct[x.k]=x.pct;});
+  return p.map(x=>{
+    const kand=(AFINITA[x.k]||[]).filter(k=>locPct[k]>=PRAH_PRITOMEN)
+      .sort((a,b)=>locPct[b]-locPct[a]);
+    if(!kand.length)return POVAHA[x.k].n;
+    const L=LOKALIZACE[kand[0]];
+    return POVAHA[x.k].sab.replace('%g',L.g).replace('%l',L.l).replace('%a',L.a);
+  }).join(' + ');
+}
+
+
+/* ===================================================================
+   MŘÍŽKA PĚTI ELEMENTŮ — tři osy, tři zdroje
+   =================================================================== */
+function bbcNorm(seznam,smer){
+  const v=(seznam||[]).filter(r=>r&&r.n&&r.v!==''&&r.v!==undefined&&!isNaN(Number(r.v)));
+  if(!v.length)return [];
+  const c=v.map(r=>Number(r.v)),mn=Math.min.apply(null,c),mx=Math.max.apply(null,c);
+  const absolutni=(mn>=0&&mx<=100);
+  return v.map(r=>{
+    const x=Number(r.v);let p;
+    if(absolutni)p=smer==='primy'?x:100-x;
+    else if(mx===mn)p=60;
+    else p=smer==='primy'?(x-mn)/(mx-mn)*100:(mx-x)/(mx-mn)*100;
+    return {n:r.n,e:r.e||organNaElement(r.n),v:x,pct:Math.round(p)};
+  }).sort((a,b)=>b.pct-a.pct);
+}
+function bbcZObrazu(obraz){
+  const g=id=>obraz[id]&&Array.isArray(obraz[id].v)?obraz[id].v:[];
+  const d=id=>obraz[id]?obraz[id].datum:'';
+  return {oslabeni:bbcNorm(g('bbc_oblasti'),'primy'),
+          stagnace:bbcNorm(g('bbc_nerovnovahy'),'inverzni'),
+          zateze:bbcNorm(g('bbc_zateze'),'inverzni'),
+          datum:d('bbc_oblasti')||d('bbc_nerovnovahy')||d('bbc_zateze')};
+}
+function rozdel(t,podil,cil){
+  const locs={};let sum=0;
+  Object.keys(t).forEach(k=>{if(LOK2EL[k]){const e=LOK2EL[k];locs[e]=(locs[e]||0)+t[k];sum+=t[k];}});
+  Object.keys(OSY).forEach(osa=>{
+    let val=0;
+    OSY[osa].pov.forEach(pk=>{
+      if(t[pk]===undefined)return;
+      const zn=OSY[osa].znamenko?OSY[osa].znamenko[pk]:1;
+      val+=t[pk]*zn;
+    });
+    if(!val)return;
+    if(sum>0)Object.keys(locs).forEach(e=>cil(e,osa,val*podil*(locs[e]/sum)));
+    else cil('celkove',osa,val*podil);
+  });
+}
+function prispevky(q,v){
+  const out=[];
+  if(q.typ==='frek'&&q.t){const f=FREK.filter(x=>x.l===v)[0];if(f)out.push({t:q.t,podil:f.w});}
+  else if(q.typ==='anone'&&q.t)out.push({t:q.t,podil:v==='ano'?1:0});
+  else if(q.typ==='skala'&&q.t)out.push({t:q.t,podil:Number(v)/10});
+  else if(q.typ==='vyber'&&q.volby){const o=q.volby.filter(x=>x.l===v)[0];if(o&&o.t)out.push({t:o.t,podil:1});}
+  else if(q.typ==='vicevyber'&&q.volby&&Array.isArray(v))v.forEach(l=>{
+    const o=q.volby.filter(x=>x.l===l)[0];if(o&&o.t)out.push({t:o.t,podil:1});});
+  else if(q.typ==='matice'&&q.polozky&&v&&typeof v==='object')q.polozky.forEach(pp=>{
+    const x=v[pp.id];if(!x||!pp.t)return;const f=FREK.filter(y=>y.l===x)[0];if(f)out.push({t:pp.t,podil:f.w});});
+  return out;
+}
+function osyZ(obraz,ids){
+  const raw={},max={},kl=Object.keys(ELEMENTY).concat(['celkove']);
+  kl.forEach(e=>{raw[e]={};max[e]={};Object.keys(OSY).forEach(o=>{raw[e][o]=0;max[e][o]=0;});});
+  let pocet=0;
+  DOTAZNIK.filter(s=>ids.indexOf(s.id)>=0).forEach(s=>s.otazky.forEach(q=>{
+    const zaz=obraz[q.id];if(!zaz)return;
+    const koef=q.puls?PULS_KOEF:1;
+    prispevky(q,zaz.v).forEach(c=>rozdel(c.t,c.podil*koef,(e,o,x)=>{raw[e][o]+=x;}));
+    let varianty=[];
+    if(q.typ==='vyber'||q.typ==='vicevyber')varianty=(q.volby||[]).filter(o=>o.t).map(o=>o.t);
+    else if(q.typ==='matice')varianty=(q.polozky||[]).map(pp=>pp.t).filter(Boolean);
+    else if(q.t)varianty=[q.t];
+    if(!varianty.length)return;
+    if(q.typ==='matice')varianty.forEach(t=>rozdel(t,koef,(e,o,x)=>{max[e][o]+=Math.abs(x);}));
+    else{
+      const cell={};
+      varianty.forEach(t=>rozdel(t,koef,(e,o,x)=>{const k=e+'|'+o;cell[k]=Math.max(cell[k]||0,Math.abs(x));}));
+      Object.keys(cell).forEach(k=>{const pp=k.split('|');max[pp[0]][pp[1]]+=cell[k];});
+    }
+    pocet++;
+  }));
+  return {raw:raw,max:max,pocet:pocet};
+}
+const SEKCE_ANAMNEZA=['zaklad','styl','termo','bolesti','pohyb','traveni','spanek','smysly','dychani','kuze','gynuro','psychika'];
+function mrizka(obraz){
+  const anam=osyZ(obraz,SEKCE_ANAMNEZA),obj=osyZ(obraz,['objektiv']),bbc=bbcZObrazu(obraz);
+  const pct=(src,e,o)=>src.max[e]&&src.max[e][o]>=MIN_PODKLAD?Math.round(src.raw[e][o]/src.max[e][o]*100):null;
+  const bbcEl=(pole,e)=>{const f=pole.filter(x=>x.e===e);
+    return f.length?Math.max.apply(null,f.map(x=>x.pct)):null;};
+  const elementy=Object.keys(ELEMENTY).map(e=>{
+    const b={};
+    Object.keys(OSY).forEach(o=>{
+      const a=pct(anam,e,o);
+      const bb=o==='oslabeni'?bbcEl(bbc.oslabeni,e):(o==='stagnace'?bbcEl(bbc.stagnace,e):null);
+      const j=pct(obj,e,o);
+      const zd=[a,bb,j].filter(x=>x!==null);
+      b[o]={anam:a,bbc:bb,obj:j,souhrn:zd.length?Math.round(zd.reduce((x,y)=>x+y,0)/zd.length):null};
+    });
+    const prum=k=>{const v=['oslabeni','stagnace'].map(o=>b[o][k]).filter(x=>x!==null);
+      return v.length?v.reduce((x,y)=>x+y,0)/v.length:null;};
+    const zdroje={'anamnéza':prum('anam'),'BBC':prum('bbc'),'jazyk a oči':prum('obj')};
+    const dost=Object.keys(zdroje).filter(k=>zdroje[k]!==null);
+    let shoda='jeden zdroj',rozptyl=null;
+    if(dost.length>=2){
+      const hod=dost.map(k=>zdroje[k]);
+      const hi=Math.max.apply(null,hod),lo=Math.min.apply(null,hod);
+      rozptyl=Math.round(hi-lo);
+      shoda=rozptyl<=30?'shoda':(dost.filter(k=>zdroje[k]===hi)[0]+' výš než '+dost.filter(k=>zdroje[k]===lo)[0]);
+    }
+    return {e:e,b:b,shoda:shoda,rozptyl:rozptyl,zdroje:zdroje,
+      celkem:Math.max(b.oslabeni.souhrn||0,b.stagnace.souhrn||0)};
+  });
+  return {elementy:elementy,bbc:bbc,pocet:anam.pocet+obj.pocet,celkove:anam};
+}
+function souhrnText(m){
+  const s=m.elementy.slice().sort((a,b)=>b.celkem-a.celkem).filter(x=>x.celkem>0);
+  if(!s.length)return 'Zatím není dost dat.';
+  return s.slice(0,2).map(x=>{
+    const osa=(x.b.oslabeni.souhrn||0)>=(x.b.stagnace.souhrn||0)?'oslabení':'stagnace';
+    const t=x.b.teplo.souhrn;
+    const tep=t===null?'':(t>15?', s horkem':(t<-15?', s chladem':''));
+    return ELEMENTY[x.e].n+' — '+osa+' '+x.celkem+tep;
+  }).join('   |   ');
+}
+
+/* ===================================================================
    VYKRESLENÍ
-   ==================================================================== */
+   =================================================================== */
 function renderNav(){
   const list=sekce();
   ['nav','navMobile'].forEach(id=>{
@@ -455,22 +772,23 @@ function renderNav(){
     list.forEach((s,i)=>{
       const b=document.createElement('button');
       b.className='nav-item';b.setAttribute('aria-current',i===aktivni);
-      b.dataset.done=s.vystup?false:otazky(s).every(zodpovezeno);
+      b.dataset.done=(s.vystup||s.prubeh)?false:otazky(s).every(zodpovezeno);
       b.innerHTML='<span class="dot"></span>'+s.nazev;
       b.onclick=()=>{aktivni=i;document.getElementById('sheet').dataset.open='false';render();window.scrollTo(0,0);};
       el.appendChild(b);
     });
   });
+  document.getElementById('modePill').textContent=rezim==='vstup'?'Vstupní odběr':'Kontrola č. '+(historie.length+1);
 }
 
 function chipRow(q,volby,multi){
   const box=document.createElement('div');box.className='chips';
   volby.forEach(o=>{
     const b=document.createElement('button');b.className='chip'+(o.l==='ne'?' neg':'');b.textContent=o.l;
-    const akt=multi?(odpovedi[q.id]||[]).includes(o.l):odpovedi[q.id]===o.l;
+    const akt=multi?(odpovedi[q.id]||[]).indexOf(o.l)>=0:odpovedi[q.id]===o.l;
     b.setAttribute('aria-pressed',akt);
     b.onclick=()=>{
-      if(multi){const c=odpovedi[q.id]||[];odpovedi[q.id]=c.includes(o.l)?c.filter(x=>x!==o.l):c.concat(o.l);}
+      if(multi){const c=odpovedi[q.id]||[];odpovedi[q.id]=c.indexOf(o.l)>=0?c.filter(x=>x!==o.l):c.concat(o.l);}
       else odpovedi[q.id]=odpovedi[q.id]===o.l?'':o.l;
       uloz();render();
     };
@@ -479,18 +797,27 @@ function chipRow(q,volby,multi){
   return box;
 }
 
+function minulaOdpoved(q){
+  const o=obrazDo(historie.length-1)[q.id];
+  if(!o)return null;
+  let t=o.v;
+  if(Array.isArray(t))t=t.join(', ');
+  else if(t&&typeof t==='object')t=Object.keys(t).filter(k=>t[k]!=='ne')
+    .map(k=>{const p=(q.polozky||[]).filter(y=>y.id===k)[0];return (p?p.l:k)+' ('+t[k]+')';}).join(', ')||'nic';
+  return {t:t,datum:o.datum};
+}
+
 function renderOtazka(q){
   const w=document.createElement('div');w.className='q'+(q.detail?' detail':'');
   const t=document.createElement('p');t.className='q-text';t.textContent=q.text;w.appendChild(t);
 
-  if(q.typ==='frek') w.appendChild(chipRow(q,FREK,false));
-  if(q.typ==='anone') w.appendChild(chipRow(q,[{l:'ano'},{l:'ne'}],false));
-  if(q.typ==='vyber') w.appendChild(chipRow(q,q.volby,false));
-  if(q.typ==='vicevyber') w.appendChild(chipRow(q,q.volby,true));
+  if(q.typ==='frek')w.appendChild(chipRow(q,FREK,false));
+  if(q.typ==='anone')w.appendChild(chipRow(q,[{l:'ano'},{l:'ne'}],false));
+  if(q.typ==='vyber')w.appendChild(chipRow(q,q.volby,false));
+  if(q.typ==='vicevyber')w.appendChild(chipRow(q,q.volby,true));
 
   if(q.typ==='matice'){
     const box=document.createElement('div');box.className='matice';
-    (odpovedi[q.id]===undefined)&&(odpovedi[q.id]={});
     q.polozky.forEach(p=>{
       const row=document.createElement('div');row.className='mrow';
       const lab=document.createElement('span');lab.className='mrow-label';lab.textContent=p.l;
@@ -498,31 +825,72 @@ function renderOtazka(q){
       FREK.forEach(f=>{
         const b=document.createElement('button');b.dataset.v=f.l;b.textContent=f.l;
         b.setAttribute('aria-pressed',(odpovedi[q.id]||{})[p.id]===f.l);
-        b.onclick=()=>{const m=Object.assign({},odpovedi[q.id]);m[p.id]=f.l;odpovedi[q.id]=m;uloz();render();};
+        b.onclick=()=>{const m={};const cur=odpovedi[q.id]||{};Object.keys(cur).forEach(k=>m[k]=cur[k]);
+          m[p.id]=f.l;odpovedi[q.id]=m;uloz();render();};
         bt.appendChild(b);
       });
-      row.append(lab,bt);box.appendChild(row);
+      row.appendChild(lab);row.appendChild(bt);box.appendChild(row);
     });
     w.appendChild(box);
   }
 
-  if(q.typ==='skala'){
+  if(q.typ==='skala'||q.typ==='skala6'){
+    const mx=q.typ==='skala6'?6:10;
     const box=document.createElement('div');box.className='scale';
-    const r=document.createElement('input');r.type='range';r.min=0;r.max=10;r.step=1;r.value=odpovedi[q.id]??0;
-    const o=document.createElement('output');o.textContent=(odpovedi[q.id]??0)+' / 10';
-    r.oninput=()=>o.textContent=r.value+' / 10';
+    const r=document.createElement('input');r.type='range';r.min=0;r.max=mx;r.step=1;
+    r.value=odpovedi[q.id]===undefined?0:odpovedi[q.id];
+    const o=document.createElement('output');o.textContent=(odpovedi[q.id]===undefined?0:odpovedi[q.id])+' / '+mx;
+    r.oninput=()=>{o.textContent=r.value+' / '+mx;};
     r.onchange=()=>{odpovedi[q.id]=Number(r.value);uloz();renderNav();updateProgress();};
-    box.append(r,o);w.appendChild(box);
+    box.appendChild(r);box.appendChild(o);w.appendChild(box);
+    if(q.typ==='skala6'){
+      const lg=document.createElement('p');lg.className='scale-legend';
+      lg.textContent='0 = jak nejlépe může být, 6 = jak nejhůř může být';w.appendChild(lg);
+    }
   }
 
   if(q.typ==='cislo'){
     const box=document.createElement('div');box.className='num';
-    const i=document.createElement('input');i.type='number';i.inputMode='numeric';i.value=odpovedi[q.id]??'';
+    const i=document.createElement('input');i.type='number';i.inputMode='numeric';
+    i.value=odpovedi[q.id]===undefined?'':odpovedi[q.id];
+    const bmiEl=document.createElement('p');bmiEl.className='calc';
     i.oninput=()=>{odpovedi[q.id]=i.value===''?'':Number(i.value);uloz();
       if(q.bmi)bmiEl.textContent=bmiText();renderNav();updateProgress();};
     const u=document.createElement('span');u.className='unit';u.textContent=q.jednotka||'';
-    box.append(i,u);w.appendChild(box);
-    if(q.bmi){var bmiEl=document.createElement('p');bmiEl.className='calc';bmiEl.textContent=bmiText();w.appendChild(bmiEl);}
+    box.appendChild(i);box.appendChild(u);w.appendChild(box);
+    if(q.bmi){bmiEl.textContent=bmiText();w.appendChild(bmiEl);}
+  }
+
+  if(q.typ==='bbc'){
+    if(q.napoveda){const nap=document.createElement('p');nap.className='scale-legend';
+      nap.style.margin='0 0 10px';nap.textContent=q.napoveda;w.appendChild(nap);}
+    const radky=odpovedi[q.id]||[];
+    const box=document.createElement('div');box.className='bbc';
+    radky.forEach((r,i)=>{
+      const row=document.createElement('div');row.className='bbcrow';
+      const nm=document.createElement('input');nm.type='text';nm.value=r.n||'';nm.placeholder='název';
+      nm.oninput=()=>{r.n=nm.value;if(q.rezim==='el')r.e=r.e||organNaElement(nm.value);uloz();};
+      nm.onblur=()=>render();
+      const cis=document.createElement('input');cis.type='number';cis.className='bbcnum';
+      cis.inputMode='numeric';cis.value=r.v===undefined?'':r.v;cis.placeholder='č.';
+      cis.oninput=()=>{r.v=cis.value===''?'':Number(cis.value);uloz();};
+      const del=document.createElement('button');del.className='bbcdel';del.textContent='×';
+      del.title='Odebrat řádek';
+      del.onclick=()=>{radky.splice(i,1);odpovedi[q.id]=radky;uloz();render();};
+      row.appendChild(nm);row.appendChild(cis);
+      if(q.rezim==='el'){
+        const sel=document.createElement('select');sel.className='bbcsel';
+        sel.innerHTML='<option value="">element…</option>'+
+          Object.keys(ELEMENTY).map(k=>'<option value="'+k+'"'+(r.e===k?' selected':'')+'>'+ELEMENTY[k].n+'</option>').join('');
+        sel.onchange=()=>{r.e=sel.value;uloz();render();};
+        row.appendChild(sel);
+      }
+      row.appendChild(del);box.appendChild(row);
+    });
+    const pridej=document.createElement('button');pridej.className='btn';pridej.style.marginTop='10px';
+    pridej.textContent='Přidat řádek';
+    pridej.onclick=()=>{const r=(odpovedi[q.id]||[]).concat([{n:'',v:''}]);odpovedi[q.id]=r;uloz();render();};
+    w.appendChild(box);w.appendChild(pridej);
   }
 
   if(q.typ==='text'){
@@ -530,6 +898,12 @@ function renderOtazka(q){
     ta.oninput=()=>{odpovedi[q.id]=ta.value;uloz();};
     ta.onblur=()=>{renderNav();updateProgress();};
     w.appendChild(ta);
+  }
+
+  if(rezim==='kontrola'&&zodpovezeno(q)){
+    const m=minulaOdpoved(q);
+    if(m){const p=document.createElement('p');p.className='q-last';
+      p.textContent='Minule ('+czDatum(m.datum)+'): '+m.t;w.appendChild(p);}
   }
 
   if(q.typ!=='text'){
@@ -541,144 +915,222 @@ function renderOtazka(q){
     ta.oninput=()=>{poznamky[q.id]=ta.value;uloz();};
     nd.appendChild(ta);
     tog.onclick=()=>{nd.style.display=nd.style.display==='none'?'block':'none';if(nd.style.display==='block')ta.focus();};
-    w.append(tog,nd);
+    w.appendChild(tog);w.appendChild(nd);
   }
   return w;
 }
 
 function bmiText(){
-  const v=Number(odpovedi.vyska),k=Number(odpovedi.vaha);
-  if(!v||!k) return '';
-  const b=k/Math.pow(v/100,2);
-  return 'BMI '+b.toFixed(1);
+  const hist=obrazDo(historie.length-1);
+  const v=Number(odpovedi.vyska)||Number(hist.vyska?hist.vyska.v:0);
+  const k=Number(odpovedi.vaha);
+  if(!v||!k)return'';
+  return 'BMI '+(k/Math.pow(v/100,2)).toFixed(1);
 }
 
 function render(){
   const list=sekce();
-  if(aktivni>=list.length) aktivni=list.length-1;
+  if(aktivni>=list.length)aktivni=list.length-1;
   const s=list[aktivni],main=document.getElementById('main');
   main.innerHTML='';
   document.getElementById('topTitle').textContent=s.nazev;
   const h=document.createElement('h2');h.className='sec-title';h.textContent=s.nazev;
   const p=document.createElement('p');p.className='sec-hint';p.textContent=s.hint||'';
-  main.append(h,p);
+  main.appendChild(h);main.appendChild(p);
 
-  if(s.vystup) renderZapis(main);
+  if(s.vystup)renderZapis(main);
+  else if(s.prubeh)renderPrubeh(main);
   else{
     otazky(s).forEach(q=>main.appendChild(renderOtazka(q)));
     const act=document.createElement('div');act.className='sec-actions';
     const b1=document.createElement('button');b1.className='btn';b1.textContent='Sekce bez potíží';
     b1.onclick=()=>{
       otazky(s).forEach(q=>{
-        if(q.typ==='frek'||q.typ==='anone'){ if(!zodpovezeno(q)) odpovedi[q.id]='ne'; }
-        else if(q.typ==='matice'){const m=Object.assign({},odpovedi[q.id]);q.polozky.forEach(x=>{if(!m[x.id])m[x.id]='ne';});odpovedi[q.id]=m;}
+        if(q.typ==='frek'||q.typ==='anone'){if(!zodpovezeno(q))odpovedi[q.id]='ne';}
+        else if(q.typ==='matice'){const m={};const cur=odpovedi[q.id]||{};
+          Object.keys(cur).forEach(k=>m[k]=cur[k]);
+          q.polozky.forEach(x=>{if(!m[x.id])m[x.id]='ne';});odpovedi[q.id]=m;}
         else if((q.typ==='vyber'||q.typ==='vicevyber')&&!zodpovezeno(q)){
-          const n=q.volby.find(o=>!o.t);
-          if(n) odpovedi[q.id]=q.typ==='vyber'?n.l:[n.l];
-        }
+          const n=q.volby.filter(o=>!o.t)[0];if(n)odpovedi[q.id]=q.typ==='vyber'?n.l:[n.l];}
       });
       uloz();render();
     };
+    act.appendChild(b1);
+    if(rezim==='kontrola'&&!s.vzdy&&s.otazky.some(q=>!q.s)){
+      const b3=document.createElement('button');b3.className='btn';
+      b3.textContent=rozsireno[s.id]?'Skrýt doplňkové otázky':'Doplnit celou sekci';
+      b3.onclick=()=>{rozsireno[s.id]=!rozsireno[s.id];uloz();render();};
+      act.appendChild(b3);
+    }
     const b2=document.createElement('button');b2.className='btn';b2.textContent='Vymazat sekci';
     b2.onclick=()=>{otazky(s).forEach(q=>{delete odpovedi[q.id];delete poznamky[q.id];});uloz();render();};
-    act.append(b1,b2);main.appendChild(act);
+    act.appendChild(b2);
+    main.appendChild(act);
   }
   renderNav();updateProgress();
   document.getElementById('nextBtn').textContent=aktivni===list.length-1?'Hotovo':'Další';
 }
 
 function updateProgress(){
-  const qs=sekce().filter(s=>!s.vystup).flatMap(otazky);
-  const done=qs.filter(zodpovezeno).length;
-  document.getElementById('progressBar').style.width=(qs.length?done/qs.length*100:0)+'%';
-  document.getElementById('countLabel').textContent=done+' / '+qs.length;
+  const qq=sekce().filter(s=>!s.vystup&&!s.prubeh).reduce((a,s)=>a.concat(otazky(s)),[]);
+  const done=qq.filter(zodpovezeno).length;
+  document.getElementById('progressBar').style.width=(qq.length?done/qq.length*100:0)+'%';
+  document.getElementById('countLabel').textContent=done+' / '+qq.length;
 }
 
-/* ====================================================================
-   SYNDROMOVÉ SKÓRE
-   ==================================================================== */
-function skore(){
-  const sc={},proc={};
-  Object.keys(VZORCE).forEach(k=>{sc[k]=0;proc[k]=[];});
-  const pridej=(t,popis,nasobek)=>{
-    if(!t) return;
-    Object.entries(t).forEach(([k,w])=>{
-      if(sc[k]===undefined) return;
-      const v=w*(nasobek===undefined?1:nasobek);
-      if(v<=0) return;
-      sc[k]+=v;proc[k].push(popis);
+/* ===================================================================
+   PRŮBĚH
+   =================================================================== */
+function renderPrubeh(main){
+  const box=document.createElement('div');box.className='record';
+  box.innerHTML='<h3>Historie odběrů</h3>';
+  if(!historie.length){
+    const e=document.createElement('p');e.className='empty';
+    e.textContent='Zatím žádný uložený odběr. Uložíte ho tlačítkem v sekci Zápis.';box.appendChild(e);
+  }else{
+    const l=document.createElement('div');l.className='obraz';
+    let html='';
+    historie.forEach(o=>{html+='<div><b>'+czDatum(o.datum)+' — '+(o.rezim==='vstup'?'vstupní odběr':'kontrola')+
+      '</b><span>'+Object.keys(o.odpovedi||{}).length+' odpovědí</span></div>';});
+    l.innerHTML=html;box.appendChild(l);
+    const del=document.createElement('button');del.className='btn';del.style.marginTop='14px';
+    del.textContent='Smazat poslední odběr';
+    del.onclick=()=>{if(confirm('Smazat poslední uložený odběr?')){historie.pop();ulozHist();render();}};
+    box.appendChild(del);
+  }
+  main.appendChild(box);
+
+  if(historie.length){
+    const tb=document.createElement('div');tb.className='record';
+    tb.innerHTML='<h3>Posun elementů</h3>';
+    const snim=historie.map((o,i)=>({d:czDatum(o.datum).replace(/ \d{4}$/,''),m:mrizka(obrazDo(i))}));
+    if(Object.keys(odpovedi).length)snim.push({d:'dnes',m:mrizka(obrazAktualni())});
+    const tab=document.createElement('table');tab.className='mrizka';
+    let html='<tr><th>Element</th><th>osa</th>'+snim.map(x=>'<th>'+x.d+'</th>').join('')+'<th>posun</th></tr>';
+    Object.keys(ELEMENTY).forEach(e=>{
+      ['oslabeni','stagnace'].forEach((osa,idx)=>{
+        const rada=snim.map(x=>{const el=x.m.elementy.filter(y=>y.e===e)[0];
+          return el?el.b[osa].souhrn:null;});
+        const pl=rada.filter(x=>x!==null);
+        if(!pl.length||Math.max.apply(null,pl)<15)return;
+        const prvni=pl[0],posl=pl[pl.length-1],d=posl-prvni;
+        const sip=d<=-8?'<span class="down">▼ zlepšení '+Math.abs(d)+'</span>':
+          (d>=8?'<span class="up">▲ zhoršení '+d+'</span>':'▬ beze změny');
+        html+='<tr><td class="el">'+(idx===0?ELEMENTY[e].n:'')+'</td><td style="text-align:left">'+
+          OSY[osa].n.toLowerCase()+'</td>'+
+          rada.map(x=>'<td>'+(x===null?'—':x)+'</td>').join('')+'<td>'+sip+'</td></tr>';
+      });
     });
-  };
-  sekce().forEach(s=>otazky(s).forEach(q=>{
-    const v=odpovedi[q.id];
-    if(q.typ==='frek'&&v&&v!=='ne'){const f=FREK.find(x=>x.l===v);pridej(q.t,q.zapis+' ('+v+')',f?f.w:1);}
-    if(q.typ==='anone'&&v==='ano') pridej(q.t,q.zapis,1);
-    if(q.typ==='vyber'&&v){const o=q.volby.find(x=>x.l===v);if(o)pridej(o.t,q.zapis.toLowerCase()+': '+o.l,1);}
-    if(q.typ==='vicevyber'&&Array.isArray(v)) v.forEach(l=>{const o=q.volby.find(x=>x.l===l);if(o)pridej(o.t,q.zapis.toLowerCase()+': '+o.l,1);});
-    if(q.typ==='matice'&&v) Object.entries(v).forEach(([pid,val])=>{
-      if(val==='ne') return;const p=q.polozky.find(x=>x.id===pid),f=FREK.find(x=>x.l===val);
-      if(p)pridej(p.t,p.l+' ('+val+')',f?f.w:1);
-    });
-  }));
-  return Object.entries(sc).map(([k,v])=>({k,v:Math.round(v*10)/10,proc:proc[k]}))
-    .filter(x=>x.v>0).sort((a,b)=>b.v-a.v);
+    tab.innerHTML=html;tb.appendChild(tab);
+    const leg=document.createElement('p');leg.className='disclaimer';
+    leg.textContent='Počítá se vždy ze složeného obrazu, tedy z nejnovější známé hodnoty u každé položky. Řádky pod 15 body se nezobrazují.';
+    tb.appendChild(leg);main.appendChild(tb);
+  }
+
+  const ob=document.createElement('div');ob.className='record';
+  ob.innerHTML='<h3>Aktuální obraz a stáří nálezů</h3>';
+  const o=obrazAktualni(),list=document.createElement('div');list.className='obraz';
+  let html='',n=0;
+  vsechnyOtazky().forEach(q=>{
+    const z=o[q.id];if(!z)return;
+    let v=z.v;
+    if(q.typ==='bbc'){
+      if(!Array.isArray(v)||!v.length)return;
+      v=v.filter(x=>x&&x.n).map(x=>x.n+' '+x.v).join(', ');
+    }
+    else if(Array.isArray(v))v=v.join(', ');
+    if(v&&typeof v==='object')return;
+    if(v==='ne'||v==='')return;
+    const dnu=stariDnu(z.datum);n++;
+    html+='<div><b>'+q.zapis+': '+v+'</b><span class="'+(dnu>120?'stale':'')+'">'+
+      (dnu<1?'dnes':czDatum(z.datum)+(dnu>120?', '+Math.round(dnu/30)+' měsíců':''))+'</span></div>';
+  });
+  if(!n){const e=document.createElement('p');e.className='empty';e.textContent='Zatím nic.';ob.appendChild(e);}
+  else{list.innerHTML=html;ob.appendChild(list);}
+  main.appendChild(ob);
 }
 
-/* ====================================================================
+/* ===================================================================
    ZÁPIS
-   ==================================================================== */
-function sekceText(id){
-  const s=DOTAZNIK.find(x=>x.id===id);
-  if(!s||(s.podminka&&!s.podminka(odpovedi))) return null;
+   =================================================================== */
+function sekceText(id,obraz){
+  const s=DOTAZNIK.filter(x=>x.id===id)[0];
+  if(!s||(s.podminka&&!s.podminka(odpovedi)))return null;
   const poz=[],neg=[],radky=[];
-  otazky(s).forEach(q=>{
-    const v=odpovedi[q.id],pozn=poznamky[q.id]?' ('+poznamky[q.id].trim()+')':'';
-    if(q.typ==='frek'){ if(v==='ne')neg.push(q.zapis); else if(v)poz.push(q.zapis+' — '+v+pozn); return; }
-    if(q.typ==='anone'){ if(v==='ne')neg.push(q.zapis); else if(v==='ano')poz.push(q.zapis+pozn); return; }
+  s.otazky.forEach(q=>{
+    if(q.podminka&&!q.podminka(odpovedi))return;
+    const zaz=obraz[q.id];if(!zaz)return;
+    const v=zaz.v,stare=zaz.datum!==dnesnyDatum()?' ['+czDatum(zaz.datum)+']':'';
+    const pozn=poznamky[q.id]?' ('+poznamky[q.id].trim()+')':'';
+    if(q.typ==='frek'){if(v==='ne')neg.push(q.zapis);else if(v)poz.push(q.zapis+' — '+v+pozn+stare);return;}
+    if(q.typ==='anone'){if(v==='ne')neg.push(q.zapis);else if(v==='ano')poz.push(q.zapis+pozn+stare);return;}
     if(q.typ==='matice'){
-      if(!v) return;
-      const a=[],n=[];
-      q.polozky.forEach(p=>{const x=v[p.id];if(!x)return;x==='ne'?n.push(p.l):a.push(p.l+' ('+x+')');});
-      if(a.length)radky.push(q.zapis+': '+a.join(', ')+'.');
-      if(n.length)radky.push('Neguje: '+n.join(', ')+'.');
+      if(!v||typeof v!=='object')return;
+      const a=[],nn=[];
+      q.polozky.forEach(p=>{const x=v[p.id];if(!x)return;x==='ne'?nn.push(p.l):a.push(p.l+' ('+x+')');});
+      if(a.length)radky.push(q.zapis+': '+a.join(', ')+'.'+stare);
+      if(nn.length)radky.push('Neguje: '+nn.join(', ')+'.');
       return;
     }
-    if(v===undefined||v===''||(Array.isArray(v)&&!v.length)) return;
-    if(q.typ==='skala') radky.push(q.zapis+': '+v+'/10'+pozn);
-    else if(q.typ==='cislo') radky.push(q.zapis+': '+v+(q.jednotka?' '+q.jednotka:'')+pozn+(q.bmi&&bmiText()?', '+bmiText():''));
-    else if(Array.isArray(v)) radky.push(q.zapis+': '+v.join(', ')+pozn);
-    else radky.push(q.zapis+': '+String(v).trim()+pozn);
+    if(q.typ==='bbc'){
+      if(!Array.isArray(v)||!v.length)return;
+      const r=v.filter(x=>x&&x.n).map(x=>x.n+' '+x.v);
+      if(r.length)radky.push(q.zapis+': '+r.join(', ')+stare);
+      return;
+    }
+    if(prazdna(v))return;
+    if(q.typ==='skala')radky.push(q.zapis+': '+v+'/10'+pozn+stare);
+    else if(q.typ==='skala6')radky.push(q.zapis+': '+v+'/6'+pozn+stare);
+    else if(q.typ==='cislo')radky.push(q.zapis+': '+v+(q.jednotka?' '+q.jednotka:'')+pozn+
+      (q.bmi&&bmiText()?', '+bmiText():'')+stare);
+    else if(Array.isArray(v))radky.push(q.zapis+': '+v.join(', ')+pozn+stare);
+    else radky.push(q.zapis+': '+String(v).trim()+pozn+stare);
   });
-  if(poz.length) radky.push('Udává: '+poz.join(', ')+'.');
-  if(neg.length) radky.push('Neguje: '+neg.join(', ')+'.');
-  if(!radky.length) return null;
+  if(poz.length)radky.push('Udává: '+poz.join(', ')+'.');
+  if(neg.length)radky.push('Neguje: '+neg.join(', ')+'.');
+  if(!radky.length)return null;
   return s.nazev+'\n'+radky.map(r=>'  '+r).join('\n');
 }
 
 function textZapisu(){
-  const L=[];
-  L.push('ANAMNÉZA TČM'+(klientJmeno?' — '+klientJmeno:'')+(klientId?' (ID '+klientId+')':''));
-  L.push('Datum odběru: '+new Date().toLocaleDateString('cs-CZ'));
+  const obraz=obrazAktualni(),L=[];
+  L.push('ANAMNÉZA TČM — '+(rezim==='vstup'?'vstupní odběr':'kontrola č. '+(historie.length+1))+
+    (odpovedi.klient?' — '+odpovedi.klient:'')+(klientId?' (ID '+klientId+')':''));
+  L.push('Datum: '+czDatum(dnesnyDatum()));
+  L.push('Údaje v hranatých závorkách pocházejí ze starších odběrů.');
   L.push('');
   const blok=(nadpis,ids)=>{
-    let c=ids.map(sekceText).filter(Boolean);
-    if(!c.length) return;
-    if(c.length===1) c=[c[0].split('\n').slice(1).join('\n')];
+    let c=ids.map(i=>sekceText(i,obraz)).filter(Boolean);
+    if(!c.length)return;
+    if(c.length===1)c=[c[0].split('\n').slice(1).join('\n')];
     L.push(nadpis);L.push(c.join('\n'));L.push('');
   };
   blok('ZÁKLADNÍ ÚDAJE',['zaklad']);
+  blok('SLEDOVANÉ POTÍŽE',['vysledek']);
   blok('OSOBNÍ ANAMNÉZA A ŽIVOTOSPRÁVA',['styl']);
   blok('SUBJEKTIVNĚ',['termo','bolesti','pohyb','traveni','spanek','smysly','dychani','kuze','gynuro','psychika']);
   blok('OBJEKTIVNĚ',['objektiv']);
-  const sk=skore().slice(0,3);
-  if(sk.length){
-    L.push('NÁVRH SYNDROMU (podklad k ověření)');
-    sk.forEach((x,i)=>{
-      L.push('  '+(i+1)+'. '+VZORCE[x.k].nazev+' — skóre '+x.v);
-      L.push('     Opora: '+[...new Set(x.proc)].join('; ')+'.');
-    });
-    L.push('');
-  }
+
+  const m=mrizka(obraz);
+  L.push('ROZBOR PĚTI ELEMENTŮ (0–100, vyšší = větší potřeba zásahu)');
+  L.push('  Souhrn: '+souhrnText(m));
+  L.push('  element     oslabení   stagnace   teplo/chlad   zdroje');
+  m.elementy.forEach(x=>{
+    const c=v=>(v===null?'—':String(v));
+    const t=x.b.teplo.souhrn;
+    L.push('  '+(ELEMENTY[x.e].n+'        ').slice(0,10)+
+      ('    '+c(x.b.oslabeni.souhrn)).slice(-6)+
+      ('       '+c(x.b.stagnace.souhrn)).slice(-11)+
+      ('        '+(t===null?'—':(t>0?'+':'')+t)).slice(-14)+
+      '   '+x.shoda);
+  });
+  const nes=m.elementy.filter(x=>x.rozptyl!==null&&x.rozptyl>30);
+  if(nes.length)L.push('  Nesoulad zdrojů u: '+nes.map(x=>ELEMENTY[x.e].n).join(', ')+
+    '. Doporučeno ověřit.');
+  if(m.bbc.zateze.length)L.push('  Zátěže podle závažnosti: '+m.bbc.zateze.map(z=>z.n+' '+z.pct+'/100').join(', ')+'.');
+  L.push('  Podklad z '+m.pocet+' hodnocených otázek a '+
+    (m.bbc.oslabeni.length+m.bbc.stagnace.length)+' položek BBC.');
+  L.push('');
   L.push('ZÁVĚR A PLÁN');
   L.push('  ');
   return L.join('\n');
@@ -688,57 +1140,84 @@ function renderZapis(main){
   const box=document.createElement('div');box.className='record';
   const h=document.createElement('h3');h.textContent='Anamnestický zápis';
   const ta=document.createElement('textarea');ta.id='zapisText';ta.value=textZapisu();
-  box.append(h,ta);main.appendChild(box);
+  box.appendChild(h);box.appendChild(ta);main.appendChild(box);
 
-  const sk=skore();
-  const pb=document.createElement('div');pb.className='record';pb.style.marginTop='16px';
-  const ph=document.createElement('h3');ph.textContent='Návrh syndromu';pb.appendChild(ph);
-  if(!sk.length){
-    const e=document.createElement('p');e.className='empty';e.textContent='Zatím není dost odpovědí pro návrh.';pb.appendChild(e);
-  }else{
-    const max=sk[0].v;
-    sk.slice(0,4).forEach(x=>{
-      const d=document.createElement('div');d.className='pattern';
-      d.innerHTML='<div class="pattern-head"><span class="pattern-name">'+VZORCE[x.k].nazev+
-        '</span><span class="pattern-score">skóre '+x.v+'</span></div>'+
-        '<div class="bar"><i style="width:'+(x.v/max*100)+'%"></i></div>'+
-        '<p class="why">'+VZORCE[x.k].text+' Opora: '+[...new Set(x.proc)].join('; ')+'.</p>';
+  const m=mrizka(obrazAktualni());
+  const pb=document.createElement('div');pb.className='record';
+  pb.innerHTML='<h3>Pět elementů</h3><p class="vzorec">'+souhrnText(m)+'</p>';
+  const tab=document.createElement('table');tab.className='mrizka';
+  const bunka=x=>x.souhrn===null?'—':(x.souhrn>0?'+':'')+x.souhrn;
+  let html='<tr><th>Element</th><th>Oslabení</th><th>Stagnace</th><th>Teplo/chlad</th><th>Zdroje</th></tr>';
+  m.elementy.forEach(x=>{
+    const cls=x.shoda==='shoda'?'shoda-ok':(x.rozptyl===null?'':'shoda-ne');
+    html+='<tr><td class="el">'+ELEMENTY[x.e].n+'<br><small>'+ELEMENTY[x.e].org+'</small></td>'+
+      '<td>'+(x.b.oslabeni.souhrn===null?'—':x.b.oslabeni.souhrn)+'</td>'+
+      '<td>'+(x.b.stagnace.souhrn===null?'—':x.b.stagnace.souhrn)+'</td>'+
+      '<td>'+bunka(x.b.teplo)+'</td>'+
+      '<td class="'+cls+'">'+x.shoda+'</td></tr>';
+  });
+  tab.innerHTML=html;pb.appendChild(tab);
+  const legenda=document.createElement('p');legenda.className='disclaimer';
+  legenda.textContent='Čísla jsou 0 až 100, vyšší znamená větší potřebu zásahu. Teplo je kladné, chlad záporný. '+
+    'Sloupec Zdroje porovnává anamnézu, BBC a objektivní nález; rozdíl nad 30 bodů se hlásí jako nesoulad.';
+  pb.appendChild(legenda);
+
+  if(m.bbc.zateze.length){
+    const zh=document.createElement('p');zh.className='disclaimer';zh.style.margin='18px 0 4px';
+    zh.textContent='Energetické zátěže podle závažnosti';pb.appendChild(zh);
+    m.bbc.zateze.forEach(z=>{
+      const d=document.createElement('div');d.className='zatez';
+      d.innerHTML='<span>'+z.n+'</span><span>'+z.pct+' / 100 &nbsp;<small style="color:var(--muted)">('+z.v+')</small></span>';
       pb.appendChild(d);
     });
-    const dis=document.createElement('p');dis.className='disclaimer';
-    dis.textContent='Skóre je součet vah odpovědí, kde „výjimečně" váží čtvrtinu a „často" plnou hodnotu. Podklad, ne diagnóza.';
-    pb.appendChild(dis);
+  }
+  const nezar=[].concat(m.bbc.oslabeni,m.bbc.stagnace).filter(x=>!x.e);
+  if(nezar.length){
+    const w=document.createElement('p');w.className='disclaimer';
+    w.textContent='Bez přiřazeného elementu, doplňte v sekci BBC: '+
+      nezar.map(x=>x.n).filter((v,i,a)=>a.indexOf(v)===i).join(', ')+'.';
+    pb.appendChild(w);
   }
   main.appendChild(pb);
 
   const act=document.createElement('div');act.className='sec-actions';
   const mk=(l,fn,cls)=>{const b=document.createElement('button');b.className='btn'+(cls||'');b.textContent=l;b.onclick=fn;return b;};
-  act.append(
-    mk('Přegenerovat z odpovědí',()=>{document.getElementById('zapisText').value=textZapisu();}),
-    mk('Kopírovat',async()=>{
-      const t=document.getElementById('zapisText').value;
-      try{await navigator.clipboard.writeText(t);alert('Zápis zkopírován.');}
-      catch(e){document.getElementById('zapisText').select();document.execCommand('copy');}
-    },' btn-primary'),
-    mk('Stáhnout .txt',()=>{
-      const b=new Blob([document.getElementById('zapisText').value],{type:'text/plain;charset=utf-8'});
-      const a=document.createElement('a');a.href=URL.createObjectURL(b);
-      a.download='anamneza-tcm-'+new Date().toISOString().slice(0,10)+'.txt';a.click();
-    }),
-    mk('Tisk / PDF',()=>window.print()),
-    mk('Nový odběr',()=>{
-      if(!confirm('Smazat všechny odpovědi a začít nový odběr?'))return;
-      odpovedi={};poznamky={};aktivni=0;uloz();render();window.scrollTo(0,0);
-    })
-  );
+  act.appendChild(mk('Přegenerovat',()=>{document.getElementById('zapisText').value=textZapisu();}));
+  act.appendChild(mk('Kopírovat',function(){
+    const t=document.getElementById('zapisText').value;
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(()=>alert('Zápis zkopírován.'),()=>{
+        document.getElementById('zapisText').select();document.execCommand('copy');});
+    }else{document.getElementById('zapisText').select();document.execCommand('copy');}
+  },' btn-primary'));
+  act.appendChild(mk('Stáhnout .txt',()=>{
+    const b=new Blob([document.getElementById('zapisText').value],{type:'text/plain;charset=utf-8'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(b);
+    a.download='anamneza-tcm-'+dnesnyDatum()+'.txt';a.click();
+  }));
+  act.appendChild(mk('Tisk / PDF',()=>window.print()));
+  act.appendChild(mk('Uložit odběr a začít další',()=>{
+    if(!Object.keys(odpovedi).length){alert('Není co uložit.');return;}
+    if(!confirm('Uložit tento odběr do historie? Odpovědi se uzamknou a další odběr začne prázdný.'))return;
+    historie.push({datum:dnesnyDatum(),rezim:rezim,
+      odpovedi:JSON.parse(JSON.stringify(odpovedi)),poznamky:JSON.parse(JSON.stringify(poznamky))});
+    ulozHist();
+    odpovedi={};poznamky={};rozsireno={};rezim='kontrola';aktivni=0;uloz();render();window.scrollTo(0,0);
+  }));
   main.appendChild(act);
+
+  if(historie.length){
+    const pr=document.createElement('div');pr.className='sec-actions';
+    pr.appendChild(mk(rezim==='vstup'?'Přepnout na kontrolu':'Rozbalit plný dotazník',()=>{
+      rezim=rezim==='vstup'?'kontrola':'vstup';uloz();render();}));
+    main.appendChild(pr);
+  }
 }
 
 document.getElementById('prevBtn').onclick=()=>{if(aktivni>0){aktivni--;render();window.scrollTo(0,0);}};
 document.getElementById('nextBtn').onclick=()=>{if(aktivni<sekce().length-1){aktivni++;render();window.scrollTo(0,0);}};
-document.getElementById('openSheet').onclick=()=>document.getElementById('sheet').dataset.open='true';
+document.getElementById('openSheet').onclick=()=>{document.getElementById('sheet').dataset.open='true';};
 document.getElementById('sheet').onclick=e=>{if(e.target.id==='sheet')e.currentTarget.dataset.open='false';};
-
 render();
 </script>
 </body>
